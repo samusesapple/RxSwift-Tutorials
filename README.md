@@ -1,5 +1,5 @@
 # RxSwift-Tutorials
-### 목표
+### 목적
 ---
 RxSwift 기능 학습
 <br>
