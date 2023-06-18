@@ -61,26 +61,26 @@ class ViewController: UIViewController {
     
     private func bindOutput() {
         // bullets - id
-        idValid.subscribe(onNext: { valid in
-            self.changeValidViewStatus(self.idValidView,
+        idValid.subscribe(onNext: { [weak self] valid in
+            self?.changeValidViewStatus(self?.idValidView,
                                        status: valid)
         })
             .disposed(by: disposeBag)
         
         // bullets - password
-        passwordValid.subscribe(onNext: { valid in
-            self.changeValidViewStatus(self.pwValidView,
+        passwordValid.subscribe(onNext: { [weak self] valid in
+            self?.changeValidViewStatus(self?.pwValidView,
                                        status: valid)
         })
             .disposed(by: disposeBag)
         
         // login Button
         Observable.combineLatest(idValid, passwordValid, resultSelector: { $0 && $1 })
-            .subscribe { enabled in
+            .subscribe { [weak self] enabled in
                 if enabled {
-                    self.loginButton.backgroundColor = .systemBlue
+                    self?.loginButton.backgroundColor = .systemBlue
                 } else {
-                    self.loginButton.backgroundColor = .lightGray
+                    self?.loginButton.backgroundColor = .lightGray
                 }
             }
             .disposed(by: disposeBag)
@@ -88,7 +88,9 @@ class ViewController: UIViewController {
         // check ID & PW
         Observable.combineLatest(idString, passwordString)
             .map({ $0 == "id@gmail.com" && $1 == "password" })
-            .subscribe { self.matchStatus = $0 }
+            .subscribe { [weak self] status in
+                self?.matchStatus = status
+            }
             .disposed(by: disposeBag)
     }
     
@@ -102,7 +104,8 @@ class ViewController: UIViewController {
         return password.count > 5
     }
     
-    private func changeValidViewStatus(_ view: UIView, status valid: Bool) {
+    private func changeValidViewStatus(_ view: UIView?, status valid: Bool) {
+        guard let view = view else { return }
         if valid {
             view.backgroundColor = .green
         } else {
