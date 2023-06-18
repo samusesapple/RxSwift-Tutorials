@@ -5,6 +5,7 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -29,7 +30,7 @@
         <!--Login-->
         <scene sceneID="Tb7-bQ-Ke5">
             <objects>
-                <viewController id="Hkn-ry-lT0" customClass="ViewController" customModule="RxSwiftIn4Hours" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="Hkn-ry-lT0" customClass="ViewController" customModule="RxSwift_Tutorial" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="fgd-CP-OeG">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -52,15 +53,15 @@
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3cn-eb-6ce">
                                 <rect key="frame" x="16" y="212" width="343" height="50"/>
-                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" systemColor="opaqueSeparatorColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="UpS-xQ-1eA"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" weight="thin" pointSize="15"/>
-                                <state key="normal" title="LOG IN">
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                                <state key="normal" title="LOGIN">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
-                                <state key="disabled" title="Fill the Fields"/>
+                                <state key="disabled" title="LOGIN"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                         <integer key="value" value="8"/>
@@ -99,17 +100,36 @@
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
                                 </userDefinedRuntimeAttributes>
                             </view>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="zAu-xB-4po">
+                                <rect key="frame" x="107" y="568" width="161.5" height="49"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email : id@gmail.com" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0gX-M7-Ldd">
+                                        <rect key="frame" x="0.0" y="0.0" width="161.5" height="20.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Password: password" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EPR-Jq-W7e">
+                                        <rect key="frame" x="0.0" y="28.5" width="156" height="20.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="ZPR-ka-SEl"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="UFD-GE-iF0" firstAttribute="top" secondItem="WZr-WG-ZEV" secondAttribute="top" constant="8" id="1Pc-rs-asH"/>
                             <constraint firstItem="3cn-eb-6ce" firstAttribute="leading" secondItem="ZPR-ka-SEl" secondAttribute="leading" constant="16" id="3nP-sd-GkQ"/>
+                            <constraint firstItem="zAu-xB-4po" firstAttribute="centerX" secondItem="fgd-CP-OeG" secondAttribute="centerX" id="67D-B0-PIB"/>
                             <constraint firstItem="ZPR-ka-SEl" firstAttribute="trailing" secondItem="WZr-WG-ZEV" secondAttribute="trailing" constant="16" id="7NK-IS-Ekx"/>
                             <constraint firstItem="3cn-eb-6ce" firstAttribute="top" secondItem="WZr-WG-ZEV" secondAttribute="bottom" constant="16" id="Eld-fI-Lbk"/>
                             <constraint firstItem="1cK-Ng-uLB" firstAttribute="leading" secondItem="ZPR-ka-SEl" secondAttribute="leading" constant="16" id="MbD-ri-gmn"/>
                             <constraint firstItem="UFD-GE-iF0" firstAttribute="trailing" secondItem="WZr-WG-ZEV" secondAttribute="trailing" constant="-8" id="a4F-ZF-xJO"/>
                             <constraint firstItem="WXd-rO-8w2" firstAttribute="trailing" secondItem="1cK-Ng-uLB" secondAttribute="trailing" constant="-8" id="c7d-ld-Hcx"/>
+                            <constraint firstItem="ZPR-ka-SEl" firstAttribute="bottom" secondItem="zAu-xB-4po" secondAttribute="bottom" constant="50" id="dgC-Hr-ec5"/>
                             <constraint firstItem="WZr-WG-ZEV" firstAttribute="top" secondItem="1cK-Ng-uLB" secondAttribute="bottom" constant="16" id="eio-al-fYX"/>
                             <constraint firstItem="ZPR-ka-SEl" firstAttribute="trailing" secondItem="1cK-Ng-uLB" secondAttribute="trailing" constant="16" id="gVu-85-zoI"/>
                             <constraint firstItem="1cK-Ng-uLB" firstAttribute="top" secondItem="ZPR-ka-SEl" secondAttribute="top" constant="16" id="ifA-WC-m73"/>
@@ -160,4 +180,9 @@
             <point key="canvasLocation" x="1612" y="134"/>
         </scene>
     </scenes>
+    <resources>
+        <systemColor name="opaqueSeparatorColor">
+            <color red="0.77647058823529413" green="0.77647058823529413" blue="0.78431372549019607" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
 </document>
