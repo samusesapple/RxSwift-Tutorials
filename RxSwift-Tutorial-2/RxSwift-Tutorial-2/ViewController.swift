@@ -23,50 +23,40 @@ class ViewController: UIViewController {
     @IBOutlet weak var resumeButton: UIButton!
     @IBOutlet weak var stopButton: UIButton!
     
-    // MARK: - Lifecycle
+    // MARK: - IBActions
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        bindInput()
-        bindOutput()
-    }
-    
-    // MARK: - Bind
-    func bindInput() {
-        resumeButton.rx.tap.subscribe { _ in
-            HttpClient.shared.getImageURL()
-                .bind(to: self.imageURL)
+    @IBAction func resumeButtonTapped(_ sender: Any) {
+        HttpClient.shared.getImageURL()
+            .bind(to: imageURL)
+            .disposed(by: disposeBag)
+        
+        imageURL.subscribe { string in
+            self.rxImageLoader(string)
+                .observe(on: MainScheduler.asyncInstance)
+                .bind(onNext: { self.imageView.image = $0 })
                 .disposed(by: self.disposeBag)
         }
         .disposed(by: disposeBag)
     }
     
-    func bindOutput() {
-        // label text, imageView image
-//        imageURL
-//            .filter({ $0 != nil })
-//            .map({ URL(string: $0!)! })
-//            .map(self.rxImageLoader)
-//            .observe(on: MainScheduler.asyncInstance)
-        
-        imageURL.subscribe(onNext: { urlString in
-            guard let urlString = urlString else { return }
-            self.rxImageLoader(URL(string: urlString)!)
-                .asObservable()
-                .observe(on: MainScheduler.asyncInstance)
-                .subscribe { image in
-                    self.imageView.image = image
-                    self.mainLabel.text = "FETCHED!"
-                }
-                .disposed(by: self.disposeBag)
-        })
-        .disposed(by: disposeBag)
+    @IBAction func stopButtonTapped(_ sender: Any) {
+        disposeBag = DisposeBag()
+        imageView.image = nil
     }
+    
+    // MARK: - Lifecycle
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+    }
+
     
     // MARK: - Logics
     
-    private func rxImageLoader(_ url: URL) -> Observable<UIImage?> {
+    private func rxImageLoader(_ urlString: String?) -> Observable<UIImage?> {
         return Observable.create { emitter in
+            let url = URL(string: urlString!)!
             let task = URLSession.shared.dataTask(with: url) { data, response, error in
                 if error != nil {
                     emitter.onError(error!)
@@ -88,5 +78,6 @@ class ViewController: UIViewController {
             }
         }
     }
+    
 }
 

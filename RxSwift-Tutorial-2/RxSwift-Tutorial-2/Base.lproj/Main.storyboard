@@ -27,6 +27,9 @@
                                         <rect key="frame" x="0.0" y="0.0" width="130" height="37"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="filled" title="RESUME"/>
+                                        <connections>
+                                            <action selector="resumeButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="0Jk-ct-Xgv"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="X9K-y4-2NF">
                                         <rect key="frame" x="160" y="0.0" width="130" height="37"/>
@@ -35,7 +38,7 @@
                                             <color key="baseBackgroundColor" systemColor="systemRedColor"/>
                                         </buttonConfiguration>
                                         <connections>
-                                            <action selector="stopButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="wKn-B0-Wl1"/>
+                                            <action selector="stopButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="pkl-24-hPC"/>
                                         </connections>
                                     </button>
                                 </subviews>
