@@ -179,7 +179,6 @@ RxSwift 기능 학습
                         observer.onNext(data.randomElement()?.url)
                     case .failure(let error):
                         observer.onError(error)
-                        observer.onCompleted()
                     }
                 }
             return Disposables.create {
