@@ -16,6 +16,8 @@ class ViewController: UIViewController {
     
     var imageURL: PublishSubject<String?> = PublishSubject<String?>()
     
+    let sampleView = UIView()
+    
     // MARK: - IBOutlets
     
     @IBOutlet weak var mainLabel: UILabel!
@@ -48,11 +50,11 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
     }
 
     
-    // MARK: - Logics
+    // MARK: - Helpers
     
     private func rxImageLoader(_ urlString: String?) -> Observable<UIImage?> {
         return Observable.create { emitter in
