@@ -30,9 +30,19 @@ class MemberItemCell: UITableViewCell {
     
     // 데이터로 각 셀에 UI 띄우기
     func setData(_ data: Member) {
-
+        loadProfileImage(data.avatar)
+        avatar.image = nil       // 셀 재사용 때문에 nil로 초기화
+        name.text = data.name
+        job.text = data.job
+        age.text = "\(data.age)"
     }
-
+    
+    private func loadProfileImage(_ data: String) {
+        NetworkManager.shared.loadImage(from: data)
+            .observe(on: MainScheduler.asyncInstance)
+            .bind(to: avatar.rx.image)
+            .disposed(by: disposeBag)
+    }
 }
 
 

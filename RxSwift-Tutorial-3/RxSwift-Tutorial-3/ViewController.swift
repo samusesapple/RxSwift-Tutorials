@@ -17,7 +17,7 @@ class ViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        setData()
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -32,10 +32,19 @@ class ViewController: UITableViewController {
     
     // MARK: - Helpers
     
-    // 1. 서버로부터 멤버 데이터들 불러오기
-    // 2. 데이터 다 받으면, 테이블뷰에 뿌리기
+    // 1. 서버로부터 멤버 데이터들 불러오기 - setData
+    // 2. 데이터 다 받으면, 테이블뷰의 각 cell에 뿌리기 - cell.setData
     // 3. 셀을 선택하면 셀에 해당되는 멤버의 세부정보를 보여주는 DetailVC로 넘어가기
 
+    func setData() {
+        NetworkManager.shared.getMembers()
+            .observe(on: MainScheduler.instance)
+            .subscribe { [weak self] members in
+                self?.data = members
+                self?.tableView.reloadData()
+            }
+            .disposed(by: disposeBag)
+    }
 }
 
 // MARK: - TableView Delegate & Datasource
