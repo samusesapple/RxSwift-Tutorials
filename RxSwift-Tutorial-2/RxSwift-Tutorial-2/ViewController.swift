@@ -55,7 +55,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         let _ = imageURL
-            .observe(on: SerialDispatchQueueScheduler(qos: .userInitiated))
+            .observe(on: ConcurrentDispatchQueueScheduler(qos: .userInitiated))
             .map({ self.rxImageLoader($0) })
             .flatMap ({ $0 })
             .observe(on: MainScheduler.asyncInstance)
