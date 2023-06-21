@@ -16,6 +16,8 @@
 		F180501A2A42F800008C242A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F18050182A42F800008C242A /* Main.storyboard */; };
 		F180501C2A42F83E008C242A /* Member.swift in Sources */ = {isa = PBXBuildFile; fileRef = F180501B2A42F83E008C242A /* Member.swift */; };
 		F180501E2A42F8BE008C242A /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F180501D2A42F8BE008C242A /* DetailViewController.swift */; };
+		F18050202A42FCE0008C242A /* TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F180501F2A42FCE0008C242A /* TableViewCell.swift */; };
+		F18050222A42FD29008C242A /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18050212A42FD29008C242A /* NetworkManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +34,8 @@
 		F18050192A42F800008C242A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		F180501B2A42F83E008C242A /* Member.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Member.swift; sourceTree = "<group>"; };
 		F180501D2A42F8BE008C242A /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		F180501F2A42FCE0008C242A /* TableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCell.swift; sourceTree = "<group>"; };
+		F18050212A42FD29008C242A /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,7 +90,9 @@
 			children = (
 				F18050042A42F277008C242A /* AppDelegate.swift */,
 				F18050062A42F277008C242A /* SceneDelegate.swift */,
+				F18050212A42FD29008C242A /* NetworkManager.swift */,
 				F18050082A42F277008C242A /* ViewController.swift */,
+				F180501F2A42FCE0008C242A /* TableViewCell.swift */,
 				F180501D2A42F8BE008C242A /* DetailViewController.swift */,
 				F180501B2A42F83E008C242A /* Member.swift */,
 				F18050182A42F800008C242A /* Main.storyboard */,
@@ -215,6 +221,8 @@
 				F18050092A42F277008C242A /* ViewController.swift in Sources */,
 				F18050052A42F277008C242A /* AppDelegate.swift in Sources */,
 				F180501E2A42F8BE008C242A /* DetailViewController.swift in Sources */,
+				F18050222A42FD29008C242A /* NetworkManager.swift in Sources */,
+				F18050202A42FCE0008C242A /* TableViewCell.swift in Sources */,
 				F18050072A42F277008C242A /* SceneDelegate.swift in Sources */,
 				F180501C2A42F83E008C242A /* Member.swift in Sources */,
 			);
