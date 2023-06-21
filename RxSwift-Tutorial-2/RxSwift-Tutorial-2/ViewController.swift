@@ -13,8 +13,9 @@ class ViewController: UIViewController {
     
     // MARK: - Properties
     private var disposeBag = DisposeBag()
+    private var disposable: Disposable?
     
-    var imageURL: PublishSubject<String?> = PublishSubject<String?>()
+    var imageURL = PublishSubject<String?>()
     
     let sampleView = UIView()
     
@@ -31,14 +32,16 @@ class ViewController: UIViewController {
         HttpClient.shared.getImageURL()
             .bind(to: imageURL)
             .disposed(by: disposeBag)
+                
+        //        imageURL.subscribe { string in
+        //            self.rxImageLoader(string)
+        //                .observe(on: MainScheduler.asyncInstance)
+        //                .bind(onNext: { self.imageView.image = $0 })
+        //                .disposed(by: self.disposeBag)
+        //        }
+        //        .disposed(by: disposeBag)
         
-        imageURL.subscribe { string in
-            self.rxImageLoader(string)
-                .observe(on: MainScheduler.asyncInstance)
-                .bind(onNext: { self.imageView.image = $0 })
-                .disposed(by: self.disposeBag)
-        }
-        .disposed(by: disposeBag)
+
     }
     
     @IBAction func stopButtonTapped(_ sender: Any) {
@@ -51,8 +54,15 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let _ = imageURL
+            .observe(on: SerialDispatchQueueScheduler(qos: .userInitiated))
+            .map({ self.rxImageLoader($0) })
+            .flatMap ({ $0 })
+            .observe(on: MainScheduler.asyncInstance)
+            .bind(onNext: { self.imageView.image = $0 })
+//            .disposed(by: disposeBag)
     }
-
+    
     
     // MARK: - Helpers
     
