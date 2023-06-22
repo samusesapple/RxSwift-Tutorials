@@ -90,17 +90,49 @@
 			children = (
 				F18050042A42F277008C242A /* AppDelegate.swift */,
 				F18050062A42F277008C242A /* SceneDelegate.swift */,
-				F18050212A42FD29008C242A /* NetworkManager.swift */,
-				F18050082A42F277008C242A /* ViewController.swift */,
-				F180501F2A42FCE0008C242A /* TableViewCell.swift */,
-				F180501D2A42F8BE008C242A /* DetailViewController.swift */,
-				F180501B2A42F83E008C242A /* Member.swift */,
-				F18050182A42F800008C242A /* Main.storyboard */,
+				F1AE306B2A44535100A67F5E /* Service */,
+				F1AE306E2A44538700A67F5E /* Models */,
+				F1AE306D2A44537D00A67F5E /* Views */,
+				F1AE306C2A44537200A67F5E /* Controllers */,
 				F180500D2A42F278008C242A /* Assets.xcassets */,
 				F180500F2A42F278008C242A /* LaunchScreen.storyboard */,
 				F18050122A42F278008C242A /* Info.plist */,
 			);
 			path = "RxSwift-Tutorial-3";
+			sourceTree = "<group>";
+		};
+		F1AE306B2A44535100A67F5E /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				F18050212A42FD29008C242A /* NetworkManager.swift */,
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
+		F1AE306C2A44537200A67F5E /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				F18050082A42F277008C242A /* ViewController.swift */,
+				F180501D2A42F8BE008C242A /* DetailViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		F1AE306D2A44537D00A67F5E /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				F18050182A42F800008C242A /* Main.storyboard */,
+				F180501F2A42FCE0008C242A /* TableViewCell.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		F1AE306E2A44538700A67F5E /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				F180501B2A42F83E008C242A /* Member.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

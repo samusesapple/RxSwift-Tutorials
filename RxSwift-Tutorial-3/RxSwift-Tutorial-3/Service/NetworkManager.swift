@@ -34,20 +34,38 @@ struct NetworkManager {
         }
     }
     
-//    func getMembers() -> Observable<[Member]> {
+    func loadImage(from url: String) -> Observable<UIImage?> {
+        return Observable.create { emitter in
+            let request = AF.request(URL(string: url)!)
+                .response { response in
+                    switch response.result {
+                    case .success(let data):
+                        emitter.onNext(UIImage(data: data!))
+                    case .failure(let error):
+                        emitter.onError(error)
+                    }
+                }
+            return Disposables.create {
+                request.cancel()
+            }
+        }
+    }
+    
+//    func loadImage(from url: String) -> Observable<UIImage?> {
 //        return Observable.create { emitter in
-//            let task = URLSession.shared.dataTask(with: URL(string: MEMBER_LIST_URL)!) { data, _, error in
+//            let task = URLSession.shared.dataTask(with: URL(string: url)!) { data, _, error in
 //                if let error = error {
 //                    emitter.onError(error)
 //                    return
 //                }
 //                guard let data = data,
-//                      let members = try? JSONDecoder().decode([Member].self, from: data) else {
+//                      let image = UIImage(data: data) else {
+//                    emitter.onNext(nil)
 //                    emitter.onCompleted()
 //                    return
 //                }
 //
-//                emitter.onNext(members)
+//                emitter.onNext(image)
 //                emitter.onCompleted()
 //            }
 //            task.resume()
@@ -56,28 +74,4 @@ struct NetworkManager {
 //            }
 //        }
 //    }
-    
-    func loadImage(from url: String) -> Observable<UIImage?> {
-        return Observable.create { emitter in
-            let task = URLSession.shared.dataTask(with: URL(string: url)!) { data, _, error in
-                if let error = error {
-                    emitter.onError(error)
-                    return
-                }
-                guard let data = data,
-                      let image = UIImage(data: data) else {
-                    emitter.onNext(nil)
-                    emitter.onCompleted()
-                    return
-                }
-                
-                emitter.onNext(image)
-                emitter.onCompleted()
-            }
-            task.resume()
-            return Disposables.create {
-                task.cancel()
-            }
-        }
-    }
 }
