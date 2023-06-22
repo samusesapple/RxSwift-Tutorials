@@ -225,7 +225,87 @@ RxSwift 기능 학습
 <br>
 <br>
 
+### 3. 멤버 리스트 tableView에 띄우기 (feat. Alamofire)
+---
+#### * 구현 목표
+* Alamofire + RxSwift를 통한 보다 더 깔끔한 네트워킹 작업 구현
+<br>
+
+#### * 구현 방법 및 로직
+* 로직
+  1. viewDidLoad() 시점에 서버로부터 멤버 데이터를 배열 형태로 받는다.
+  2. 비동기 작업이 완료되면 tableView를 reload 한다.
+  3. tableView dataSource cellForRowAt에 indexPath.row를 사용하여 각각의 row에 해당되는 멤버의 데이터를 셀에 전달한다.
+  4. 전달받은 데이터로 셀의 UI를 구성한다.
+  <br>
+  
+  * viewDidLoad()
+    ```
+    func setData() {
+        NetworkManager.shared.getMembers()
+            .observe(on: MainScheduler.instance)
+            .subscribe { [weak self] members in
+                self?.data = members
+                self?.tableView.reloadData()
+            }
+            .disposed(by: disposeBag)
+    }
+    ```
+ <br>
+ 
+* 네트워킹
+  * Data Loader (Alamofire)
+  ```
+     func getMembers() -> Observable<[Member]> {
+        return Observable.create { emitter in
+            let requset = AF.request(URL(string: MEMBER_LIST_URL)!,
+                                     method: .get)
+                .responseDecodable(of: [Member].self) { response in
+                    switch response.result {
+                    case .success(let data):
+                        emitter.onNext(data)
+                    case .failure(let error):
+                        emitter.onError(error)
+                    }
+                }
+            return Disposables.create {
+                requset.cancel()
+            }
+        }
+    }
+  ```
+  <br>
+  
+  * Image Loader (Alamofire)
+  ```
+      func loadImage(from url: String) -> Observable<UIImage?> {
+        return Observable.create { emitter in
+            let request = AF.request(URL(string: url)!)
+                .response { response in
+                    switch response.result {
+                    case .success(let data):
+                        emitter.onNext(UIImage(data: data!))
+                    case .failure(let error):
+                        emitter.onError(error)
+                    }
+                }
+            return Disposables.create {
+                request.cancel()
+            }
+        }
+    }
+  ```
+<br>
+
+#### * 구현 결과 
+![Simulator Screen Recording - iPhone 14 Pro - 2023-06-22 at 19 22 59](https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/f4bedcda-deb4-4f06-ab9a-1d5da5b0469b)
+<br>
+<br>
+<br>
+
+
 
 ### 출처 및 참고 자료
 ---
 - RxSwift-Tutorial-1 (아이디 비밀번호 매칭) : https://github.com/iamchiwon/RxSwift_In_4_Hours
+- RxSwift-Tutorial-3 (멤버 리스트 tableView에 띄우기) : https://github.com/iamchiwon/RxSwift_In_4_Hours
