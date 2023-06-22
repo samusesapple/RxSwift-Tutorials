@@ -34,7 +34,7 @@ class MemberItemCell: UITableViewCell {
         avatar.image = nil       // 셀 재사용 때문에 nil로 초기화
         name.text = data.name
         job.text = data.job
-        age.text = "\(data.age)"
+        age.text = "(\(data.age))"
     }
     
     private func loadProfileImage(_ data: String) {
