@@ -303,7 +303,14 @@ RxSwift 기능 학습
 <br>
 <br>
 
-
+### 4. 검색 포털 만들기
+---
+#### * 구현 목표
+- RxSwift를 활용한 검색 포털 만들기
+- SnapKit, Then, Alamofire, Kingfisher 같이 활용하기
+<br>
+<br>
+<br>
 
 ### 출처 및 참고 자료
 ---
