@@ -6,41 +6,60 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
+import SnapKit
+import Then
 
 class MainViewController: UIViewController {
     
-    private let searchBar: UISearchBar = {
-        let sb = UISearchBar()
-        sb.searchBarStyle = .minimal
-        sb.autocorrectionType = .no
-        sb.autocapitalizationType = .none
-        sb.searchTextField.textAlignment = .left
-        return sb
-    }()
+    private var searchText: BehaviorSubject<String?> = BehaviorSubject(value: "")
     
-    lazy var tableView: UITableView = {
-        let table = UITableView()
-        table.backgroundColor = .white
-        table.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        table.dataSource = self
-        table.delegate = self
-        return table
-    }()
+    private let disposeBag = DisposeBag()
     
+// MARK: - Components
+    
+    private let searchController = UISearchController(searchResultsController: nil)
+    
+    private lazy var tableView = UITableView().then {
+        $0.backgroundColor = .white
+        $0.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        $0.dataSource = self
+        $0.delegate = self
+    }
+    
+// MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        self.navigationItem.searchController = searchController
         
-        view.addSubview(searchBar)
-        searchBar.translatesAutoresizingMaskIntoConstraints = false
-    
         view.addSubview(tableView)
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.widthAnchor.constraint(equalToConstant: view.frame.width).isActive = true
-        tableView.heightAnchor.constraint(equalToConstant: view.frame.height).isActive = true
+        tableView.snp.makeConstraints { make in
+            make.height.equalTo(view.frame.height)
+            make.width.equalTo(view.frame.width)
+        }
+        
+        bindInput()
     }
 
+// MARK: - Bind
+    
+    private func bindInput() {
+        searchController.searchBar.rx.text
+            .orEmpty
+            .bind(to: searchText)
+            .disposed(by: disposeBag)
+        
+        searchText
+            .subscribe({ print($0) })
+            .disposed(by: disposeBag)
+    }
 
+    
 }
+
+// MARK: - UITableViewDataSource
 
 extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -55,3 +74,4 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     
     
 }
+
