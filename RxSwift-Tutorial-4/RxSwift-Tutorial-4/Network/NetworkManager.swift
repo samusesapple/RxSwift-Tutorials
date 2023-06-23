@@ -25,12 +25,13 @@ struct NetworkManager {
     
     private func searchParameters(_ keyword: String) -> [String: Any] {
         [
-            "query" : keyword.utf8
+            "query" : keyword.utf8,
+            "display" : "20"
         ]
     }
     
     // MARK: - Get
-//
+
     func getSearchResult(_ keyword: String) -> Observable<[Item]?> {
         return Observable.create { emitter in
         let request = AF.request(URL(string: "https://openapi.naver.com/v1/search/blog.json")!,
@@ -50,19 +51,4 @@ struct NetworkManager {
             }
         }
     }
-    
-//    func getSearchResult(_ keyword: String) {
-//        let request = AF.request(URL(string: "https://openapi.naver.com/v1/search/blog.json")!,
-//                                              method: .get,
-//                                              parameters: searchParameters(keyword),
-//                                              headers: header)
-//        .responseDecodable(of: Search.self) { response in
-//            switch response.result {
-//            case .success(let result):
-//                print(result.items?.count)
-//            case .failure(let error):
-//                print("Error: \(error)")
-//            }
-//        }
-//    }
 }

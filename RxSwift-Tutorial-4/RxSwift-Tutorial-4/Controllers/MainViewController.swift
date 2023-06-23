@@ -15,6 +15,8 @@ class MainViewController: UIViewController {
     
     private var searchText: BehaviorSubject<String?> = BehaviorSubject(value: "")
     
+    private var data: [Item]? = []
+    
     private let disposeBag = DisposeBag()
     
 // MARK: - Components
@@ -53,8 +55,11 @@ class MainViewController: UIViewController {
         
         searchText
             .filter({ $0 != nil })
-            .map({ NetworkManager.shared.getSearchResult($0!) })
-            .subscribe(onNext: { print($0) })
+            .flatMap({ NetworkManager.shared.getSearchResult($0!) })
+            .bind(onNext: { [weak self] item in
+                self?.data = item
+                self?.tableView.reloadData()
+            })
             .disposed(by: disposeBag)
     }
 
@@ -65,12 +70,12 @@ class MainViewController: UIViewController {
 
 extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return data?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell")!
-        cell.textLabel?.text = "\(indexPath.row)"
+        cell.textLabel?.text = data?[indexPath.row].title?.htmlToString
         return cell
     }
     
