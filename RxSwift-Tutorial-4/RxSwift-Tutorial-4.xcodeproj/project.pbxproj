@@ -8,17 +8,20 @@
 
 /* Begin PBXBuildFile section */
 		031F2E0BEC3789D79367B48E /* Pods_RxSwift_Tutorial_4.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D542971816BE7B1814274AD7 /* Pods_RxSwift_Tutorial_4.framework */; };
+		F17538982A45CE0F00028D3D /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F17538972A45CE0F00028D3D /* NetworkManager.swift */; };
 		F1AE307C2A44594D00A67F5E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1AE307B2A44594D00A67F5E /* AppDelegate.swift */; };
 		F1AE307E2A44594D00A67F5E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1AE307D2A44594D00A67F5E /* SceneDelegate.swift */; };
 		F1AE30802A44594D00A67F5E /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1AE307F2A44594D00A67F5E /* MainViewController.swift */; };
 		F1AE30852A44594E00A67F5E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F1AE30842A44594E00A67F5E /* Assets.xcassets */; };
 		F1AE30882A44594E00A67F5E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F1AE30862A44594E00A67F5E /* LaunchScreen.storyboard */; };
+		F1C678622A45DAE700AF1D10 /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1C678612A45DAE700AF1D10 /* Search.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		7F6DC81618AFEB7569251E2B /* Pods-RxSwift-Tutorial-4.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RxSwift-Tutorial-4.release.xcconfig"; path = "Target Support Files/Pods-RxSwift-Tutorial-4/Pods-RxSwift-Tutorial-4.release.xcconfig"; sourceTree = "<group>"; };
 		D542971816BE7B1814274AD7 /* Pods_RxSwift_Tutorial_4.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RxSwift_Tutorial_4.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA563CAC184B17B69115B99A /* Pods-RxSwift-Tutorial-4.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RxSwift-Tutorial-4.debug.xcconfig"; path = "Target Support Files/Pods-RxSwift-Tutorial-4/Pods-RxSwift-Tutorial-4.debug.xcconfig"; sourceTree = "<group>"; };
+		F17538972A45CE0F00028D3D /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		F1AE30782A44594D00A67F5E /* RxSwift-Tutorial-4.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "RxSwift-Tutorial-4.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1AE307B2A44594D00A67F5E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F1AE307D2A44594D00A67F5E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -26,6 +29,7 @@
 		F1AE30842A44594E00A67F5E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F1AE30872A44594E00A67F5E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F1AE30892A44594E00A67F5E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F1C678612A45DAE700AF1D10 /* Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Search.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,7 +50,6 @@
 				EA563CAC184B17B69115B99A /* Pods-RxSwift-Tutorial-4.debug.xcconfig */,
 				7F6DC81618AFEB7569251E2B /* Pods-RxSwift-Tutorial-4.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -81,12 +84,38 @@
 			children = (
 				F1AE307B2A44594D00A67F5E /* AppDelegate.swift */,
 				F1AE307D2A44594D00A67F5E /* SceneDelegate.swift */,
-				F1AE307F2A44594D00A67F5E /* MainViewController.swift */,
+				F1C678632A45DAF900AF1D10 /* Network */,
+				F1C678642A45DB0700AF1D10 /* Models */,
+				F1C678652A45DB1300AF1D10 /* Controllers */,
 				F1AE30842A44594E00A67F5E /* Assets.xcassets */,
 				F1AE30862A44594E00A67F5E /* LaunchScreen.storyboard */,
 				F1AE30892A44594E00A67F5E /* Info.plist */,
 			);
 			path = "RxSwift-Tutorial-4";
+			sourceTree = "<group>";
+		};
+		F1C678632A45DAF900AF1D10 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				F17538972A45CE0F00028D3D /* NetworkManager.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		F1C678642A45DB0700AF1D10 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				F1C678612A45DAE700AF1D10 /* Search.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		F1C678652A45DB1300AF1D10 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				F1AE307F2A44594D00A67F5E /* MainViewController.swift */,
+			);
+			path = Controllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -203,6 +232,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F1C678622A45DAE700AF1D10 /* Search.swift in Sources */,
+				F17538982A45CE0F00028D3D /* NetworkManager.swift in Sources */,
 				F1AE30802A44594D00A67F5E /* MainViewController.swift in Sources */,
 				F1AE307C2A44594D00A67F5E /* AppDelegate.swift in Sources */,
 				F1AE307E2A44594D00A67F5E /* SceneDelegate.swift in Sources */,

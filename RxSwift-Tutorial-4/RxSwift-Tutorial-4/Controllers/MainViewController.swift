@@ -52,7 +52,9 @@ class MainViewController: UIViewController {
             .disposed(by: disposeBag)
         
         searchText
-            .subscribe({ print($0) })
+            .filter({ $0 != nil })
+            .map({ NetworkManager.shared.getSearchResult($0!) })
+            .subscribe(onNext: { print($0) })
             .disposed(by: disposeBag)
     }
 
