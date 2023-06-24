@@ -13,9 +13,8 @@ import Then
 
 class MainViewController: UIViewController {
     
-    private var searchText: BehaviorSubject<String?> = BehaviorSubject(value: "")
-    
-    private var data: [Item]? = []
+        
+    private let viewModel = MainViewModel()
     
     private let disposeBag = DisposeBag()
     
@@ -48,37 +47,29 @@ class MainViewController: UIViewController {
 // MARK: - Bind
     
     private func bindInput() {
-        searchController.searchBar.rx.text
-            .orEmpty
-            .bind(to: searchText)
-            .disposed(by: disposeBag)
-        
-        searchText
-            .filter({ $0 != nil })
-            .flatMap({ NetworkManager.shared.getSearchResult($0!) })
-            .bind(onNext: { [weak self] item in
-                self?.data = item
-                self?.tableView.reloadData()
-            })
-            .disposed(by: disposeBag)
+        viewModel.bindInput(searchBar: searchController.searchBar) { [weak self] in
+            self?.tableView.reloadData()
+        }
     }
-
-    
 }
 
 // MARK: - UITableViewDataSource
 
 extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return data?.count ?? 0
+        return viewModel.dataCount
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell")!
-        cell.textLabel?.text = data?[indexPath.row].title?.htmlToString
+        cell.textLabel?.text = viewModel.getTitle(index: indexPath.row)
         return cell
     }
     
-    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let link = viewModel.getLink(index: indexPath.row) else { return }
+        let detailVC = DetailViewController(url: link)
+        self.navigationController?.pushViewController(detailVC, animated: true)
+    }
 }
 
