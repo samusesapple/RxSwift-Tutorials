@@ -15,6 +15,8 @@ class MainViewModel {
     
     private var searchText: BehaviorSubject<String?> = BehaviorSubject(value: "")
     
+    private var startPage: Int = 1
+    
     private let disposeBag = DisposeBag()
     
     // MARK: - Bind
@@ -47,4 +49,18 @@ class MainViewModel {
         return data?[index].link
     }
 
+    func getNextPageResults(completion: @escaping () -> Void) {
+        guard let data = data,
+                  data.count >= 20 else { return }
+        startPage += 2
+        searchText
+            .flatMap({ [weak self] in
+                NetworkManager.shared.getSearchResult($0!,
+                                                      startPage: self!.startPage) })
+            .bind { [weak self] items in
+                items?.forEach({ self?.data?.append($0) })
+                completion()
+            }
+            .disposed(by: disposeBag)
+    }
 }

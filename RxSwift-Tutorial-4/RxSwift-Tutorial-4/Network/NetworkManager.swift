@@ -23,20 +23,22 @@ struct NetworkManager {
     
     // MARK: - Parameters
     
-    private func searchParameters(_ keyword: String) -> [String: Any] {
+    private func searchParameters(_ keyword: String, startPage: Int) -> [String: Any] {
         [
             "query" : keyword.utf8,
-            "display" : "20"
+            "display" : "20",
+            "start" : startPage
         ]
     }
     
     // MARK: - Get
 
-    func getSearchResult(_ keyword: String) -> Observable<[Item]?> {
+    func getSearchResult(_ keyword: String, startPage: Int = 1) -> Observable<[Item]?> {
         return Observable.create { emitter in
         let request = AF.request(URL(string: "https://openapi.naver.com/v1/search/blog.json")!,
                                               method: .get,
-                                              parameters: searchParameters(keyword),
+                                              parameters: searchParameters(keyword,
+                                                                           startPage: startPage),
                                               headers: header)
         .responseDecodable(of: Search.self) { response in
             switch response.result {

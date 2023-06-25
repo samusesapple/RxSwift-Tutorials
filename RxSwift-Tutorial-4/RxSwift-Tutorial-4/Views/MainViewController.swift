@@ -12,7 +12,6 @@ import SnapKit
 import Then
 
 class MainViewController: UIViewController {
-    
         
     private let viewModel = MainViewModel()
     
@@ -36,9 +35,9 @@ class MainViewController: UIViewController {
         self.navigationItem.searchController = searchController
         
         view.addSubview(tableView)
-        tableView.snp.makeConstraints { make in
-            make.height.equalTo(view.frame.height)
-            make.width.equalTo(view.frame.width)
+        tableView.snp.makeConstraints {
+            $0.height.equalTo(view.frame.height)
+            $0.width.equalTo(view.frame.width)
         }
         
         bindInput()
@@ -70,6 +69,17 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
         guard let link = viewModel.getLink(index: indexPath.row) else { return }
         let detailVC = DetailViewController(url: link)
         self.navigationController?.pushViewController(detailVC, animated: true)
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offsetY = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height
+
+        if offsetY > contentHeight - scrollView.frame.height {
+            viewModel.getNextPageResults { [weak self] in
+                self?.tableView.reloadData()
+            }
+        }
     }
 }
 

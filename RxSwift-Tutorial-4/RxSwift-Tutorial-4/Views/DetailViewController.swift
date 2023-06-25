@@ -33,10 +33,10 @@ class DetailViewController: UIViewController, WKUIDelegate, WKNavigationDelegate
         view.backgroundColor = .white
     
         view.addSubview(webView)
-        webView.snp.makeConstraints { make in
-            make.bottom.equalTo(view.snp.bottom)
-            make.height.equalTo(view.frame.height - 100)
-            make.width.equalTo(view.frame.width)
+        webView.snp.makeConstraints {
+            $0.bottom.equalTo(view.snp.bottom)
+            $0.height.equalTo(view.frame.height - 100)
+            $0.width.equalTo(view.frame.width)
         }
             
         configureWebView()
