@@ -14,16 +14,17 @@ import Then
 class MainViewController: UIViewController {
         
     private let viewModel = MainViewModel()
-    
-    private let disposeBag = DisposeBag()
-    
+        
 // MARK: - Components
     
     private let searchController = UISearchController(searchResultsController: nil)
     
     private lazy var tableView = UITableView().then {
         $0.backgroundColor = .white
-        $0.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        $0.rowHeight = 115
+        $0.register(UINib(nibName: "MainTableViewCell"
+                          , bundle: nil),
+                    forCellReuseIdentifier: "mainCell")
         $0.dataSource = self
         $0.delegate = self
     }
@@ -42,6 +43,7 @@ class MainViewController: UIViewController {
         
         bindInput()
     }
+    
 
 // MARK: - Bind
     
@@ -60,8 +62,11 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell")!
-        cell.textLabel?.text = viewModel.getTitle(index: indexPath.row)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "mainCell") as! MainTableViewCell
+
+        let output = viewModel.transform(index: indexPath.row)
+        cell.titleLabel.text = output.title
+        cell.detailLabel.text = output.detail
         return cell
     }
     

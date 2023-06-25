@@ -17,9 +17,15 @@ class MainViewModel {
     
     private var startPage: Int = 1
     
-    private let disposeBag = DisposeBag()
+    let disposeBag = DisposeBag()
     
     // MARK: - Bind
+    
+    struct Output {
+        let title: String?
+        let detail: String?
+        let link: String?
+    }
     
     func bindInput(searchBar: UISearchBar, completion: @escaping () -> Void) {
         searchBar.rx.text.orEmpty
@@ -35,16 +41,19 @@ class MainViewModel {
             .disposed(by: disposeBag)
     }
     
+    func transform(index: Int = 0) -> Output {
+        return Output(title: data?[index].title?.htmlToString,
+                      detail: data?[index].description?.htmlToString,
+                      link: data?[index].link)
+    }
+    
     // MARK: - Helpers
+
     
     var dataCount: Int {
         return data?.count ?? 0
     }
-    
-    func getTitle(index: Int) -> String? {
-        return data?[index].title?.htmlToString
-    }
-    
+
     func getLink(index: Int) -> String? {
         return data?[index].link
     }
@@ -52,6 +61,7 @@ class MainViewModel {
     func getNextPageResults(completion: @escaping () -> Void) {
         guard let data = data,
                   data.count >= 20 else { return }
+        
         startPage += 2
         searchText
             .flatMap({ [weak self] in
