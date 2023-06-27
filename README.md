@@ -344,5 +344,9 @@ RxSwift 기능 학습
 
 ### 출처 및 참고 자료
 ---
-- RxSwift-Tutorial-1 (아이디 비밀번호 매칭) : https://github.com/iamchiwon/RxSwift_In_4_Hours
-- RxSwift-Tutorial-3 (멤버 리스트 tableView에 띄우기) : https://github.com/iamchiwon/RxSwift_In_4_Hours
+- RxSwift-Tutorial-1 (아이디 비밀번호 매칭) : 
+    https://github.com/iamchiwon/RxSwift_In_4_Hours
+- RxSwift-Tutorial-3 (멤버 리스트 tableView에 띄우기) : 
+      https://github.com/iamchiwon/RxSwift_In_4_Hours
+- RxSwift-Tutorial-4 (검색 포털 만들기) : 
+      네이버 API 공식 개발자 문서 https://developers.naver.com/docs/serviceapi/search/web/web.md#%EC%9B%B9%EB%AC%B8%EC%84%9C
