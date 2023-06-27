@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		699C7F6FCB698A1547263DF9 /* Pods_RxSwift_Tutorial_5.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB1B05AFA4A0C6ED4FA71AE5 /* Pods_RxSwift_Tutorial_5.framework */; };
 		F111D3AC2A484EEF004A54D0 /* CalculatorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F111D3AB2A484EEF004A54D0 /* CalculatorViewModel.swift */; };
+		F111D3B32A4AEDB9004A54D0 /* CurrencyFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F111D3B22A4AEDB9004A54D0 /* CurrencyFormatter.swift */; };
+		F12E9D232A4B1A6900859C61 /* ButtonCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = F12E9D222A4B1A6900859C61 /* ButtonCommand.swift */; };
+		F12E9D252A4B1F2500859C61 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = F12E9D242A4B1F2500859C61 /* Result.swift */; };
 		F1C678872A481D2E00AF1D10 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1C678862A481D2E00AF1D10 /* AppDelegate.swift */; };
 		F1C678892A481D2E00AF1D10 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1C678882A481D2E00AF1D10 /* SceneDelegate.swift */; };
 		F1C6788B2A481D2E00AF1D10 /* CalculatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1C6788A2A481D2E00AF1D10 /* CalculatorViewController.swift */; };
@@ -22,6 +25,9 @@
 		6CFB8D1CF4F3B7ADF99B9253 /* Pods-RxSwift-Tutorial-5.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RxSwift-Tutorial-5.release.xcconfig"; path = "Target Support Files/Pods-RxSwift-Tutorial-5/Pods-RxSwift-Tutorial-5.release.xcconfig"; sourceTree = "<group>"; };
 		BB1B05AFA4A0C6ED4FA71AE5 /* Pods_RxSwift_Tutorial_5.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RxSwift_Tutorial_5.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F111D3AB2A484EEF004A54D0 /* CalculatorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorViewModel.swift; sourceTree = "<group>"; };
+		F111D3B22A4AEDB9004A54D0 /* CurrencyFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyFormatter.swift; sourceTree = "<group>"; };
+		F12E9D222A4B1A6900859C61 /* ButtonCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonCommand.swift; sourceTree = "<group>"; };
+		F12E9D242A4B1F2500859C61 /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		F1C678832A481D2E00AF1D10 /* RxSwift-Tutorial-5.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "RxSwift-Tutorial-5.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1C678862A481D2E00AF1D10 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F1C678882A481D2E00AF1D10 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -84,6 +90,7 @@
 			children = (
 				F1C678862A481D2E00AF1D10 /* AppDelegate.swift */,
 				F1C678882A481D2E00AF1D10 /* SceneDelegate.swift */,
+				F111D3B22A4AEDB9004A54D0 /* CurrencyFormatter.swift */,
 				F1C6789C2A48428A00AF1D10 /* Models */,
 				F1C6789B2A48428100AF1D10 /* ViewModels */,
 				F1C6789A2A48426200AF1D10 /* Views */,
@@ -114,6 +121,8 @@
 		F1C6789C2A48428A00AF1D10 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				F12E9D222A4B1A6900859C61 /* ButtonCommand.swift */,
+				F12E9D242A4B1F2500859C61 /* Result.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -234,9 +243,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				F1C6788B2A481D2E00AF1D10 /* CalculatorViewController.swift in Sources */,
+				F12E9D232A4B1A6900859C61 /* ButtonCommand.swift in Sources */,
 				F1C678872A481D2E00AF1D10 /* AppDelegate.swift in Sources */,
 				F111D3AC2A484EEF004A54D0 /* CalculatorViewModel.swift in Sources */,
+				F12E9D252A4B1F2500859C61 /* Result.swift in Sources */,
 				F1C678892A481D2E00AF1D10 /* SceneDelegate.swift in Sources */,
+				F111D3B32A4AEDB9004A54D0 /* CurrencyFormatter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

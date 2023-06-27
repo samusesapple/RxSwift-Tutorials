@@ -8,13 +8,10 @@
 import Foundation
 import RxSwift
 
-enum ButtonCommand {
-    case clear
-    case next
-    case addNumber(Character)
-}
-
 class CalculatorViewModel {
+    
+    var buttonSubject: PublishSubject<ButtonCommand> = PublishSubject()
+
     let disposeBag = DisposeBag()
     
     struct Input {
@@ -26,18 +23,24 @@ class CalculatorViewModel {
         return Observable
             .combineLatest(input.totalSubject,
                            input.personSubject)
-            .map { String(((100*($0 / $1)).rounded()) / 100) }
+            .map { Formatter.currencyFormatter.string(from: ($0 / $1) as NSNumber)! }
     }
     
-    func buttonTapped(_ command: ButtonCommand) {
-        switch command {
-        case .addNumber(let number):
-            print(number)
-        case .clear:
-            print("Clear button Tapped")
-        case .next:
-            print("Next button Tapped")
+    // return obervable about button action
+    func buttonTapped(_ command: ButtonCommand) -> Observable<ButtonCommand> {
+        return Observable.create { emitter in
+            switch command {
+            case .addNumber(let number):
+                emitter.onNext(.addNumber(number))
+            case .clear:
+                emitter.onNext(.clear)
+            case .next:
+                print("Next button Tapped")
+                emitter.onNext(.next)
+            }
+            return Disposables.create {
+                print("disposed")
+            }
         }
     }
-    
 }

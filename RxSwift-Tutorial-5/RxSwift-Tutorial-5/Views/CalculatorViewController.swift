@@ -10,18 +10,18 @@ import RxSwift
 import RxCocoa
 
 class CalculatorViewController: UIViewController {
-
+    
     // MARK: - Properties
     
     private let viewModel = CalculatorViewModel()
     
     private var totalSubject: BehaviorSubject<Double> = BehaviorSubject(value: 0)
     private var personSubject: BehaviorSubject<Double> = BehaviorSubject(value: 1)
-
+    
     private let disposableBag = DisposeBag()
-
+    
     // MARK: - Components
-  
+    
     @IBOutlet weak var totalAmountTextField: UITextField!
     @IBOutlet weak var personCountTextField: UITextField!
     
@@ -45,13 +45,30 @@ class CalculatorViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        [button0, button1, button2, button3, button4, button5,
+         button6, button7, button8, button9,
+         clearButton, nextButton
+        ].forEach(buttonInput)
+        
         bindInput()
         bindOutput()
     }
-
-    func bindInput() {
-        buttonInput()
-        
+    
+    // MARK: - Bind
+    
+    /* input :
+     1. button
+       1-1) number button
+       1-2) next button
+       1-3) clear button
+     
+     2. textField text (only could change by button)
+       2-1) total amount tf.text
+       2-2) person count tf.text
+     */
+    
+    private func bindInput() {
         totalAmountTextField.rx.text
             .orEmpty
             .filter({ Double($0) != nil && Double($0)! > 0 })
@@ -67,35 +84,30 @@ class CalculatorViewController: UIViewController {
             .disposed(by: disposableBag)
     }
     
-    func buttonInput() {
-        button0.rx.tap.map({ ButtonCommand.addNumber("0") })
-            .bind(onNext: { [weak self] in self?.viewModel.buttonTapped($0) })
-        .disposed(by: disposableBag)
-        
-        button1.rx.tap.map({ ButtonCommand.addNumber("1") })
-            .bind(onNext: { [weak self] in self?.viewModel.buttonTapped($0) })
-        .disposed(by: disposableBag)
-        
-        button2.rx.tap.map({ ButtonCommand.addNumber("2") })
-            .bind(onNext: { [weak self] in self?.viewModel.buttonTapped($0) })
-        .disposed(by: disposableBag)
-        
-        button3.rx.tap.map({ ButtonCommand.addNumber("3") })
-            .bind(onNext: { [weak self] in self?.viewModel.buttonTapped($0) })
-        .disposed(by: disposableBag)
-        
-        button4.rx.tap.map({ ButtonCommand.addNumber("4") })
-            .bind(onNext: { [weak self] in self?.viewModel.buttonTapped($0) })
-        .disposed(by: disposableBag)
-        
+    private func buttonInput(_ button: UIButton) {
+        button.rx.tap
+            .map({ [weak self] event in
+                guard let num = button.titleLabel?.text else {
+                   return button == self?.clearButton ? ButtonCommand.clear : ButtonCommand.next
+                }
+                return ButtonCommand.addNumber(num)
+            })
+            .bind(to: viewModel.buttonSubject)
+            .disposed(by: disposableBag)
     }
     
-    func bindOutput() {
+    /* output :
+     1. number button : type text
+     2. next button : resign tf firstResponder
+     3. clear button : clear everything
+     4. show amount per person
+     */
+    private func bindOutput() {
         viewModel.transform(input: CalculatorViewModel.Input(totalSubject: totalSubject,
                                                              personSubject: personSubject))
         .subscribe(onNext: { [weak self] in self?.resultAmountLabel.text = $0 })
         .disposed(by: disposableBag)
     }
-
+    
 }
 
