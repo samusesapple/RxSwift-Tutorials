@@ -336,7 +336,9 @@ RxSwift 기능 학습
 <br>
 
 #### * 구조
-<img width="981" alt="image" src="https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/71e6dd3d-ef71-4237-aeca-008d519df916">
+<img width="981" alt="image" src="https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/973318e0-dbbf-4629-b302-4941530d8c96">
+
+
 
 
 
