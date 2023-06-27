@@ -308,9 +308,39 @@ RxSwift 기능 학습
 #### * 구현 목표
 - RxSwift를 활용한 검색 포털 만들기
 - SnapKit, Then, Alamofire, Kingfisher 같이 활용하기
+- Naver 검색 API 활용하기
+<br>
+
+#### * 구현 로직
+* 로직
+    1. searchBar의 text를 구독하여 변경되는 값을 외부 변수에 저장
+    2. 외부 변수의 값이 변경 될 때마다 네트워킹 요청
+    3. 네트워킹을 통해 나온 결과값을 tableView에 display
+    4. 해당되는 셀의 url을 detailVC에 전달
+    5. detailVC - 전달받은 url을 통해 해당 웹페이시 webview에 띄우기
+<br>
+
+#### * 구현 결과
+![Simulator Screen Recording - iPhone 14 - 2023-06-27 at 23 39 25](https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/d2bba83b-246b-40f9-9aa7-114d1ef9c159)
 <br>
 <br>
 <br>
+
+### 5. 더치페이 계산기 
+---
+#### * 구현 목표
+- 애플 전화기 theme의 더치페이 계산기 앱 만들기
+- MVVM 패턴
+- Unit test 구현
+- RxSwift로 진행하는 첫 미니 토이 프로젝트
+<br>
+
+#### * 구조
+<img width="981" alt="image" src="https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/71e6dd3d-ef71-4237-aeca-008d519df916">
+
+
+
+
 
 ### 출처 및 참고 자료
 ---
