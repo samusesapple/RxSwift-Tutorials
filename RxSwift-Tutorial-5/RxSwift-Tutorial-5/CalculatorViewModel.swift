@@ -14,16 +14,25 @@ class CalculatorViewModel {
 
     let disposeBag = DisposeBag()
     
+    // MARK: - Input & Output
+    
     struct Input {
         let totalSubject: BehaviorSubject<Double>
         let personSubject: BehaviorSubject<Double>
     }
+  
+    struct Output {
+        let amountPerPersonObservable: Observable<String>
+    }
     
-    func transform(input: Input) -> Observable<String> {
-        return Observable
-            .combineLatest(input.totalSubject,
-                           input.personSubject)
-            .map { Formatter.currencyFormatter.string(from: ($0 / $1) as NSNumber)! }
+    // MARK: - Methods
+    
+    func transform(input: Input) -> Output {
+        let amountPerPerson = Observable.combineLatest(input.totalSubject,
+                                                       input.personSubject)
+            .map({ Formatter.currencyFormatter.string(from: ($0 / $1) as NSNumber)! })
+        
+        return Output(amountPerPersonObservable: amountPerPerson)
     }
     
     // return obervable about button action

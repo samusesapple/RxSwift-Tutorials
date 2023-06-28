@@ -103,10 +103,12 @@ class CalculatorViewController: UIViewController {
      4. show amount per person
      */
     private func bindOutput() {
-        viewModel.transform(input: CalculatorViewModel.Input(totalSubject: totalSubject,
+        let output = viewModel.transform(input: CalculatorViewModel.Input(totalSubject: totalSubject,
                                                              personSubject: personSubject))
-        .subscribe(onNext: { [weak self] in self?.resultAmountLabel.text = $0 })
-        .disposed(by: disposableBag)
+        
+        output.amountPerPersonObservable
+            .subscribe(onNext: { [weak self] in self?.resultAmountLabel.text = $0 })
+            .disposed(by: disposableBag)
     }
     
 }
