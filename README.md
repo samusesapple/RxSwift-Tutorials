@@ -339,8 +339,21 @@ RxSwift 기능 학습
 <img width="981" alt="image" src="https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/973318e0-dbbf-4629-b302-4941530d8c96">
 <br>
 
-#### * 문제와 해결과정
+#### * 문제상황 및 해결과정
+1. UITextField.rx.text는 유저가 직접 키보드로 텍스트필드를 선택해서 입력한 이벤트만 방출한다. 따라서 앱 상의 숫자패드를 입력하여 textField.text를 변경해도 해당 이벤트는 방출되지 않는다. <br>
 
+   1. 아이디어
+      ```
+      1. button Tapped
+      2. send button command to viewModel
+      3. return buttonCommand Subjects (num(Just(Int)), clear(Void), next(emit void))
+      4. let VC subscribe 3's subjcets (Actions =>  1. num : use it as Input of transform
+                                                    2. clear : let viewModel to clear target TF's text
+                                                    3. next : let viewModel to change target TF)
+        ```
+<br>
+
+3. 
 
 
 
