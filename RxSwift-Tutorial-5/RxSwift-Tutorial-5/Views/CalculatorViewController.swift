@@ -15,8 +15,10 @@ class CalculatorViewController: UIViewController {
     
     private let viewModel = CalculatorViewModel()
     
-    private var totalSubject: BehaviorSubject<Double> = BehaviorSubject(value: 0)
-    private var personSubject: BehaviorSubject<Double> = BehaviorSubject(value: 1)
+    private var buttonSubject: PublishSubject<ButtonCommand> = PublishSubject()
+    
+    private var totalSubject: BehaviorSubject<Int> = BehaviorSubject(value: 0)
+    private var personSubject: BehaviorSubject<Int> = BehaviorSubject(value: 1)
     
     private let disposableBag = DisposeBag()
     
@@ -68,22 +70,6 @@ class CalculatorViewController: UIViewController {
        2-2) person count tf.text
      */
     
-    private func bindInput() {
-        totalAmountTextField.rx.text
-            .orEmpty
-            .filter({ Double($0) != nil && Double($0)! > 0 })
-            .map({ Double($0)! })
-            .bind(to: totalSubject)
-            .disposed(by: disposableBag)
-        
-        personCountTextField.rx.text
-            .orEmpty
-            .filter({ Double($0) != nil && Double($0)! > 0 })
-            .map({ Double($0)! })
-            .bind(to: personSubject)
-            .disposed(by: disposableBag)
-    }
-    
     private func buttonInput(_ button: UIButton) {
         button.rx.tap
             .map({ [weak self] event in
@@ -92,8 +78,28 @@ class CalculatorViewController: UIViewController {
                 }
                 return ButtonCommand.addNumber(num)
             })
-            .bind(to: viewModel.buttonSubject)
+            .bind(to: buttonSubject)
             .disposed(by: disposableBag)
+    }
+    
+    private func bindInput() {
+        buttonSubject.subscribe(onNext: { [weak self] command in
+            switch command {
+            case .addNumber(let num):
+                self?.viewModel.getObservableForTappedNumber(num)
+                    .subscribe(onNext: { print("button Tapped: \($0)") })
+                    .disposed(by: self!.disposableBag)
+            case .clear:
+                self?.viewModel.getTextFieldObservableToClear()
+                    .subscribe(onNext: { print("need to clear : \($0)") })
+                    .disposed(by: self!.disposableBag)
+            case .next:
+                self?.viewModel.nextButtonToggled()
+                    .subscribe(onNext: { print("target TF : \($0)") })
+                    .disposed(by: self!.disposableBag)
+            }
+        })
+        .disposed(by: disposableBag)
     }
     
     /* output :
@@ -103,8 +109,16 @@ class CalculatorViewController: UIViewController {
      4. show amount per person
      */
     private func bindOutput() {
-        let output = viewModel.transform(input: CalculatorViewModel.Input(totalSubject: totalSubject,
-                                                             personSubject: personSubject))
+        let output = viewModel.transform(input: CalculatorViewModel.Input(buttonCommand: buttonSubject,
+                                                                          totalSubject: totalSubject,
+                                                                          personSubject: personSubject))
+        output.totalAmountObservable
+            .subscribe(onNext: { [weak self] in self?.totalAmountTextField.text = $0 })
+            .disposed(by: disposableBag)
+        
+        output.personCountObservable
+            .subscribe(onNext: { [weak self] in self?.personCountTextField.text = $0 })
+            .disposed(by: disposableBag)
         
         output.amountPerPersonObservable
             .subscribe(onNext: { [weak self] in self?.resultAmountLabel.text = $0 })

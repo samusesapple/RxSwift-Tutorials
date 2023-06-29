@@ -8,48 +8,69 @@
 import Foundation
 import RxSwift
 
-class CalculatorViewModel {
-    
-    var buttonSubject: PublishSubject<ButtonCommand> = PublishSubject()
+/*
+ 1. button Tapped
+ 2. send button command to viewModel
+ 3. return buttonCommand Subjects (num(Just), clear(emit void), next(emit void))
+ 4. let VC subscribe 3's subjcets (Actions => 1. num : use it as Input of transform
+                                            2. clear : let viewModel to clear target TF's text
+                                            3. next : let viewModel to change target TF)
+ */
 
-    let disposeBag = DisposeBag()
-    
+class CalculatorViewModel {
+        
     // MARK: - Input & Output
     
+    private var inputField: InputField = .totalAmount
+    
+    struct ButtonOutput {
+        let numberSubject: Observable<String>
+        let clearSubject: Observable<Void>
+        let nextSubject: Observable<Void>
+    }
+    
     struct Input {
-        let totalSubject: BehaviorSubject<Double>
-        let personSubject: BehaviorSubject<Double>
+        let buttonCommand: PublishSubject<ButtonCommand>
+        let totalSubject: BehaviorSubject<Int>
+        let personSubject: BehaviorSubject<Int>
     }
   
     struct Output {
+        let totalAmountObservable: Observable<String>
+        let personCountObservable: Observable<String>
         let amountPerPersonObservable: Observable<String>
     }
     
     // MARK: - Methods
+    // 눌린 버튼의 값을 stream에 보냄
+    func getObservableForTappedNumber(_ buttonNumber: String) -> Observable<String> {
+        return Observable.just(buttonNumber)
+    }
+    
+    // 어느 tf가 clear 되어야하는지를 stream에 보냄
+    func getTextFieldObservableToClear() -> Observable<InputField> {
+        return Observable.just(inputField)
+    }
+    
+    // 타겟 textField 변경
+    func nextButtonToggled() -> Observable<InputField> {
+        let target = inputField == .personCount ? InputField.totalAmount : InputField.personCount
+        inputField = target
+        
+        return Observable.just(target)
+    }
     
     func transform(input: Input) -> Output {
+        let totalAmountObservable = input.totalSubject.asObservable().map({ "\($0)" })
+        let personCountObservable = input.personSubject.asObservable().map({ "\($0)" })
         let amountPerPerson = Observable.combineLatest(input.totalSubject,
                                                        input.personSubject)
-            .map({ Formatter.currencyFormatter.string(from: ($0 / $1) as NSNumber)! })
+            .map({ (Double($0) / Double($1)) * 100 })
+            .map({ "\($0 / 100)"})
         
-        return Output(amountPerPersonObservable: amountPerPerson)
+        return Output(totalAmountObservable: totalAmountObservable,
+                      personCountObservable: personCountObservable,
+                      amountPerPersonObservable: amountPerPerson)
     }
-    
-    // return obervable about button action
-    func buttonTapped(_ command: ButtonCommand) -> Observable<ButtonCommand> {
-        return Observable.create { emitter in
-            switch command {
-            case .addNumber(let number):
-                emitter.onNext(.addNumber(number))
-            case .clear:
-                emitter.onNext(.clear)
-            case .next:
-                print("Next button Tapped")
-                emitter.onNext(.next)
-            }
-            return Disposables.create {
-                print("disposed")
-            }
-        }
-    }
+
 }
