@@ -7,6 +7,7 @@
 
 import Foundation
 import RxSwift
+import RxCocoa
 
 class CalculatorViewModel {
     
@@ -18,16 +19,14 @@ class CalculatorViewModel {
     private var personCount: String = ""
 
     struct Input {
-        let totalSubject: PublishSubject<Int>
-        let personSubject: PublishSubject<Int>
+        let totalSubject: BehaviorSubject<Int>
+        let personSubject: BehaviorSubject<Int>
     }
     
     struct Output {
-        let totalAmountObservable: Observable<String>
-        let personCountObservable: Observable<String>
-        let amountPerPersonObservable: Observable<String>
+        let resultObservable: Observable<Result>
     }
-
+    
     // MARK: - Transform
     
     // Number Button - 눌린 버튼의 값을 stream에 보냄
@@ -74,17 +73,17 @@ class CalculatorViewModel {
     }
     
     func transform(input: Input) -> Output {
-        let totalAmountObservable = input.totalSubject.asObservable().map({ "\($0)" })
-        let personCountObservable = input.personSubject.asObservable().map({ "\($0)" })
-        let amountPerPerson = Observable.combineLatest(input.totalSubject,
+        let resultObservable = Observable.combineLatest(input.totalSubject,
                                                        input.personSubject)
-            .map({ (Double($0) / Double($1)) * 100 })
-            .map({ "\($0 / 100)"})
+            .map({ totalAmount, personCount in
+                let amountPerPerson = Double(totalAmount) / Double(personCount)
+                let result = Result(totalAmount: totalAmount,
+                                    personCount: personCount,
+                                    amountPerPerseon: amountPerPerson)
+                return result
+            })
         
-        return Output(totalAmountObservable: totalAmountObservable,
-                      personCountObservable: personCountObservable,
-                      amountPerPersonObservable: amountPerPerson)
+        return Output(resultObservable: resultObservable)
     }
-    
 }
 

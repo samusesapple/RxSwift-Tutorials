@@ -18,8 +18,8 @@ class CalculatorViewController: UIViewController {
     private var buttonSubject: PublishSubject<ButtonCommand> = PublishSubject()
     
     private var targetInputFieldSubject: BehaviorSubject<InputField> = BehaviorSubject(value: .totalAmount)
-    private var totalSubject: PublishSubject<Int> = PublishSubject()
-    private var personSubject: PublishSubject<Int> = PublishSubject()
+    private var totalSubject: BehaviorSubject<Int> = BehaviorSubject(value: 0)
+    private var personSubject: BehaviorSubject<Int> = BehaviorSubject(value: 1)
     
     private var disposableBag = DisposeBag()
     
@@ -119,16 +119,12 @@ class CalculatorViewController: UIViewController {
     private func bindOutput() {
         let output = viewModel.transform(input: CalculatorViewModel.Input(totalSubject: totalSubject,
                                                                           personSubject: personSubject))
-        output.totalAmountObservable
-            .subscribe(onNext: { [weak self] in self?.totalAmountTextField.text = $0 })
-            .disposed(by: disposableBag)
-        
-        output.personCountObservable
-            .subscribe(onNext: { [weak self] in self?.personCountTextField.text = $0 })
-            .disposed(by: disposableBag)
-        
-        output.amountPerPersonObservable
-            .subscribe(onNext: { [weak self] in self?.resultAmountLabel.text = $0 })
+        output.resultObservable
+            .subscribe(onNext: { [weak self] result in
+                self?.totalAmountTextField.text = "\(result.totalAmount)"
+                self?.personCountTextField.text = "\(result.personCount)"
+                self?.resultAmountLabel.text = "\(result.amountPerPerseon)"
+            })
             .disposed(by: disposableBag)
     }
     
