@@ -8,15 +8,6 @@
 import Foundation
 import RxSwift
 
-/*
- 1. button Tapped
- 2. send button command to viewModel
- 3. return buttonCommand Subjects (num(Just), clear(emit void), next(emit void))
- 4. let VC subscribe 3's subjcets (Actions => 1. num : use it as Input of transform
- 2. clear : let viewModel to clear target TF's text
- 3. next : let viewModel to change target TF)
- */
-
 class CalculatorViewModel {
     
     // MARK: - Input & Output
@@ -25,13 +16,7 @@ class CalculatorViewModel {
     
     private var totalAmount: String = ""
     private var personCount: String = ""
-    
-    struct ButtonOutput {
-        let numberSubject: Observable<String>
-        let clearSubject: Observable<Int>
-        let nextSubject: Observable<InputField>
-    }
-    
+
     struct Input {
         let totalSubject: PublishSubject<Int>
         let personSubject: PublishSubject<Int>
@@ -45,7 +30,7 @@ class CalculatorViewModel {
 
     // MARK: - Transform
     
-    // 눌린 버튼의 값을 stream에 보냄
+    // Number Button - 눌린 버튼의 값을 stream에 보냄
     func getObservableForTappedNumber(_ buttonNumber: String) -> Observable<String> {
         return Observable.create({ [weak self] emitter in
             guard let self = self else { return Disposables.create() }
@@ -62,7 +47,7 @@ class CalculatorViewModel {
         })
     }
     
-    // 어느 target TF의 string 초기화, VC의 subject가 구독할 수 있도록 초기값 세팅해주는 Observer return
+    // Clear Button - clear 되면 초기값 세팅하도록 Observer return
     func shouldClearTextField() -> Observable<Int> {
         return Observable.create({ [weak self] emitter in
             guard let self = self else { return Disposables.create() }
@@ -78,7 +63,7 @@ class CalculatorViewModel {
         })
     }
     
-    // 타겟 textField 변경
+    // Next Button - 타겟 textField 변경
     func nextButtonToggled() -> Observable<InputField> {
         let target = inputField == .personCount ? InputField.totalAmount : InputField.personCount
         inputField = target
