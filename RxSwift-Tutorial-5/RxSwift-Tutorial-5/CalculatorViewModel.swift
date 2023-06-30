@@ -13,51 +13,79 @@ import RxSwift
  2. send button command to viewModel
  3. return buttonCommand Subjects (num(Just), clear(emit void), next(emit void))
  4. let VC subscribe 3's subjcets (Actions => 1. num : use it as Input of transform
-                                            2. clear : let viewModel to clear target TF's text
-                                            3. next : let viewModel to change target TF)
+ 2. clear : let viewModel to clear target TF's text
+ 3. next : let viewModel to change target TF)
  */
 
 class CalculatorViewModel {
-        
+    
     // MARK: - Input & Output
     
-    private var inputField: InputField = .totalAmount
+    var inputField: InputField = .totalAmount
+    
+    private var totalAmount: String = ""
+    private var personCount: String = ""
     
     struct ButtonOutput {
         let numberSubject: Observable<String>
-        let clearSubject: Observable<Void>
-        let nextSubject: Observable<Void>
+        let clearSubject: Observable<Int>
+        let nextSubject: Observable<InputField>
     }
     
     struct Input {
-        let buttonCommand: PublishSubject<ButtonCommand>
-        let totalSubject: BehaviorSubject<Int>
-        let personSubject: BehaviorSubject<Int>
+        let totalSubject: PublishSubject<Int>
+        let personSubject: PublishSubject<Int>
     }
-  
+    
     struct Output {
         let totalAmountObservable: Observable<String>
         let personCountObservable: Observable<String>
         let amountPerPersonObservable: Observable<String>
     }
+
+    // MARK: - Transform
     
-    // MARK: - Methods
     // 눌린 버튼의 값을 stream에 보냄
     func getObservableForTappedNumber(_ buttonNumber: String) -> Observable<String> {
-        return Observable.just(buttonNumber)
+        return Observable.create({ [weak self] emitter in
+            guard let self = self else { return Disposables.create() }
+            
+            switch self.inputField {
+            case .totalAmount:
+                self.totalAmount += buttonNumber
+                emitter.onNext(self.totalAmount)
+            case .personCount:
+                self.personCount += buttonNumber
+                emitter.onNext(self.personCount)
+            }
+            return Disposables.create()
+        })
     }
     
-    // 어느 tf가 clear 되어야하는지를 stream에 보냄
-    func getTextFieldObservableToClear() -> Observable<InputField> {
-        return Observable.just(inputField)
+    // 어느 target TF의 string 초기화, VC의 subject가 구독할 수 있도록 초기값 세팅해주는 Observer return
+    func shouldClearTextField() -> Observable<Int> {
+        return Observable.create({ [weak self] emitter in
+            guard let self = self else { return Disposables.create() }
+            switch self.inputField {
+            case .totalAmount:
+                self.totalAmount = ""
+                emitter.onNext(0)
+            case .personCount:
+                self.personCount = ""
+                emitter.onNext(0)
+            }
+            return Disposables.create()
+        })
     }
     
     // 타겟 textField 변경
     func nextButtonToggled() -> Observable<InputField> {
         let target = inputField == .personCount ? InputField.totalAmount : InputField.personCount
         inputField = target
-        
-        return Observable.just(target)
+        print("target: \(inputField)")
+        return Observable.create({ $0.onNext(target)
+            return Disposables.create()
+        })
     }
     
     func transform(input: Input) -> Output {
@@ -72,5 +100,6 @@ class CalculatorViewModel {
                       personCountObservable: personCountObservable,
                       amountPerPersonObservable: amountPerPerson)
     }
-
+    
 }
+

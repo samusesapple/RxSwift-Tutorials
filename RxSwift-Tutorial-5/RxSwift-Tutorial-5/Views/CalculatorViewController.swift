@@ -17,10 +17,11 @@ class CalculatorViewController: UIViewController {
     
     private var buttonSubject: PublishSubject<ButtonCommand> = PublishSubject()
     
-    private var totalSubject: BehaviorSubject<Int> = BehaviorSubject(value: 0)
-    private var personSubject: BehaviorSubject<Int> = BehaviorSubject(value: 1)
+    private var targetInputFieldSubject: BehaviorSubject<InputField> = BehaviorSubject(value: .totalAmount)
+    private var totalSubject: PublishSubject<Int> = PublishSubject()
+    private var personSubject: PublishSubject<Int> = PublishSubject()
     
-    private let disposableBag = DisposeBag()
+    private var disposableBag = DisposeBag()
     
     // MARK: - Components
     
@@ -55,26 +56,16 @@ class CalculatorViewController: UIViewController {
         
         bindInput()
         bindOutput()
+        configureFocusedTextFieldColor()
     }
     
     // MARK: - Bind
-    
-    /* input :
-     1. button
-       1-1) number button
-       1-2) next button
-       1-3) clear button
-     
-     2. textField text (only could change by button)
-       2-1) total amount tf.text
-       2-2) person count tf.text
-     */
     
     private func buttonInput(_ button: UIButton) {
         button.rx.tap
             .map({ [weak self] event in
                 guard let num = button.titleLabel?.text else {
-                   return button == self?.clearButton ? ButtonCommand.clear : ButtonCommand.next
+                    return button == self?.clearButton ? ButtonCommand.clear : ButtonCommand.next
                 }
                 return ButtonCommand.addNumber(num)
             })
@@ -84,33 +75,49 @@ class CalculatorViewController: UIViewController {
     
     private func bindInput() {
         buttonSubject.subscribe(onNext: { [weak self] command in
+            guard let self = self else { return }
+            
             switch command {
             case .addNumber(let num):
-                self?.viewModel.getObservableForTappedNumber(num)
-                    .subscribe(onNext: { print("button Tapped: \($0)") })
-                    .disposed(by: self!.disposableBag)
+                let numObserver = viewModel.getObservableForTappedNumber(num)
+                    .map({ Int($0)! })
+                
+                switch viewModel.inputField {
+                case .totalAmount:
+                    numObserver
+                        .subscribe(self.totalSubject)
+                        .disposed(by: self.disposableBag)
+                case .personCount:
+                    numObserver
+                        .subscribe(self.personSubject)
+                        .disposed(by: self.disposableBag)
+                }
+                
             case .clear:
-                self?.viewModel.getTextFieldObservableToClear()
-                    .subscribe(onNext: { print("need to clear : \($0)") })
-                    .disposed(by: self!.disposableBag)
+                let clearObserver = viewModel.shouldClearTextField()
+        
+                switch viewModel.inputField {
+                case .totalAmount:
+                    clearObserver
+                        .subscribe(totalSubject)
+                        .disposed(by: self.disposableBag)
+                case .personCount:
+                    clearObserver
+                        .subscribe(personSubject)
+                        .disposed(by: self.disposableBag)
+                }
+                
             case .next:
-                self?.viewModel.nextButtonToggled()
-                    .subscribe(onNext: { print("target TF : \($0)") })
-                    .disposed(by: self!.disposableBag)
+                self.viewModel.nextButtonToggled()
+                    .subscribe(targetInputFieldSubject)
+                    .disposed(by: self.disposableBag)
             }
         })
         .disposed(by: disposableBag)
     }
     
-    /* output :
-     1. number button : type text
-     2. next button : resign tf firstResponder
-     3. clear button : clear everything
-     4. show amount per person
-     */
     private func bindOutput() {
-        let output = viewModel.transform(input: CalculatorViewModel.Input(buttonCommand: buttonSubject,
-                                                                          totalSubject: totalSubject,
+        let output = viewModel.transform(input: CalculatorViewModel.Input(totalSubject: totalSubject,
                                                                           personSubject: personSubject))
         output.totalAmountObservable
             .subscribe(onNext: { [weak self] in self?.totalAmountTextField.text = $0 })
@@ -125,5 +132,18 @@ class CalculatorViewController: UIViewController {
             .disposed(by: disposableBag)
     }
     
+    private func configureFocusedTextFieldColor() {
+        targetInputFieldSubject.subscribe(onNext: { [weak self] field in
+            switch field {
+            case .totalAmount:
+                self?.totalAmountTextField.textColor = .black
+                self?.personCountTextField.textColor = .gray
+            case .personCount:
+                self?.totalAmountTextField.textColor = .gray
+                self?.personCountTextField.textColor = .black
+            }
+        })
+        .disposed(by: disposableBag)
+    }
 }
 
