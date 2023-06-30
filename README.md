@@ -342,22 +342,33 @@ RxSwift 기능 학습
 #### * 문제상황 및 해결과정
 1. UITextField.rx.text는 유저가 직접 키보드로 텍스트필드를 선택해서 입력한 이벤트만 방출한다. 따라서 앱 상의 숫자패드를 입력하여 textField.text를 변경해도 해당 이벤트는 방출되지 않는다. <br>
 
-   1. 아이디어
-      ```
-      1. button Tapped
-      2. send button command to viewModel
-      3. return buttonCommand Subjects (num(Just(Int)), clear(Void), next(emit void))
-      4. let VC subscribe 3's subjcets (Actions =>  1. num : use it as Input of transform
-                                                    2. clear : let viewModel to clear target TF's text
-                                                    3. next : let viewModel to change target TF)
-        ```
+* 아이디어 로직: <br>
+    1. VC : 버튼이 눌리면 외부변수 buttonSubject: PublishSubject<ButtonCommand> 에 어떤 버튼이 눌렸는지를 담는다.
+    2. VC : buttonSubject를 구독한 후, ButtonCommand의 case에 따라 분기처리 한다.
+    3. VC: 각 case에 필요한 Observer를 viewModel에 요청한다.
+    4. viewModel에서는 VC에게 줄 Observer를 생성해준다.
+    5. viewModel로부터 받은 Observer를 각각의 외부변수(Subject)에 바인딩한다.
+    6. viewModel은 각 외부변수(Subject)를 조합하여 Output을 VC에게 준다.
+    7. viewModel로부터 받은 Output으로 UI를 그린다.
 <br>
 
-3. 
+* 코드 :
+> ViewController
+<img width="604" alt="image" src="https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/56e2c8c2-1a99-40e7-befd-ac35e094af92">
+<img width="478" alt="image" src="https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/df033620-2a48-49ed-9a95-75d794338ca3">
+<img width="636" alt="image" src="https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/befd41ec-cf22-4f23-9bdb-b56e77e36a09">
+<br>
+<br>
 
+> ViewModel
+ <img width="615" alt="image" src="https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/8a752240-896a-4b0c-83bc-5782e0b5c326">
+<img width="531" alt="image" src="https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/14f4e72a-6a30-4f1b-8952-9e63b20a2948">
+<br>
 
-
-
+#### * 구현 결과
+![Simulator Screen Recording - iPhone 14 Pro - 2023-06-30 at 16 26 34](https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/f6b93620-c10d-4454-9d29-da338c26145a)
+<br>
+<br>
 
 
 ### 출처 및 참고 자료
