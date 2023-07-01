@@ -11,7 +11,7 @@ import RxSwift
 
 final class RxSwift_Tutorial_5Tests: XCTestCase {
 
-    // SUT -> System Under Test
+    // System Under Test
     private var sut: CalculatorViewModel!
     private var disposeBag = DisposeBag()
     
