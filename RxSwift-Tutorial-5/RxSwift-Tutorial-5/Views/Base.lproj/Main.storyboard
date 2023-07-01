@@ -28,6 +28,8 @@
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="75" id="Jon-IE-eOn"/>
                                                     <constraint firstAttribute="width" constant="75" id="W5W-5D-EJt"/>
+                                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="75" id="dce-v4-5Ru"/>
+                                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="75" id="nhf-mJ-uZf"/>
                                                 </constraints>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="gray" title="1" cornerStyle="capsule">

@@ -13,6 +13,7 @@
 		F12E9D232A4B1A6900859C61 /* ButtonCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = F12E9D222A4B1A6900859C61 /* ButtonCommand.swift */; };
 		F1606C6F2A4C44C40078BB85 /* InputField.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1606C6E2A4C44C40078BB85 /* InputField.swift */; };
 		F1606C712A4EFA170078BB85 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1606C702A4EFA170078BB85 /* Result.swift */; };
+		F1606C812A4FCEF90078BB85 /* RxSwift_Tutorial_5Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1606C802A4FCEF90078BB85 /* RxSwift_Tutorial_5Tests.swift */; };
 		F1C678872A481D2E00AF1D10 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1C678862A481D2E00AF1D10 /* AppDelegate.swift */; };
 		F1C678892A481D2E00AF1D10 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1C678882A481D2E00AF1D10 /* SceneDelegate.swift */; };
 		F1C6788B2A481D2E00AF1D10 /* CalculatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1C6788A2A481D2E00AF1D10 /* CalculatorViewController.swift */; };
@@ -20,6 +21,16 @@
 		F1C678902A481D2F00AF1D10 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F1C6788F2A481D2F00AF1D10 /* Assets.xcassets */; };
 		F1C678932A481D2F00AF1D10 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F1C678912A481D2F00AF1D10 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		F1606C822A4FCEF90078BB85 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F1C6787B2A481D2E00AF1D10 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F1C678822A481D2E00AF1D10;
+			remoteInfo = "RxSwift-Tutorial-5";
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		29EEFF24EBF6C548014BE8AA /* Pods-RxSwift-Tutorial-5.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RxSwift-Tutorial-5.debug.xcconfig"; path = "Target Support Files/Pods-RxSwift-Tutorial-5/Pods-RxSwift-Tutorial-5.debug.xcconfig"; sourceTree = "<group>"; };
@@ -30,6 +41,8 @@
 		F12E9D222A4B1A6900859C61 /* ButtonCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonCommand.swift; sourceTree = "<group>"; };
 		F1606C6E2A4C44C40078BB85 /* InputField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputField.swift; sourceTree = "<group>"; };
 		F1606C702A4EFA170078BB85 /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
+		F1606C7E2A4FCEF90078BB85 /* RxSwift-Tutorial-5Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "RxSwift-Tutorial-5Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F1606C802A4FCEF90078BB85 /* RxSwift_Tutorial_5Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxSwift_Tutorial_5Tests.swift; sourceTree = "<group>"; };
 		F1C678832A481D2E00AF1D10 /* RxSwift-Tutorial-5.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "RxSwift-Tutorial-5.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1C678862A481D2E00AF1D10 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F1C678882A481D2E00AF1D10 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -41,6 +54,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		F1606C7B2A4FCEF90078BB85 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F1C678802A481D2E00AF1D10 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -69,10 +89,19 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		F1606C7F2A4FCEF90078BB85 /* RxSwift-Tutorial-5Tests */ = {
+			isa = PBXGroup;
+			children = (
+				F1606C802A4FCEF90078BB85 /* RxSwift_Tutorial_5Tests.swift */,
+			);
+			path = "RxSwift-Tutorial-5Tests";
+			sourceTree = "<group>";
+		};
 		F1C6787A2A481D2E00AF1D10 = {
 			isa = PBXGroup;
 			children = (
 				F1C678852A481D2E00AF1D10 /* RxSwift-Tutorial-5 */,
+				F1606C7F2A4FCEF90078BB85 /* RxSwift-Tutorial-5Tests */,
 				F1C678842A481D2E00AF1D10 /* Products */,
 				1BFC356368E572CD60DF1105 /* Pods */,
 				AEC6B782B4339F2C8280931D /* Frameworks */,
@@ -83,6 +112,7 @@
 			isa = PBXGroup;
 			children = (
 				F1C678832A481D2E00AF1D10 /* RxSwift-Tutorial-5.app */,
+				F1606C7E2A4FCEF90078BB85 /* RxSwift-Tutorial-5Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -96,8 +126,8 @@
 				F1C6789C2A48428A00AF1D10 /* Models */,
 				F1C6789B2A48428100AF1D10 /* ViewModels */,
 				F1C6789A2A48426200AF1D10 /* Views */,
-				F1C6788F2A481D2F00AF1D10 /* Assets.xcassets */,
 				F1C678942A481D2F00AF1D10 /* Info.plist */,
+				F1C6788F2A481D2F00AF1D10 /* Assets.xcassets */,
 			);
 			path = "RxSwift-Tutorial-5";
 			sourceTree = "<group>";
@@ -133,6 +163,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		F1606C7D2A4FCEF90078BB85 /* RxSwift-Tutorial-5Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F1606C842A4FCEF90078BB85 /* Build configuration list for PBXNativeTarget "RxSwift-Tutorial-5Tests" */;
+			buildPhases = (
+				F1606C7A2A4FCEF90078BB85 /* Sources */,
+				F1606C7B2A4FCEF90078BB85 /* Frameworks */,
+				F1606C7C2A4FCEF90078BB85 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F1606C832A4FCEF90078BB85 /* PBXTargetDependency */,
+			);
+			name = "RxSwift-Tutorial-5Tests";
+			productName = "RxSwift-Tutorial-5Tests";
+			productReference = F1606C7E2A4FCEF90078BB85 /* RxSwift-Tutorial-5Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		F1C678822A481D2E00AF1D10 /* RxSwift-Tutorial-5 */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = F1C678972A481D2F00AF1D10 /* Build configuration list for PBXNativeTarget "RxSwift-Tutorial-5" */;
@@ -162,6 +210,10 @@
 				LastSwiftUpdateCheck = 1430;
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
+					F1606C7D2A4FCEF90078BB85 = {
+						CreatedOnToolsVersion = 14.3.1;
+						TestTargetID = F1C678822A481D2E00AF1D10;
+					};
 					F1C678822A481D2E00AF1D10 = {
 						CreatedOnToolsVersion = 14.3.1;
 					};
@@ -181,11 +233,19 @@
 			projectRoot = "";
 			targets = (
 				F1C678822A481D2E00AF1D10 /* RxSwift-Tutorial-5 */,
+				F1606C7D2A4FCEF90078BB85 /* RxSwift-Tutorial-5Tests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		F1606C7C2A4FCEF90078BB85 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F1C678812A481D2E00AF1D10 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -241,6 +301,14 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		F1606C7A2A4FCEF90078BB85 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F1606C812A4FCEF90078BB85 /* RxSwift_Tutorial_5Tests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F1C6787F2A481D2E00AF1D10 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -257,6 +325,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		F1606C832A4FCEF90078BB85 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F1C678822A481D2E00AF1D10 /* RxSwift-Tutorial-5 */;
+			targetProxy = F1606C822A4FCEF90078BB85 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		F1C6788C2A481D2E00AF1D10 /* Main.storyboard */ = {
@@ -278,6 +354,50 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		F1606C852A4FCEF90078BB85 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = JY9QH7G8BB;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.SamSung.RxSwift-Tutorial-5Tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RxSwift-Tutorial-5.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/RxSwift-Tutorial-5";
+			};
+			name = Debug;
+		};
+		F1606C862A4FCEF90078BB85 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = JY9QH7G8BB;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.SamSung.RxSwift-Tutorial-5Tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RxSwift-Tutorial-5.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/RxSwift-Tutorial-5";
+			};
+			name = Release;
+		};
 		F1C678952A481D2F00AF1D10 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -401,6 +521,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = JY9QH7G8BB;
+				ENABLE_TESTING_SEARCH_PATHS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "RxSwift-Tutorial-5/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -408,6 +529,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -433,6 +555,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = JY9QH7G8BB;
+				ENABLE_TESTING_SEARCH_PATHS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "RxSwift-Tutorial-5/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -440,6 +563,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -459,6 +583,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		F1606C842A4FCEF90078BB85 /* Build configuration list for PBXNativeTarget "RxSwift-Tutorial-5Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F1606C852A4FCEF90078BB85 /* Debug */,
+				F1606C862A4FCEF90078BB85 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		F1C6787E2A481D2E00AF1D10 /* Build configuration list for PBXProject "RxSwift-Tutorial-5" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
