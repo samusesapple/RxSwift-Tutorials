@@ -356,13 +356,24 @@ RxSwift 기능 학습
 > ViewController
 <img width="604" alt="image" src="https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/56e2c8c2-1a99-40e7-befd-ac35e094af92">
 <img width="478" alt="image" src="https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/df033620-2a48-49ed-9a95-75d794338ca3">
-<img width="636" alt="image" src="https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/befd41ec-cf22-4f23-9bdb-b56e77e36a09">
+<img width="719" alt="image" src="https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/83241a4c-240b-45c3-ac02-32e6868414ff">
 <br>
 <br>
 
 > ViewModel
  <img width="615" alt="image" src="https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/8a752240-896a-4b0c-83bc-5782e0b5c326">
-<img width="531" alt="image" src="https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/14f4e72a-6a30-4f1b-8952-9e63b20a2948">
+<img width="546" alt="image" src="https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/b534d0bb-b8b4-455d-9b72-bda24f32feec">
+
+<br>
+<br>
+
+#### * Unit Test 과정
+    1. SUT(테스트 대상) : CalculatorViewModel
+    2. 시나리오 작성 : Given, When, Then의 형식으로 시나리오 작성; 'totalAmount: 1000, personCount: 4' 일 경우의 output을 대상으로 예상 결과값에 대한 UnitTest작성
+    3. 테스트 실행
+<br>
+<img width="627" alt="image" src="https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/ef7f0f88-0f7f-41ae-b4d0-028189f13410">
+<br>
 <br>
 
 #### * 구현 결과
