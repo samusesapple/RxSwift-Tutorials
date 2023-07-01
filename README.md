@@ -307,7 +307,7 @@ RxSwift 기능 학습
 ---
 #### * 구현 목표
 - RxSwift를 활용한 검색 포털 만들기
-- SnapKit, Then, Alamofire, Kingfisher 같이 활용하기
+- SnapKit, Then, Alamofire 같이 활용하기
 - Naver 검색 API 활용하기
 <br>
 
