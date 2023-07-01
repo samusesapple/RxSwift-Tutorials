@@ -369,8 +369,7 @@ RxSwift 기능 학습
 
 #### * Unit Test 과정
     1. SUT(테스트 대상) : CalculatorViewModel
-    2. 시나리오 작성 : Given, When, Then의 형식으로 시나리오 작성; 'totalAmount: 1000, personCount: 4' 일 경우의 output을 대상으로 예상 결과값에 대한 UnitTest작성
-    3. 테스트 실행
+    2. 테스트 시나리오 작성 및 테스트 검증 (GWT 형식) : 'totalAmount: 1000, personCount: 4' 일 경우의 output을 검증하는 test case 작성 및 검증 
 <br>
 <img width="627" alt="image" src="https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/ef7f0f88-0f7f-41ae-b4d0-028189f13410">
 <br>
