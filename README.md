@@ -379,6 +379,20 @@ RxSwift 기능 학습
 ![Simulator Screen Recording - iPhone 14 Pro - 2023-06-30 at 16 26 34](https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/f6b93620-c10d-4454-9d29-da338c26145a)
 <br>
 <br>
+<br>
+
+### Mock 입출금 앱
+---
+#### * 구현 목표
+- 입금, 출금, 입출금 내역 확인 가능한 Mock 입출금 앱 만들기
+- DI 
+- Unit Test
+- MVVM 패턴
+<br>
+
+#### * 구조
+<img width="1043" alt="image" src="https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/ee7bd2a8-36e6-45ad-90cd-ff6b09af99a3">
+
 
 
 ### 출처 및 참고 자료
