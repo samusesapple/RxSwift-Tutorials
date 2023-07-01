@@ -6,11 +6,24 @@
 //
 
 import Foundation
+import RxSwift
 
-class BalanceViewModel {
-    let account: BankAccount
+protocol BankViewModel {
+    var account: BankAccount { get set }
+}
+
+class BalanceViewModel: BankViewModel {
+    var account: BankAccount
     
-    init(account: BankAccount) {
-        self.account = account
+    var balanceObservable: Observable<String>
+    
+    init(viewModel: BankViewModel) {
+        self.account = viewModel.account
+        self.balanceObservable = Observable.just("\(viewModel.account.balance)")
+    }
+    
+    var historyViewModel: HistoryViewModel {
+        return HistoryViewModel(viewModel: self)
     }
 }
+
