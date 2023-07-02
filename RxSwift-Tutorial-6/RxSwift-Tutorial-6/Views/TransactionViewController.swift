@@ -10,15 +10,15 @@ import SnapKit
 import Then
 import RxCocoa
 import RxSwift
+import ReactorKit
 
-final class TransactionViewController: UIViewController {
-
+final class TransactionViewController: UIViewController, View {
+    
+    typealias Reactor = TransactionViewModel
+    
     private var viewModel: TransactionViewModel
     
-    private var balanceSubject: BehaviorSubject<Int>
-    private var transactionSubject = PublishSubject<Transaction>()
-    
-    var disposableBag = DisposeBag()
+    var disposeBag: RxSwift.DisposeBag
     
     // MARK: - Components
     
@@ -48,16 +48,15 @@ final class TransactionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        setAutolayout()
         
-        bindUI()
-        bindButtonAction()
-        bindOutput()
+        setAutolayout()
+
+        bind(reactor: viewModel)
     }
         
     init(viewModel: ViewModel) {
         self.viewModel = TransactionViewModel(viewModel: viewModel)
-        self.balanceSubject = BehaviorSubject(value: viewModel.account.balance)
+        self.disposeBag = DisposeBag()
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -66,15 +65,14 @@ final class TransactionViewController: UIViewController {
     }
     
     // MARK: - Bind
-    
-    private func bindUI() {
-        balanceSubject
-            .map({ "\($0)"})
-            .bind(to: balanceView.balanceLabel.rx.text)
-            .disposed(by: disposableBag)
+
+    func bind(reactor: TransactionViewModel) {
+        bindButtonAction(reactor)
+        bindState(reactor)
     }
     
-    private func bindButtonAction() {
+    // 버튼에 대한 액션 reactor에 전달
+    private func bindButtonAction(_ reactor: Reactor) {
         depositButton.rx.tap
             .filter({ [weak self] in
                 self!.amonutTextField.text!.count > 0
@@ -82,9 +80,9 @@ final class TransactionViewController: UIViewController {
             .map({ [weak self] in
                 self!.amonutTextField.text!
             })
-            .map({ Transaction.deposit(Int($0)!) })
-            .bind(to: transactionSubject)
-            .disposed(by: disposableBag)
+            .map({ Reactor.Action.deposit(Int($0)!) })
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
         
         withdrawButton.rx.tap
             .filter({ [weak self] in
@@ -93,19 +91,18 @@ final class TransactionViewController: UIViewController {
             .map({ [weak self] in
                 self!.amonutTextField.text!
             })
-            .map({ Transaction.withdraw(Int($0)!) })
-            .bind(to: transactionSubject)
-            .disposed(by: disposableBag)
+            .map({ Reactor.Action.withdraw(Int($0)!) })
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
     
-    private func bindOutput() {
-        let input = TransactionViewModel.Input(balanceSubject: balanceSubject,
-                                               transactionSubject: transactionSubject)
-        let output = viewModel.transform(input: input)
-        
-        output.balancePublisher
-            .bind(to: balanceSubject)
-            .disposed(by: disposableBag)
+    // UI 업데이트
+    private func bindState(_ reactor: Reactor) {
+        reactor.state
+            .map({ $0.currentBalance })
+            .map({ "\($0)"})
+            .bind(to: balanceView.balanceLabel.rx.text)
+            .disposed(by: disposeBag)
     }
     
     // MARK: - Helpers
