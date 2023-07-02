@@ -7,7 +7,7 @@
 
 import Foundation
 
-class HistoryViewModel: ViewModel {
+final class HistoryViewModel: ViewModel {
     
     var account: BankAccount
     

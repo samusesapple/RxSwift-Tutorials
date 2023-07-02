@@ -8,11 +8,12 @@
 import Foundation
 import RxSwift
 
-protocol ViewModel {
+protocol ViewModel: AnyObject {
     var account: BankAccount { get set }
 }
 
-class BalanceViewModel: ViewModel {
+final class BalanceViewModel: ViewModel {
+    
     var account: BankAccount
     
     var balanceObservable: Observable<String>
@@ -22,8 +23,12 @@ class BalanceViewModel: ViewModel {
         self.balanceObservable = Observable.just("\(viewModel.account.balance)")
     }
     
-    var historyViewModel: HistoryViewModel {
-        return HistoryViewModel(viewModel: self)
+    var historyViewModel: ViewModel {
+        return self
+    }
+    
+    var transactionViewModel: ViewModel {
+        return self
     }
 }
 

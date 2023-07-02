@@ -18,7 +18,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let dummyBankAccount = MockViewModel()
         
-        window.rootViewController = MainViewController(viewModel: dummyBankAccount)
+        let naviVC = UINavigationController(rootViewController:
+                                                MainViewController(viewModel: dummyBankAccount))
+        window.rootViewController = naviVC
         window.makeKeyAndVisible()
         self.window = window
     }

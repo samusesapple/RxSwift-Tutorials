@@ -9,5 +9,5 @@ import Foundation
 
 enum Transaction {
     case deposit(Int)
-    case withdrwal(Int)
+    case withdraw(Int)
 }

@@ -7,6 +7,11 @@
 
 import Foundation
 
-class MockViewModel: ViewModel {
-    var account: BankAccount = BankAccount(balance: 10001230, history: [])
+final class MockViewModel: ViewModel {
+    var account: BankAccount = BankAccount(balance: 10001230,
+                                           history: [
+                                            .deposit(20),
+                                            .withdraw(30),
+                                            .deposit(50)
+                                           ])
 }

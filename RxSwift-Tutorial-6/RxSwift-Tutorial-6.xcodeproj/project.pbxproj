@@ -16,9 +16,14 @@
 		F13BA3E92A5010470048DAED /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = F13BA3E82A5010470048DAED /* Transaction.swift */; };
 		F13BA3EC2A5010B60048DAED /* BankAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = F13BA3EB2A5010B60048DAED /* BankAccount.swift */; };
 		F13BA3EE2A50128E0048DAED /* BalanceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F13BA3ED2A50128E0048DAED /* BalanceViewModel.swift */; };
+		F18DCB982A514915002F5597 /* BalanceLabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18DCB972A514915002F5597 /* BalanceLabelView.swift */; };
 		F1E668A72A5022C8001C42E4 /* HistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E668A62A5022C8001C42E4 /* HistoryViewModel.swift */; };
 		F1E668AA2A50287C001C42E4 /* MockViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E668A92A50287C001C42E4 /* MockViewModel.swift */; };
 		F1E668AC2A502B95001C42E4 /* HistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E668AB2A502B95001C42E4 /* HistoryViewController.swift */; };
+		F1E668AE2A512EBB001C42E4 /* HistoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E668AD2A512EBB001C42E4 /* HistoryTableViewCell.swift */; };
+		F1E668B02A5132B3001C42E4 /* TransactionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E668AF2A5132B3001C42E4 /* TransactionViewController.swift */; };
+		F1E668B22A513D23001C42E4 /* TransactionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E668B12A513D23001C42E4 /* TransactionViewModel.swift */; };
+		F1E668B52A5143F9001C42E4 /* TransactionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E668B42A5143F9001C42E4 /* TransactionButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,9 +40,14 @@
 		F13BA3E82A5010470048DAED /* Transaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
 		F13BA3EB2A5010B60048DAED /* BankAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankAccount.swift; sourceTree = "<group>"; };
 		F13BA3ED2A50128E0048DAED /* BalanceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceViewModel.swift; sourceTree = "<group>"; };
+		F18DCB972A514915002F5597 /* BalanceLabelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceLabelView.swift; sourceTree = "<group>"; };
 		F1E668A62A5022C8001C42E4 /* HistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViewModel.swift; sourceTree = "<group>"; };
 		F1E668A92A50287C001C42E4 /* MockViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockViewModel.swift; sourceTree = "<group>"; };
 		F1E668AB2A502B95001C42E4 /* HistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViewController.swift; sourceTree = "<group>"; };
+		F1E668AD2A512EBB001C42E4 /* HistoryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryTableViewCell.swift; sourceTree = "<group>"; };
+		F1E668AF2A5132B3001C42E4 /* TransactionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionViewController.swift; sourceTree = "<group>"; };
+		F1E668B12A513D23001C42E4 /* TransactionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionViewModel.swift; sourceTree = "<group>"; };
+		F1E668B42A5143F9001C42E4 /* TransactionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,9 +124,12 @@
 		F13BA3E52A5010230048DAED /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				F1E668B32A5143E2001C42E4 /* Components */,
 				F13BA3DB2A5007830048DAED /* LaunchScreen.storyboard */,
 				F13BA3D42A5007820048DAED /* MainViewController.swift */,
 				F1E668AB2A502B95001C42E4 /* HistoryViewController.swift */,
+				F1E668AD2A512EBB001C42E4 /* HistoryTableViewCell.swift */,
+				F1E668AF2A5132B3001C42E4 /* TransactionViewController.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -126,6 +139,7 @@
 			children = (
 				F13BA3ED2A50128E0048DAED /* BalanceViewModel.swift */,
 				F1E668A62A5022C8001C42E4 /* HistoryViewModel.swift */,
+				F1E668B12A513D23001C42E4 /* TransactionViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -136,6 +150,15 @@
 				F1E668A92A50287C001C42E4 /* MockViewModel.swift */,
 			);
 			path = Mocks;
+			sourceTree = "<group>";
+		};
+		F1E668B32A5143E2001C42E4 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				F18DCB972A514915002F5597 /* BalanceLabelView.swift */,
+				F1E668B42A5143F9001C42E4 /* TransactionButton.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -256,11 +279,16 @@
 				F13BA3EE2A50128E0048DAED /* BalanceViewModel.swift in Sources */,
 				F13BA3D12A5007820048DAED /* AppDelegate.swift in Sources */,
 				F1E668AA2A50287C001C42E4 /* MockViewModel.swift in Sources */,
+				F1E668AE2A512EBB001C42E4 /* HistoryTableViewCell.swift in Sources */,
 				F13BA3EC2A5010B60048DAED /* BankAccount.swift in Sources */,
 				F13BA3E92A5010470048DAED /* Transaction.swift in Sources */,
 				F1E668AC2A502B95001C42E4 /* HistoryViewController.swift in Sources */,
+				F1E668B02A5132B3001C42E4 /* TransactionViewController.swift in Sources */,
 				F13BA3D32A5007820048DAED /* SceneDelegate.swift in Sources */,
+				F18DCB982A514915002F5597 /* BalanceLabelView.swift in Sources */,
 				F1E668A72A5022C8001C42E4 /* HistoryViewModel.swift in Sources */,
+				F1E668B52A5143F9001C42E4 /* TransactionButton.swift in Sources */,
+				F1E668B22A513D23001C42E4 /* TransactionViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
