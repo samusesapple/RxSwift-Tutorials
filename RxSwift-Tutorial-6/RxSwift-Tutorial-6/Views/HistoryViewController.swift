@@ -17,8 +17,8 @@ class HistoryViewController: UIViewController {
         view.backgroundColor = .blue
     }
     
-    init(viewModel: HistoryViewModel) {
-        self.viewModel = viewModel
+    init(viewModel: ViewModel) {
+        self.viewModel = HistoryViewModel(viewModel: viewModel)
         super.init(nibName: nil, bundle: nil)
     }
     

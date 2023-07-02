@@ -61,8 +61,8 @@ class MainViewController: UIViewController {
         bindData()
     }
     
-    init(viewModel: BalanceViewModel) {
-        self.viewModel = viewModel
+    init(viewModel: ViewModel) {
+        self.viewModel = BalanceViewModel(viewModel: viewModel)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -82,7 +82,9 @@ class MainViewController: UIViewController {
         
         actionButton.rx.tap
             .map({ "action button" })
-            .subscribe(onNext: { print($0) })
+            .subscribe(onNext: {
+                print($0)
+            })
             .disposed(by: disposeBag)
     }
     

@@ -8,16 +8,16 @@
 import Foundation
 import RxSwift
 
-protocol BankViewModel {
+protocol ViewModel {
     var account: BankAccount { get set }
 }
 
-class BalanceViewModel: BankViewModel {
+class BalanceViewModel: ViewModel {
     var account: BankAccount
     
     var balanceObservable: Observable<String>
     
-    init(viewModel: BankViewModel) {
+    init(viewModel: ViewModel) {
         self.account = viewModel.account
         self.balanceObservable = Observable.just("\(viewModel.account.balance)")
     }

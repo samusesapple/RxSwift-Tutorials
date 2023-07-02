@@ -16,7 +16,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let window = UIWindow(windowScene: windowScene)
         
-        let dummyBankAccount = BalanceViewModel(viewModel: MockViewModel())
+        let dummyBankAccount = MockViewModel()
         
         window.rootViewController = MainViewController(viewModel: dummyBankAccount)
         window.makeKeyAndVisible()
