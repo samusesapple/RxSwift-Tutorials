@@ -8,7 +8,7 @@
 import Foundation
 
 final class MockViewModel: ViewModel {
-    var account: BankAccount = BankAccount(balance: 10001230,
+    var account: BankAccount = BankAccount(balance: 0,
                                            history: [
                                             .deposit(20),
                                             .withdraw(30),
