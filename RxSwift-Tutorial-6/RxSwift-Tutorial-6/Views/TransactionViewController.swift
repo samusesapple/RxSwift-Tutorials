@@ -9,14 +9,11 @@ import UIKit
 import SnapKit
 import Then
 import RxCocoa
-import RxSwift
 import ReactorKit
 
 final class TransactionViewController: UIViewController, View {
     
-    typealias Reactor = TransactionViewModel
-    
-    private var viewModel: TransactionViewModel
+    private var reactor: TransactionViewModel
     
     var disposeBag: RxSwift.DisposeBag
     
@@ -51,11 +48,11 @@ final class TransactionViewController: UIViewController, View {
         
         setAutolayout()
 
-        bind(reactor: viewModel)
+        bind(reactor: reactor)
     }
         
     init(viewModel: ViewModel) {
-        self.viewModel = TransactionViewModel(viewModel: viewModel)
+        self.reactor = TransactionViewModel(viewModel: viewModel)
         self.disposeBag = DisposeBag()
         super.init(nibName: nil, bundle: nil)
     }
@@ -72,7 +69,7 @@ final class TransactionViewController: UIViewController, View {
     }
     
     // 버튼에 대한 액션 reactor에 전달
-    private func bindButtonAction(_ reactor: Reactor) {
+    private func bindButtonAction(_ reactor: TransactionViewModel) {
         depositButton.rx.tap
             .filter({ [weak self] in
                 self!.amonutTextField.text!.count > 0
@@ -97,7 +94,7 @@ final class TransactionViewController: UIViewController, View {
     }
     
     // UI 업데이트
-    private func bindState(_ reactor: Reactor) {
+    private func bindState(_ reactor: TransactionViewModel) {
         reactor.state
             .map({ $0.currentBalance })
             .map({ "\($0)"})

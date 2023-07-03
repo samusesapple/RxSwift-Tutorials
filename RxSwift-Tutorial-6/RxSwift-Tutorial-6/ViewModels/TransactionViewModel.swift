@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import RxSwift
 import ReactorKit
 
 final class TransactionViewModel: ViewModel, Reactor {
@@ -18,20 +17,20 @@ final class TransactionViewModel: ViewModel, Reactor {
     private var disposeBag = DisposeBag()
     
     // Input
-    /// view로부터 받는 action
+    /// view로부터 받는 action 정의
     enum Action {
         case deposit(Int)
         case withdraw(Int)
     }
     
-    // Action에 대한 작업
+    /// Action에 대한 작업 단위 정의
     enum Mutation {
         case increaseBalance(Int)
         case decreaseBalance(Int)
     }
     
     // Output
-    /// 현재 상태, view는 State를 사용하여 UI를 업데이트 함
+    /// 현재 상태, view는 State를 구독하 UI를 업데이트 함
     struct State {
         let currentBalance: Int
     }

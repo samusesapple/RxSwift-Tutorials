@@ -7,20 +7,30 @@
 
 import Foundation
 import RxSwift
+import ReactorKit
 
 protocol ViewModel: AnyObject {
     var account: BankAccount { get set }
 }
 
-final class BalanceViewModel: ViewModel {
+final class BalanceViewModel: ViewModel, Reactor {
+    
+    let initialState: State
+    
+    enum Action {
+        case historyButtonTapped
+        case actionButtonTapped
+    }
+    
+    struct State {
+        let currentBalance: Int
+    }
     
     var account: BankAccount
     
-    var balanceObservable: Observable<String>
-    
     init(viewModel: ViewModel) {
         self.account = viewModel.account
-        self.balanceObservable = Observable.just("\(viewModel.account.balance)")
+        self.initialState = State(currentBalance: viewModel.account.balance)
     }
     
     var historyViewModel: ViewModel {

@@ -8,14 +8,14 @@
 import UIKit
 import Then
 import SnapKit
-import RxSwift
+import ReactorKit
 import RxCocoa
 
-final class MainViewController: UIViewController {
+final class MainViewController: UIViewController, View {
     
-    private var viewModel: BalanceViewModel
+    private var reactor: BalanceViewModel
     
-    private var disposeBag = DisposeBag()
+    var disposeBag = DisposeBag()
     
     // MARK: - Components
     
@@ -49,12 +49,11 @@ final class MainViewController: UIViewController {
         view.backgroundColor = .white
         setAutolayout()
         
-        buttonActions()
-        bindData()
+        bind(reactor: reactor)
     }
     
-    init(viewModel: ViewModel) {
-        self.viewModel = BalanceViewModel(viewModel: viewModel)
+    init(reactor: ViewModel) {
+        self.reactor = BalanceViewModel(viewModel: reactor)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -64,9 +63,14 @@ final class MainViewController: UIViewController {
     
     // MARK: - Bind
     
-    private func buttonActions() {
+    func bind(reactor: BalanceViewModel) {
+        buttonActions(reactor)
+        bindState(reactor)
+    }
+
+    private func buttonActions(_ reactor: BalanceViewModel) {
         historyButton.rx.tap
-            .map({ [weak self] in self!.viewModel.historyViewModel })
+            .map({ reactor.historyViewModel })
             .subscribe(onNext: { [weak self] in
                 self?.navigationController?
                     .pushViewController(HistoryViewController(viewModel: $0), animated: true)
@@ -74,7 +78,7 @@ final class MainViewController: UIViewController {
             .disposed(by: disposeBag)
         
         actionButton.rx.tap
-            .map({ [weak self] in self!.viewModel.transactionViewModel })
+            .map({ reactor.transactionViewModel })
             .subscribe(onNext: { [weak self] in
                 self?.navigationController?
                     .pushViewController(TransactionViewController(viewModel: $0), animated: true)
@@ -82,8 +86,9 @@ final class MainViewController: UIViewController {
             .disposed(by: disposeBag)
     }
     
-    private func bindData() {
-        viewModel.balanceObservable
+    private func bindState(_ reactor: BalanceViewModel) {
+        reactor.state
+            .map({ "\($0.currentBalance)" })
             .observe(on: MainScheduler.instance)
             .subscribe { [weak self] balance in
                 self?.balanceView.balanceLabel.text = balance
