@@ -381,17 +381,20 @@ RxSwift 기능 학습
 <br>
 <br>
 
-### 6. Mock 입출금 앱
+### 6. 가상 입출금 앱
 ---
 #### * 구현 목표
 - 입금, 출금, 입출금 내역 확인 가능한 Mock 입출금 앱 만들기
+- ReactorKit을 활용한 MVVM 패턴
 - DI 
 - Unit Test
-- MVVM 패턴
 <br>
 
 #### * 구조
 <img width="1043" alt="image" src="https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/ee7bd2a8-36e6-45ad-90cd-ff6b09af99a3">
+
+![image](https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/b9e488e0-2bf5-4faf-b593-3c24fdc24b7a)
+
 
 
 
@@ -403,3 +406,4 @@ RxSwift 기능 학습
       https://github.com/iamchiwon/RxSwift_In_4_Hours
 - RxSwift-Tutorial-4 (검색 포털 만들기) : 
       네이버 API 공식 개발자 문서 https://developers.naver.com/docs/serviceapi/search/web/web.md#%EC%9B%B9%EB%AC%B8%EC%84%9C
+- RxSwift-Tutorial-6 (가상 입출금 앱) : ReactorKit https://github.com/ReactorKit/ReactorKit 
