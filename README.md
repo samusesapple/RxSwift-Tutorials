@@ -404,7 +404,7 @@ RxSwift 기능 학습
   
 * SUT: TransactionViewController (입출금 작업이 일어나기에 비즈니스 로직이 가장 많이 일어나는 View에 Reactor에 대한 단위 테스트 실행)
 * DI(의존성 주입): BankAccount 프로토콜 생성하여 해당 프로토콜을 채택한 모든 객체가 Reactor(ViewModel)의 생성자에 들어갈 수 있도록 Dependency Injection 완료 된 상태로 테스트 진행
-* MockData: Unit Test의 참거짓을 비교 판단할 데이터 대상이 필요하기에 BankAccount 프로토콜을 채택한 MockData 객체 생성 및 사용하여 테스트 진행
+* MockData: Unit Test의 참거짓을 비교 판단할 데이터 대상이 필요하기에 BankAccount 프로토콜을 채택한 MockData 객체 생성 및 사용하여 테스트 진행 <br>
     <img width="276" alt="image" src="https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/3b53bdb5-f9d4-4038-956a-5720317b55e0">
     <br>
 
