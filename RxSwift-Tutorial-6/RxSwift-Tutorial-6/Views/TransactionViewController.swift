@@ -17,7 +17,7 @@ final class TransactionViewController: UIViewController, View {
     
     // MARK: - Components
     
-    private let balanceView = BalanceLabelView()
+    let balanceView = BalanceLabelView()
     
     let amonutTextField = UITextField().then {
         $0.borderStyle = .roundedRect

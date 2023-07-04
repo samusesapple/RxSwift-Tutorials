@@ -17,7 +17,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let window = UIWindow(windowScene: windowScene)
         
         let mainVC = MainViewController()
-        let mockData = MockData()
+        let mockData = MockData(account: BankAccount(balance: 130,
+                                                     history: [.deposit(30),
+                                                               .withdraw(500),
+                                                               .withdraw(600),
+                                                               .deposit(700)
+                                                              ]))
         mainVC.bind(reactor: BalanceViewModel(data: mockData))
         
         let naviVC = UINavigationController(rootViewController: mainVC)

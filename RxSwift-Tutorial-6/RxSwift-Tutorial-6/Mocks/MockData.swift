@@ -8,10 +8,9 @@
 import Foundation
 
 final class MockData: BankData {
-    var account: BankAccount = BankAccount(balance: 120,
-                                           history: [
-                                            .deposit(20),
-                                            .withdraw(30),
-                                            .deposit(50)
-                                           ])
+    var account: BankAccount
+    
+    init(account: BankAccount) {
+        self.account = account
+    }
 }
