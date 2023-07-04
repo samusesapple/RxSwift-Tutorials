@@ -394,6 +394,23 @@ RxSwift 기능 학습
 <img width="1043" alt="image" src="https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/ee7bd2a8-36e6-45ad-90cd-ff6b09af99a3">
 
 ![image](https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/b9e488e0-2bf5-4faf-b593-3c24fdc24b7a)
+<br>
+
+#### * Unit Test
+* SUT: TransactionViewController (입출금 작업이 일어나기에 비즈니스 로직이 가장 많이 일어나는 View에 Reactor에 대한 단위 테스트 실행)
+* MockData: 데이터 바인딩이 필요하기에 MockData 객체 생성하여 테스트 진행
+<img width="566" alt="image" src="https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/319146fe-cda3-486a-ac79-bf65054c60ed">
+<br>
+
+1. View -> Reactor (View로부터 Action 전달 받는 것에 대한 단위 테스트)
+    <img width="623" alt="image" src="https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/2c158efd-f656-426a-a575-6075b31ac208">
+
+2. Reactor (Action에 대해 처리할 작업, Muataion에 따른 State 변경에 대한 단위 테스트)
+    <img width="596" alt="image" src="https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/0cdeea7e-0ac4-45fc-8390-316bd20d9f39">
+
+3. Reactor -> View (Reactor의 상태값, State를 View가 잘 구독하고 있는지에 대한 단위 테스트)
+   <img width="555" alt="image" src="https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/e79adaed-1528-4e7a-b854-84b60eea4517">
+
 
 
 
