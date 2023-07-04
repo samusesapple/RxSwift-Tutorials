@@ -9,35 +9,78 @@ import Foundation
 import RxSwift
 import ReactorKit
 
-protocol ViewModel: AnyObject {
+protocol BankData: AnyObject {
     var account: BankAccount { get set }
 }
 
-final class BalanceViewModel: ViewModel, Reactor {
+final class BalanceViewModel: BankData, Reactor {
     
     let initialState: State
     
-    enum Action {
+    var account: BankAccount
+    
+    /// Input
+    enum Action: Equatable {
         case historyButtonTapped
         case actionButtonTapped
     }
     
-    struct State {
+    /// Action about Input
+    enum Mutation: Equatable {
+        case presentHistoryVC
+        case presentTransactionVC
+    }
+    
+    /// Output
+    struct State: Equatable {
         let currentBalance: Int
+        let needToShowHistory: Bool
+        let needToShowTransaction: Bool
     }
     
-    var account: BankAccount
+    // MARK: - Initializer
     
-    init(viewModel: ViewModel) {
-        self.account = viewModel.account
-        self.initialState = State(currentBalance: viewModel.account.balance)
+    init(data: BankData) {
+        self.account = data.account
+        self.initialState = State(currentBalance: data.account.balance,
+                                  needToShowHistory: false,
+                                  needToShowTransaction: false)
     }
     
-    var historyViewModel: ViewModel {
+    // MARK: - Bind
+    
+    func mutate(action: Action) -> Observable<Mutation> {
+        return Observable.create { emitter in
+            switch action {
+            case .historyButtonTapped:
+                emitter.onNext(.presentHistoryVC)
+            case .actionButtonTapped:
+                emitter.onNext(.presentTransactionVC)
+            }
+            return Disposables.create()
+        }
+    }
+
+    func reduce(state: State, mutation: Mutation) -> State {
+        switch mutation {
+        case .presentHistoryVC:
+            return State(currentBalance: state.currentBalance,
+                         needToShowHistory: true,
+                         needToShowTransaction: false)
+        case .presentTransactionVC:
+            return State(currentBalance: state.currentBalance,
+                         needToShowHistory: false,
+                         needToShowTransaction: true)
+        }
+    }
+    
+    // MARK: - Methods
+    
+    var historyViewModel: BankData {
         return self
     }
     
-    var transactionViewModel: ViewModel {
+    var transactionViewModel: BankData {
         return self
     }
 }

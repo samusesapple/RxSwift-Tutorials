@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum Transaction {
+enum Transaction: Equatable {
     case deposit(Int)
     case withdraw(Int)
 }

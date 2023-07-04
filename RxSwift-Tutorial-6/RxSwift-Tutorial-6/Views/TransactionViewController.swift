@@ -13,15 +13,13 @@ import ReactorKit
 
 final class TransactionViewController: UIViewController, View {
     
-    private var reactor: TransactionViewModel
-    
     var disposeBag: RxSwift.DisposeBag
     
     // MARK: - Components
     
     private let balanceView = BalanceLabelView()
     
-    private let amonutTextField = UITextField().then {
+    let amonutTextField = UITextField().then {
         $0.borderStyle = .roundedRect
         $0.layer.borderWidth = 0.5
         $0.layer.borderColor = UIColor.gray.cgColor
@@ -32,9 +30,9 @@ final class TransactionViewController: UIViewController, View {
         $0.placeholder = "Type price"
     }
     
-    private let depositButton = TransactionButton(action: .deposit(0))
+    let depositButton = TransactionButton(action: .deposit(0))
     
-    private let withdrawButton = TransactionButton(action: .withdraw(0))
+    let withdrawButton = TransactionButton(action: .withdraw(0))
     
     // MARK: - Lifecycle
     
@@ -47,12 +45,9 @@ final class TransactionViewController: UIViewController, View {
         view.backgroundColor = .white
         
         setAutolayout()
-
-        bind(reactor: reactor)
     }
         
-    init(viewModel: ViewModel) {
-        self.reactor = TransactionViewModel(viewModel: viewModel)
+    init() {
         self.disposeBag = DisposeBag()
         super.init(nibName: nil, bundle: nil)
     }

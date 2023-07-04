@@ -8,7 +8,7 @@
 import Foundation
 import ReactorKit
 
-final class TransactionViewModel: ViewModel, Reactor {
+final class TransactionViewModel: BankData, Reactor {
     
     let initialState: State
     
@@ -18,13 +18,13 @@ final class TransactionViewModel: ViewModel, Reactor {
     
     // Input
     /// view로부터 받는 action 정의
-    enum Action {
+    enum Action: Equatable {
         case deposit(Int)
         case withdraw(Int)
     }
     
     /// Action에 대한 작업 단위 정의
-    enum Mutation {
+    enum Mutation: Equatable {
         case increaseBalance(Int)
         case decreaseBalance(Int)
     }
@@ -37,27 +37,22 @@ final class TransactionViewModel: ViewModel, Reactor {
     
     // MARK: - Initializer
     
-    init(viewModel: ViewModel) {
-        self.account = viewModel.account
-        self.initialState = State(currentBalance: viewModel.account.balance)
+    init(data: BankData) {
+        self.account = data.account
+        self.initialState = State(currentBalance: data.account.balance)
     }
     
     // MARK: - Transform
     
     func mutate(action: Action) -> Observable<Mutation> {
-        switch action {
-        case .deposit(let amount):
-            print("+\(amount)")
-            return Observable.create { emitter in
-                emitter.onNext(Mutation.increaseBalance(amount))
-                return Disposables.create()
+        return Observable.create { emitter in
+            switch action {
+            case .deposit(let int):
+                emitter.onNext(.increaseBalance(int))
+            case .withdraw(let int):
+                emitter.onNext(.decreaseBalance(int))
             }
-        case .withdraw(let amount):
-            print("-\(amount)")
-            return Observable.create { emitter in
-                emitter.onNext(Mutation.decreaseBalance(amount))
-                return Disposables.create()
-            }
+            return Disposables.create()
         }
     }
     

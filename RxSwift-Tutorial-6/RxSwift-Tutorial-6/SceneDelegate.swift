@@ -16,10 +16,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let window = UIWindow(windowScene: windowScene)
         
-        let dummyBankAccount = MockViewModel()
+        let mainVC = MainViewController()
+        let mockData = MockData()
+        mainVC.bind(reactor: BalanceViewModel(data: mockData))
         
-        let naviVC = UINavigationController(rootViewController:
-                                                MainViewController(reactor: dummyBankAccount))
+        let naviVC = UINavigationController(rootViewController: mainVC)
         window.rootViewController = naviVC
         window.makeKeyAndVisible()
         self.window = window

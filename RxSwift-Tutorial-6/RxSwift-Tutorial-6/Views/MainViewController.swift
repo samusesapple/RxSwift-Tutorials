@@ -13,7 +13,7 @@ import RxCocoa
 
 final class MainViewController: UIViewController, View {
     
-    private var reactor: BalanceViewModel
+    private var reactor: BalanceViewModel!
     
     var disposeBag = DisposeBag()
     
@@ -48,19 +48,17 @@ final class MainViewController: UIViewController, View {
         
         view.backgroundColor = .white
         setAutolayout()
-        
-        bind(reactor: reactor)
     }
     
-    init(reactor: ViewModel) {
-        self.reactor = BalanceViewModel(viewModel: reactor)
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
+//    init(data: BankData) {
+//        self.reactor = BalanceViewModel(data: data)
+//        super.init(nibName: nil, bundle: nil)
+////    }
+//    
+//    required init?(coder: NSCoder) {
+//        fatalError("init(coder:) has not been implemented")
+//    }
+//    
     // MARK: - Bind
     
     func bind(reactor: BalanceViewModel) {
@@ -73,15 +71,19 @@ final class MainViewController: UIViewController, View {
             .map({ reactor.historyViewModel })
             .subscribe(onNext: { [weak self] in
                 self?.navigationController?
-                    .pushViewController(HistoryViewController(viewModel: $0), animated: true)
+                    .pushViewController(HistoryViewController(data: $0), animated: true)
             })
             .disposed(by: disposeBag)
         
         actionButton.rx.tap
             .map({ reactor.transactionViewModel })
+            .map({ let transactionVC = TransactionViewController()
+                transactionVC.bind(reactor: TransactionViewModel(data: $0))
+                return transactionVC
+            })
             .subscribe(onNext: { [weak self] in
                 self?.navigationController?
-                    .pushViewController(TransactionViewController(viewModel: $0), animated: true)
+                    .pushViewController($0, animated: true)
             })
             .disposed(by: disposeBag)
     }

@@ -31,8 +31,8 @@ final class HistoryViewController: UIViewController {
         setAutolayout()
     }
     
-    init(viewModel: ViewModel) {
-        self.viewModel = HistoryViewModel(viewModel: viewModel)
+    init(data: BankData) {
+        self.viewModel = HistoryViewModel(data: data)
         super.init(nibName: nil, bundle: nil)
     }
     

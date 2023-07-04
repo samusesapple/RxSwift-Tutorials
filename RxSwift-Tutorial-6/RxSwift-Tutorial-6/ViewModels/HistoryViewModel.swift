@@ -7,14 +7,14 @@
 
 import Foundation
 
-final class HistoryViewModel: ViewModel {
+final class HistoryViewModel: BankData {
     
     var account: BankAccount
     
     var history: [Transaction]
     
-    init(viewModel: ViewModel) {
-        self.account = viewModel.account
-        self.history = viewModel.account.history
+    init(data: BankData) {
+        self.account = data.account
+        self.history = data.account.history
     }
 }
