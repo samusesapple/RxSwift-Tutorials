@@ -13,7 +13,7 @@ import RxCocoa
 
 final class MainViewController: UIViewController, View {
     
-    private var reactor: BalanceViewModel!
+    private var reactor: MainReactor!
     
     var disposeBag = DisposeBag()
     
@@ -48,25 +48,22 @@ final class MainViewController: UIViewController, View {
         
         view.backgroundColor = .white
         setAutolayout()
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(currentBalanceDidChanged),
+                                               name: NotificationCenterManager.currentBalanceChangeNotification,
+                                               object: nil)
     }
     
-//    init(data: BankData) {
-//        self.reactor = BalanceViewModel(data: data)
-//        super.init(nibName: nil, bundle: nil)
-////    }
-//    
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
-//    
     // MARK: - Bind
     
-    func bind(reactor: BalanceViewModel) {
+    func bind(reactor: MainReactor) {
+        self.reactor = reactor
         buttonActions(reactor)
         bindState(reactor)
     }
-
-    private func buttonActions(_ reactor: BalanceViewModel) {
+    
+    private func buttonActions(_ reactor: MainReactor) {
         historyButton.rx.tap
             .map({ reactor.historyViewModel })
             .subscribe(onNext: { [weak self] in
@@ -77,10 +74,7 @@ final class MainViewController: UIViewController, View {
         
         actionButton.rx.tap
             .map({ reactor.transactionViewModel })
-            .map({ let transactionVC = TransactionViewController()
-                transactionVC.bind(reactor: TransactionViewModel(data: $0))
-                return transactionVC
-            })
+            .map({ TransactionViewController(data: $0) })
             .subscribe(onNext: { [weak self] in
                 self?.navigationController?
                     .pushViewController($0, animated: true)
@@ -88,7 +82,7 @@ final class MainViewController: UIViewController, View {
             .disposed(by: disposeBag)
     }
     
-    private func bindState(_ reactor: BalanceViewModel) {
+    private func bindState(_ reactor: MainReactor) {
         reactor.state
             .map({ "\($0.currentBalance)" })
             .observe(on: MainScheduler.instance)
@@ -96,6 +90,17 @@ final class MainViewController: UIViewController, View {
                 self?.balanceView.balanceLabel.text = balance
             }
             .disposed(by: disposeBag)
+    }
+    
+    // MARK: - Actions
+    
+    @objc private func currentBalanceDidChanged(_ notification: NSNotification) {
+        if let dictionary = notification.object as? [String : Any],
+           let value = dictionary["currentBalance"] as? Int {
+            Observable.just(Reactor.Action.currentBalanceDidChanged(value))
+                .bind(to: reactor.action)
+                .disposed(by: disposeBag)
+        }
     }
     
     // MARK: - Helpers

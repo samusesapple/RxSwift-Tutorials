@@ -8,7 +8,7 @@
 import Foundation
 import ReactorKit
 
-final class TransactionViewModel: BankData, Reactor {
+final class TransactionReactor: BankData, Reactor {
     
     let initialState: State
     
@@ -27,12 +27,14 @@ final class TransactionViewModel: BankData, Reactor {
     enum Mutation: Equatable {
         case increaseBalance(Int)
         case decreaseBalance(Int)
+        case valueDidChanged(Bool)
     }
     
     // Output
     /// 현재 상태, view는 State를 구독하 UI를 업데이트 함
     struct State {
-        let currentBalance: Int
+        var currentBalance: Int
+        var statusDidChanged = false
     }
     
     // MARK: - Initializer
@@ -45,23 +47,32 @@ final class TransactionViewModel: BankData, Reactor {
     // MARK: - Transform
     
     func mutate(action: Action) -> Observable<Mutation> {
-        return Observable.create { emitter in
-            switch action {
-            case .deposit(let int):
-                emitter.onNext(.increaseBalance(int))
-            case .withdraw(let int):
-                emitter.onNext(.decreaseBalance(int))
-            }
-            return Disposables.create()
+        switch action {
+        case .deposit(let int):
+            return Observable.concat([
+                Observable.just(.valueDidChanged(true)),
+                Observable.just(.increaseBalance(int)),
+                Observable.just(.valueDidChanged(false))
+            ])
+        case .withdraw(let int):
+            return Observable.concat([
+                Observable.just(.valueDidChanged(true)),
+                Observable.just(.decreaseBalance(int)),
+                Observable.just(.valueDidChanged(false))
+            ])
         }
     }
     
     func reduce(state: State, mutation: Mutation) -> State {
+        var newState = state
         switch mutation {
         case .increaseBalance(let int):
-            return State(currentBalance: state.currentBalance + int)
+            newState.currentBalance += int
         case .decreaseBalance(let int):
-            return State(currentBalance: state.currentBalance - int)
+            newState.currentBalance -= int
+        case .valueDidChanged(let changed):
+            newState.statusDidChanged = changed
         }
+        return newState
     }
 }

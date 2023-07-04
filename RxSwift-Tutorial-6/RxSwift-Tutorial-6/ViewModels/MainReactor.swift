@@ -13,7 +13,7 @@ protocol BankData: AnyObject {
     var account: BankAccount { get set }
 }
 
-final class BalanceViewModel: BankData, Reactor {
+final class MainReactor: BankData, Reactor {
     
     let initialState: State
     
@@ -23,12 +23,14 @@ final class BalanceViewModel: BankData, Reactor {
     enum Action: Equatable {
         case historyButtonTapped
         case actionButtonTapped
+        case currentBalanceDidChanged(Int)
     }
     
     /// Action about Input
     enum Mutation: Equatable {
         case presentHistoryVC
         case presentTransactionVC
+        case currentBalanceDidChanged(Int)
     }
     
     /// Output
@@ -56,6 +58,8 @@ final class BalanceViewModel: BankData, Reactor {
                 emitter.onNext(.presentHistoryVC)
             case .actionButtonTapped:
                 emitter.onNext(.presentTransactionVC)
+            case .currentBalanceDidChanged(let int):
+                emitter.onNext(.currentBalanceDidChanged(int))
             }
             return Disposables.create()
         }
@@ -71,6 +75,10 @@ final class BalanceViewModel: BankData, Reactor {
             return State(currentBalance: state.currentBalance,
                          needToShowHistory: false,
                          needToShowTransaction: true)
+        case .currentBalanceDidChanged(let int):
+            return State(currentBalance: int,
+                         needToShowHistory: false,
+                         needToShowTransaction: false)
         }
     }
     

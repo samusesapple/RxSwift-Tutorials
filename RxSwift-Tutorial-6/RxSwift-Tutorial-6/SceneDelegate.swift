@@ -23,7 +23,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                                                                .withdraw(600),
                                                                .deposit(700)
                                                               ]))
-        mainVC.bind(reactor: BalanceViewModel(data: mockData))
+        mainVC.bind(reactor: MainReactor(data: mockData))
         
         let naviVC = UINavigationController(rootViewController: mainVC)
         window.rootViewController = naviVC

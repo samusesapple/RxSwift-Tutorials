@@ -16,7 +16,7 @@ final class RxSwift_Tutorial_6Tests: XCTestCase {
                                                          history: []))
     
     override func setUp() {
-        sut = TransactionViewController()
+        sut = TransactionViewController(data: mockData)
     }
     
     override func tearDown() {
@@ -25,9 +25,9 @@ final class RxSwift_Tutorial_6Tests: XCTestCase {
     
     // MARK: - View -> Reactor Action Test
     
-    func testAction_whenDidTapDepositButton_amount300_sendActions() {
+    private func testAction_whenDidTapDepositButton_amount300_sendActions() {
         // Given
-        let reactor = TransactionViewModel(data: mockData)
+        let reactor = TransactionReactor(data: mockData)
         reactor.isStubEnabled = true
         sut.reactor = reactor
         sut.amonutTextField.text = "300"
@@ -39,9 +39,9 @@ final class RxSwift_Tutorial_6Tests: XCTestCase {
         XCTAssertEqual(reactor.stub.actions.last, .deposit(300))
     }
     
-    func testAction_whenDidTapWithdrawButton_amount300_sendActions() {
+    private func testAction_whenDidTapWithdrawButton_amount300_sendActions() {
         // Given
-        let reactor = TransactionViewModel(data: mockData)
+        let reactor = TransactionReactor(data: mockData)
         reactor.isStubEnabled = true
         sut.reactor = reactor
         sut.amonutTextField.text = "300"
@@ -55,9 +55,9 @@ final class RxSwift_Tutorial_6Tests: XCTestCase {
     
     // MARK: - Reactor (State status about Mutation) Test
     
-    func testStateStatus_whenDeposit300_thenBalanceStateIs300() {
+    private func testStateStatus_whenDeposit300_thenBalanceStateIs300() {
         // Given
-        let reactor = TransactionViewModel(data: mockData)
+        let reactor = TransactionReactor(data: mockData)
         
         // When
         reactor.action.onNext(.deposit(300))
@@ -66,9 +66,9 @@ final class RxSwift_Tutorial_6Tests: XCTestCase {
         XCTAssertEqual(reactor.currentState.currentBalance, 300)
     }
     
-    func testStateStatus_whenWIthdraw300_thenBalanceStateIsMinus300() {
+    private func testStateStatus_whenWIthdraw300_thenBalanceStateIsMinus300() {
         // Given
-        let reactor = TransactionViewModel(data: mockData)
+        let reactor = TransactionReactor(data: mockData)
         
         // When
         reactor.action.onNext(.withdraw(300))
@@ -79,9 +79,9 @@ final class RxSwift_Tutorial_6Tests: XCTestCase {
     
     // MARK: - Reactor -> View (View observing State Value) Test
     
-    func testState_whenStateValueIs300_thenTextFieldTextIs300() {
+    private func testState_whenStateValueIs300_thenTextFieldTextIs300() {
         // Given
-        let reactor = TransactionViewModel(data: mockData)
+        let reactor = TransactionReactor(data: mockData)
         reactor.isStubEnabled = true
         
         sut.reactor = reactor

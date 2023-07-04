@@ -15,6 +15,8 @@ final class TransactionViewController: UIViewController, View {
     
     var disposeBag: RxSwift.DisposeBag
     
+    private var reactor: TransactionReactor!
+    
     // MARK: - Components
     
     let balanceView = BalanceLabelView()
@@ -45,9 +47,12 @@ final class TransactionViewController: UIViewController, View {
         view.backgroundColor = .white
         
         setAutolayout()
+        
+        bind(reactor: reactor)
     }
         
-    init() {
+    init(data: BankData) {
+        self.reactor = TransactionReactor(data: data)
         self.disposeBag = DisposeBag()
         super.init(nibName: nil, bundle: nil)
     }
@@ -58,13 +63,13 @@ final class TransactionViewController: UIViewController, View {
     
     // MARK: - Bind
 
-    func bind(reactor: TransactionViewModel) {
+    func bind(reactor: TransactionReactor) {
         bindButtonAction(reactor)
         bindState(reactor)
     }
     
     // 버튼에 대한 액션 reactor에 전달
-    private func bindButtonAction(_ reactor: TransactionViewModel) {
+    private func bindButtonAction(_ reactor: TransactionReactor) {
         depositButton.rx.tap
             .filter({ [weak self] in
                 self!.amonutTextField.text!.count > 0
@@ -89,11 +94,23 @@ final class TransactionViewController: UIViewController, View {
     }
     
     // UI 업데이트
-    private func bindState(_ reactor: TransactionViewModel) {
+    private func bindState(_ reactor: TransactionReactor) {
         reactor.state
             .map({ $0.currentBalance })
             .map({ "\($0)"})
             .bind(to: balanceView.balanceLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        reactor.state
+            .map({ $0.statusDidChanged })
+            .filter({ $0 != false })
+            .map({ [weak self] _ in
+                self!.balanceView.balanceLabel.text!
+            })
+            .subscribe(onNext: { value in
+                NotificationCenterManager
+                    .postCurrentBalanceChangeNotification(value: Int(value)!)
+            })
             .disposed(by: disposeBag)
     }
     

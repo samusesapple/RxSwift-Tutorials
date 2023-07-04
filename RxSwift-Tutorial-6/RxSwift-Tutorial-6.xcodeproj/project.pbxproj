@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		87230253D709D616EDE0404F /* Pods_RxSwift_Tutorial_6.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF43365D8F42D1B643EB1D5E /* Pods_RxSwift_Tutorial_6.framework */; };
+		F1185C642A54443800FA56C1 /* NotificationCenterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1185C632A54443700FA56C1 /* NotificationCenterManager.swift */; };
 		F13BA3D12A5007820048DAED /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F13BA3D02A5007820048DAED /* AppDelegate.swift */; };
 		F13BA3D32A5007820048DAED /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F13BA3D22A5007820048DAED /* SceneDelegate.swift */; };
 		F13BA3D52A5007820048DAED /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F13BA3D42A5007820048DAED /* MainViewController.swift */; };
@@ -15,7 +16,7 @@
 		F13BA3DD2A5007830048DAED /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F13BA3DB2A5007830048DAED /* LaunchScreen.storyboard */; };
 		F13BA3E92A5010470048DAED /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = F13BA3E82A5010470048DAED /* Transaction.swift */; };
 		F13BA3EC2A5010B60048DAED /* BankAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = F13BA3EB2A5010B60048DAED /* BankAccount.swift */; };
-		F13BA3EE2A50128E0048DAED /* BalanceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F13BA3ED2A50128E0048DAED /* BalanceViewModel.swift */; };
+		F13BA3EE2A50128E0048DAED /* MainReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F13BA3ED2A50128E0048DAED /* MainReactor.swift */; };
 		F18DCB982A514915002F5597 /* BalanceLabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18DCB972A514915002F5597 /* BalanceLabelView.swift */; };
 		F18DCBA02A53D105002F5597 /* RxSwift_Tutorial_6Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18DCB9F2A53D105002F5597 /* RxSwift_Tutorial_6Tests.swift */; };
 		F1E668A72A5022C8001C42E4 /* HistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E668A62A5022C8001C42E4 /* HistoryViewModel.swift */; };
@@ -23,7 +24,7 @@
 		F1E668AC2A502B95001C42E4 /* HistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E668AB2A502B95001C42E4 /* HistoryViewController.swift */; };
 		F1E668AE2A512EBB001C42E4 /* HistoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E668AD2A512EBB001C42E4 /* HistoryTableViewCell.swift */; };
 		F1E668B02A5132B3001C42E4 /* TransactionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E668AF2A5132B3001C42E4 /* TransactionViewController.swift */; };
-		F1E668B22A513D23001C42E4 /* TransactionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E668B12A513D23001C42E4 /* TransactionViewModel.swift */; };
+		F1E668B22A513D23001C42E4 /* TransactionReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E668B12A513D23001C42E4 /* TransactionReactor.swift */; };
 		F1E668B52A5143F9001C42E4 /* TransactionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E668B42A5143F9001C42E4 /* TransactionButton.swift */; };
 /* End PBXBuildFile section */
 
@@ -41,6 +42,7 @@
 		82115148D2431D5B5DB50E03 /* Pods-RxSwift-Tutorial-6.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RxSwift-Tutorial-6.release.xcconfig"; path = "Target Support Files/Pods-RxSwift-Tutorial-6/Pods-RxSwift-Tutorial-6.release.xcconfig"; sourceTree = "<group>"; };
 		C8BA7B2CF67EE856C9CF0702 /* Pods-RxSwift-Tutorial-6.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RxSwift-Tutorial-6.debug.xcconfig"; path = "Target Support Files/Pods-RxSwift-Tutorial-6/Pods-RxSwift-Tutorial-6.debug.xcconfig"; sourceTree = "<group>"; };
 		CF43365D8F42D1B643EB1D5E /* Pods_RxSwift_Tutorial_6.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RxSwift_Tutorial_6.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F1185C632A54443700FA56C1 /* NotificationCenterManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCenterManager.swift; sourceTree = "<group>"; };
 		F13BA3CD2A5007820048DAED /* RxSwift-Tutorial-6.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "RxSwift-Tutorial-6.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F13BA3D02A5007820048DAED /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F13BA3D22A5007820048DAED /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -50,7 +52,7 @@
 		F13BA3DE2A5007830048DAED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F13BA3E82A5010470048DAED /* Transaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
 		F13BA3EB2A5010B60048DAED /* BankAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankAccount.swift; sourceTree = "<group>"; };
-		F13BA3ED2A50128E0048DAED /* BalanceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceViewModel.swift; sourceTree = "<group>"; };
+		F13BA3ED2A50128E0048DAED /* MainReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainReactor.swift; sourceTree = "<group>"; };
 		F18DCB972A514915002F5597 /* BalanceLabelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceLabelView.swift; sourceTree = "<group>"; };
 		F18DCB9D2A53D105002F5597 /* RxSwift-Tutorial-6Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "RxSwift-Tutorial-6Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F18DCB9F2A53D105002F5597 /* RxSwift_Tutorial_6Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxSwift_Tutorial_6Tests.swift; sourceTree = "<group>"; };
@@ -59,7 +61,7 @@
 		F1E668AB2A502B95001C42E4 /* HistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViewController.swift; sourceTree = "<group>"; };
 		F1E668AD2A512EBB001C42E4 /* HistoryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryTableViewCell.swift; sourceTree = "<group>"; };
 		F1E668AF2A5132B3001C42E4 /* TransactionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionViewController.swift; sourceTree = "<group>"; };
-		F1E668B12A513D23001C42E4 /* TransactionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionViewModel.swift; sourceTree = "<group>"; };
+		F1E668B12A513D23001C42E4 /* TransactionReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionReactor.swift; sourceTree = "<group>"; };
 		F1E668B42A5143F9001C42E4 /* TransactionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -124,7 +126,7 @@
 			children = (
 				F13BA3D02A5007820048DAED /* AppDelegate.swift */,
 				F13BA3D22A5007820048DAED /* SceneDelegate.swift */,
-				F1E668A82A50286A001C42E4 /* Mocks */,
+				F1E668A82A50286A001C42E4 /* Service */,
 				F13BA3E42A50101E0048DAED /* Models */,
 				F13BA3E62A5010340048DAED /* ViewModels */,
 				F13BA3E52A5010230048DAED /* Views */,
@@ -159,9 +161,9 @@
 		F13BA3E62A5010340048DAED /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
-				F13BA3ED2A50128E0048DAED /* BalanceViewModel.swift */,
+				F13BA3ED2A50128E0048DAED /* MainReactor.swift */,
 				F1E668A62A5022C8001C42E4 /* HistoryViewModel.swift */,
-				F1E668B12A513D23001C42E4 /* TransactionViewModel.swift */,
+				F1E668B12A513D23001C42E4 /* TransactionReactor.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -174,12 +176,13 @@
 			path = "RxSwift-Tutorial-6Tests";
 			sourceTree = "<group>";
 		};
-		F1E668A82A50286A001C42E4 /* Mocks */ = {
+		F1E668A82A50286A001C42E4 /* Service */ = {
 			isa = PBXGroup;
 			children = (
 				F1E668A92A50287C001C42E4 /* MockData.swift */,
+				F1185C632A54443700FA56C1 /* NotificationCenterManager.swift */,
 			);
-			path = Mocks;
+			path = Service;
 			sourceTree = "<group>";
 		};
 		F1E668B32A5143E2001C42E4 /* Components */ = {
@@ -336,7 +339,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F13BA3D52A5007820048DAED /* MainViewController.swift in Sources */,
-				F13BA3EE2A50128E0048DAED /* BalanceViewModel.swift in Sources */,
+				F13BA3EE2A50128E0048DAED /* MainReactor.swift in Sources */,
 				F13BA3D12A5007820048DAED /* AppDelegate.swift in Sources */,
 				F1E668AA2A50287C001C42E4 /* MockData.swift in Sources */,
 				F1E668AE2A512EBB001C42E4 /* HistoryTableViewCell.swift in Sources */,
@@ -346,9 +349,10 @@
 				F1E668B02A5132B3001C42E4 /* TransactionViewController.swift in Sources */,
 				F13BA3D32A5007820048DAED /* SceneDelegate.swift in Sources */,
 				F18DCB982A514915002F5597 /* BalanceLabelView.swift in Sources */,
+				F1185C642A54443800FA56C1 /* NotificationCenterManager.swift in Sources */,
 				F1E668A72A5022C8001C42E4 /* HistoryViewModel.swift in Sources */,
 				F1E668B52A5143F9001C42E4 /* TransactionButton.swift in Sources */,
-				F1E668B22A513D23001C42E4 /* TransactionViewModel.swift in Sources */,
+				F1E668B22A513D23001C42E4 /* TransactionReactor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
