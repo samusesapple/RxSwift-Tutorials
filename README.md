@@ -394,6 +394,32 @@ RxSwift 기능 학습
 <img width="1043" alt="image" src="https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/ee7bd2a8-36e6-45ad-90cd-ff6b09af99a3">
 
 ![image](https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/b9e488e0-2bf5-4faf-b593-3c24fdc24b7a)
+<br>
+
+#### * Unit Test
+* Unit Test 형식:
+  
+        1. SUT : System Under Text (테스트 대상)
+        2. 테스트 시나리오 작성 및 테스트 검증 : GWT 형식 (Given, When, Then 형식)
+  
+* SUT: TransactionViewController (입출금 작업이 일어나기에 비즈니스 로직이 가장 많이 일어나는 View에 Reactor에 대한 단위 테스트 실행)
+* DI(의존성 주입): BankAccount 프로토콜 생성하여 해당 프로토콜을 채택한 모든 객체가 Reactor(ViewModel)의 생성자에 들어갈 수 있도록 Dependency Injection 완료 된 상태로 테스트 진행
+* MockData: Unit Test의 참거짓을 비교 판단할 데이터 대상이 필요하기에 BankAccount 프로토콜을 채택한 MockData 객체 생성 및 사용하여 테스트 진행 <br>
+    <img width="276" alt="image" src="https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/3b53bdb5-f9d4-4038-956a-5720317b55e0">
+    <br>
+
+    <img width="566" alt="image" src="https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/319146fe-cda3-486a-ac79-bf65054c60ed">
+    <br>
+
+1. View -> Reactor (View로부터 Action 전달 받는 것에 대한 단위 테스트)
+    <img width="623" alt="image" src="https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/2c158efd-f656-426a-a575-6075b31ac208">
+
+2. Reactor (Action에 대해 처리할 작업, Muataion에 따른 State 변경에 대한 단위 테스트)
+    <img width="596" alt="image" src="https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/0cdeea7e-0ac4-45fc-8390-316bd20d9f39">
+
+3. Reactor -> View (Reactor의 상태값, State를 View가 잘 구독하고 있는지에 대한 단위 테스트)
+   <img width="555" alt="image" src="https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/e79adaed-1528-4e7a-b854-84b60eea4517">
+
 
 
 
