@@ -398,7 +398,7 @@ RxSwift 기능 학습
 
 #### * Unit Test
 * SUT: TransactionViewController (입출금 작업이 일어나기에 비즈니스 로직이 가장 많이 일어나는 View에 Reactor에 대한 단위 테스트 실행)
-* MockData: 데이터 바인딩이 필요하기에 MockData 객체 생성하여 테스트 진행
+* MockData: 데이터 바인딩이 필요하기에 MockData 객체 생성 및 주입하여 테스트 진행
 <img width="566" alt="image" src="https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/319146fe-cda3-486a-ac79-bf65054c60ed">
 <br>
 
