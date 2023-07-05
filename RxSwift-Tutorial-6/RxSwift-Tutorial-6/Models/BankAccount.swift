@@ -8,6 +8,6 @@
 import Foundation
 
 struct BankAccount {
-    let balance: Int
-    let history: [Transaction]
+    var balance: Int
+    var history: [Transaction]
 }
