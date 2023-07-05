@@ -423,6 +423,7 @@ RxSwift 기능 학습
 <br>
 
 #### * 데이터 전달 로직
+#### 다양한 방법을 활용해보고 싶어 2가지 방식으로 진행 (Notification, Reactive)
 1. currentBalance : NotificationCenter 활용;
    1. TransactionReactor : 입출금 action이 일어날 때마다 valueDidChange에 대해 true 값을 보냄 
    2. TransactionVC : Reactor의 valueDidChanged를 구독, true 일 경우 currentBalance에 대한 Notification post
