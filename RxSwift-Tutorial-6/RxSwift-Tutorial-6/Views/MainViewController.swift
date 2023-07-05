@@ -114,17 +114,7 @@ final class MainViewController: UIViewController, View {
                 .disposed(by: disposeBag)
         }
     }
-    
-    @objc private func historyListDidChanged(_ notification: NSNotification) {
-        if let dictionary = notification.object as? [String : Any],
-           let newHistory = dictionary["historyList"] as? [Transaction] {
-            Observable.just(Reactor.Action.historyListDidUpdated(newHistory))
-                .map({ print("새로운 기록 업데이트"); return $0 })
-                .bind(to: reactor.action)
-                .disposed(by: disposeBag)
-        }
-    }
-    
+
     // MARK: - Helpers
     
     private func setAutolayout() {

@@ -52,7 +52,6 @@ final class MainReactor: BankData, Reactor {
         case .currentBalanceDidChanged(let newValue):
             return Observable.just(.updateCurrentBalanceValue(newValue))
         case .historyListDidUpdated(let newHistoryList):
-            print("NEW HISTORY UPDATED")
             return Observable.just(.updateHistoryList(newHistoryList))
         }
     }
