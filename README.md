@@ -386,6 +386,7 @@ RxSwift 기능 학습
 #### * 구현 목표
 - 입금, 출금, 입출금 내역 확인 가능한 Mock 입출금 앱 만들기
 - ReactorKit을 활용한 MVVM 패턴
+- 반응형 데이터 전달 구현
 - DI 
 - Unit Test
 <br>
@@ -419,8 +420,105 @@ RxSwift 기능 학습
 
 3. Reactor -> View (Reactor의 상태값, State를 View가 잘 구독하고 있는지에 대한 단위 테스트)
    <img width="555" alt="image" src="https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/e79adaed-1528-4e7a-b854-84b60eea4517">
+<br>
+
+#### * 데이터 전달 로직
+1. currentBalance : NotificationCenter 활용;
+   1. TransactionReactor : 입출금 action이 일어날 때마다 valueDidChange에 대해 true 값을 보냄 
+   2. TransactionVC : Reactor의 valueDidChanged를 구독, true 일 경우 currentBalance에 대한 Notification post
+   3. MainVC : currentBalance에 대한 NotificationCenter의 옵저버로 등록된 상태. 노티 받을 때마다 Action.currentBalanceDidChanged에 바뀐 값을 바인딩
+   4. MainReactor : action에 대한 mutation 진행, state값 변경
+   5. MainVC : state값 구독하고 있으므로 UI 변경
+   * TransactionReactor
+   ```
+    func mutate(action: Action) -> Observable<Mutation> {
+        switch action {
+        case .deposit(let value):
+            return Observable.concat([
+                Observable.just(.valueDidChanged(true)),
+                Observable.just(.increaseBalance(value)),
+                Observable.just(.addTransactionHistory(.deposit(value))),
+                Observable.just(.valueDidChanged(false))
+            ])
+        case .withdraw(let value):
+            return Observable.concat([
+                Observable.just(.valueDidChanged(true)),
+                Observable.just(.decreaseBalance(value)),
+                Observable.just(.addTransactionHistory(.withdraw(value))),
+                Observable.just(.valueDidChanged(false))
+            ])
+        }
+    }
+   ```
+   * TransactionVC
+   ```
+   reactor.state
+       .map({ $0.statusDidChanged })
+       .filter({ $0 != false })
+       .map({ [weak self] _ in
+         self!.balanceView.balanceLabel.text!
+       })
+       .subscribe(onNext: { value in
+          NotificationCenterManager.postCurrentBalanceChangeNotification(value: Int(value)!)
+       })
+       .disposed(by: disposeBag)
+   ```
+2. historyList : push할 Reactor의 State를 구독하는 방식 활용
+   1. MainReactor : historyListDidUpdated([Transaction]) 라는 액션을 받아 State를 mutating 하도록 로직 구현
+   2. MainVC : TransactionVC를 push 하는 시점에 transactionVC.reactor.state 중 transactionHistory 구독, MainReactor의 history와 일치하지 않는지 여부 판단 후 historyListDidUpdated 액션으로 newValue 전달
+   3. TransactionVC에서 값이 바뀌면 이를 구독하고 있는 MainVC에게 저절로 데이터가 전달됨.
+   4. MainVC에 전달된 데이터는 Reactor에게 Action으로써 또 전달됨. Reactor는 Action에 대해 State 변경함. MainVC는 변경된 State에 대한 UI 작업 처리함.
+   * MainReactor
+   ```
+       func mutate(action: Action) -> Observable<Mutation> {
+        switch action {
+        ...
+        case .historyListDidUpdated(let newHistoryList):
+            return Observable.just(.updateHistoryList(newHistoryList))
+        }
+    }
+
+    func reduce(state: State, mutation: Mutation) -> State {
+        switch mutation {
+        ...
+        case .updateHistoryList(let newHistoryList):
+            self.account.history = newHistoryList
+            return state
+        }
+    }
+   ```
+   * MainVC
+   ```
+    actionButton.rx.tap
+       .map({ reactor.transactionReactor })
+       .map({
+           let transactionVC = TransactionViewController()
+           transactionVC.reactor = $0
+           return transactionVC
+            })
+        // transactionVC push하기 전에 transactionVC state 구독 시작
+            .subscribe(onNext: { [weak self] transActionVC in
+                transActionVC.reactor?.state
+                    .map({ $0.transactionHistory })
+                    .filter({ $0 != reactor.currentState.historyList })
+        // MainReactor의 Action에 바인딩
+                    .map({ Reactor.Action.historyListDidUpdated($0) })
+                    .bind(to: reactor.action)
+                    .disposed(by: self!.disposeBag)
+                
+        self?.navigationController?
+           .pushViewController(transActionVC, animated: true)
+        })
+       .disposed(by: disposeBag)
+   ```
+<br>
 
 
+#### * 구현 결과
+![Simulator Screen Recording - iPhone 14 Pro - 2023-07-05 at 17 11 49](https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/10c05f31-860f-465d-ad50-38a16c0bb826) ![Simulator Screen Recording - iPhone 14 Pro - 2023-07-05 at 17 14 15](https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/b33d3b8b-76e9-4364-ad26-affbb5debfb6)
+<br>
+<br>
+<br>
 
 
 
