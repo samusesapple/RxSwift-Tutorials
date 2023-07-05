@@ -51,7 +51,7 @@ final class MainViewController: UIViewController, View {
         
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(currentBalanceDidChanged),
-                                               name: NotificationCenterManager.currentBalanceChangeNotification,
+                                               name: NotificationCenterManager.currentBalanceChangedNotification,
                                                object: nil)
     }
     
@@ -73,11 +73,23 @@ final class MainViewController: UIViewController, View {
             .disposed(by: disposeBag)
         
         actionButton.rx.tap
-            .map({ reactor.transactionViewModel })
-            .map({ TransactionViewController(data: $0) })
-            .subscribe(onNext: { [weak self] in
+            .map({ reactor.transactionReactor })
+            .map({
+                let transactionVC = TransactionViewController()
+                transactionVC.reactor = $0
+                return transactionVC
+            })
+        // transactionVC push하기 전에 transactionVC state 구독 시작
+            .subscribe(onNext: { [weak self] transActionVC in
+                transActionVC.reactor?.state
+                    .map({ $0.transactionHistory })
+                    .filter({ $0 != reactor.currentState.historyList })
+                    .map({ Reactor.Action.historyListDidUpdated($0) })
+                    .bind(to: reactor.action)
+                    .disposed(by: self!.disposeBag)
+                
                 self?.navigationController?
-                    .pushViewController($0, animated: true)
+                    .pushViewController(transActionVC, animated: true)
             })
             .disposed(by: disposeBag)
     }
@@ -98,6 +110,16 @@ final class MainViewController: UIViewController, View {
         if let dictionary = notification.object as? [String : Any],
            let value = dictionary["currentBalance"] as? Int {
             Observable.just(Reactor.Action.currentBalanceDidChanged(value))
+                .bind(to: reactor.action)
+                .disposed(by: disposeBag)
+        }
+    }
+    
+    @objc private func historyListDidChanged(_ notification: NSNotification) {
+        if let dictionary = notification.object as? [String : Any],
+           let newHistory = dictionary["historyList"] as? [Transaction] {
+            Observable.just(Reactor.Action.historyListDidUpdated(newHistory))
+                .map({ print("새로운 기록 업데이트"); return $0 })
                 .bind(to: reactor.action)
                 .disposed(by: disposeBag)
         }

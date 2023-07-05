@@ -28,12 +28,14 @@ final class TransactionReactor: BankData, Reactor {
         case increaseBalance(Int)
         case decreaseBalance(Int)
         case valueDidChanged(Bool)
+        case addTransactionHistory(Transaction)
     }
     
     // Output
     /// 현재 상태, view는 State를 구독하 UI를 업데이트 함
     struct State {
         var currentBalance: Int
+        var transactionHistory: [Transaction]
         var statusDidChanged = false
     }
     
@@ -41,23 +43,26 @@ final class TransactionReactor: BankData, Reactor {
     
     init(data: BankData) {
         self.account = data.account
-        self.initialState = State(currentBalance: data.account.balance)
+        self.initialState = State(currentBalance: data.account.balance,
+                                  transactionHistory: data.account.history)
     }
     
     // MARK: - Transform
     
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
-        case .deposit(let int):
+        case .deposit(let value):
             return Observable.concat([
                 Observable.just(.valueDidChanged(true)),
-                Observable.just(.increaseBalance(int)),
+                Observable.just(.increaseBalance(value)),
+                Observable.just(.addTransactionHistory(.deposit(value))),
                 Observable.just(.valueDidChanged(false))
             ])
-        case .withdraw(let int):
+        case .withdraw(let value):
             return Observable.concat([
                 Observable.just(.valueDidChanged(true)),
-                Observable.just(.decreaseBalance(int)),
+                Observable.just(.decreaseBalance(value)),
+                Observable.just(.addTransactionHistory(.withdraw(value))),
                 Observable.just(.valueDidChanged(false))
             ])
         }
@@ -72,6 +77,8 @@ final class TransactionReactor: BankData, Reactor {
             newState.currentBalance -= int
         case .valueDidChanged(let changed):
             newState.statusDidChanged = changed
+        case .addTransactionHistory(let newAction):
+            newState.transactionHistory.append(newAction)
         }
         return newState
     }

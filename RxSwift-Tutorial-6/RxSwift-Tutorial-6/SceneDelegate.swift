@@ -17,11 +17,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let window = UIWindow(windowScene: windowScene)
         
         let mainVC = MainViewController()
-        let mockData = MockData(account: BankAccount(balance: 130,
-                                                     history: [.deposit(30),
-                                                               .withdraw(500),
-                                                               .withdraw(600),
-                                                               .deposit(700)
+        let mockData = MockData(account: BankAccount(balance: 0,
+                                                     history: [
                                                               ]))
         mainVC.bind(reactor: MainReactor(data: mockData))
         

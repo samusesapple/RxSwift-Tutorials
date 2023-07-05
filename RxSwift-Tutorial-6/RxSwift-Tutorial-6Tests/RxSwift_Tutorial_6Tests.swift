@@ -16,7 +16,7 @@ final class RxSwift_Tutorial_6Tests: XCTestCase {
                                                          history: []))
     
     override func setUp() {
-        sut = TransactionViewController(data: mockData)
+        sut = TransactionViewController()
     }
     
     override func tearDown() {
@@ -87,7 +87,8 @@ final class RxSwift_Tutorial_6Tests: XCTestCase {
         sut.reactor = reactor
         
         // When
-        reactor.stub.state.value = .init(currentBalance: 300)
+        reactor.stub.state.value = .init(currentBalance: 300,
+                                         transactionHistory: [])
         
         // Then
         let testBalance = sut.balanceView.balanceLabel.text

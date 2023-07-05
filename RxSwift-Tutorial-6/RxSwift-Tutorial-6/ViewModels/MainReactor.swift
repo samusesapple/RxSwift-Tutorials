@@ -22,53 +22,61 @@ final class MainReactor: BankData, Reactor {
     /// Input
     enum Action: Equatable {
         case currentBalanceDidChanged(Int)
+        case historyListDidUpdated([Transaction])
     }
     
     /// Action about Input
     enum Mutation: Equatable {
-        case currentBalanceDidChanged(Int)
+        case updateCurrentBalanceValue(Int)
+        case updateHistoryList([Transaction])
     }
     
     /// Output
     struct State: Equatable {
         let currentBalance: Int
+        let historyList: [Transaction]
     }
     
     // MARK: - Initializer
     
     init(data: BankData) {
         self.account = data.account
-        self.initialState = State(currentBalance: data.account.balance)
+        self.initialState = State(currentBalance: data.account.balance,
+                                  historyList: data.account.history)
     }
     
     // MARK: - Bind
     
     func mutate(action: Action) -> Observable<Mutation> {
-        return Observable.create { emitter in
-            switch action {
-            case .currentBalanceDidChanged(let newValue):
-                emitter.onNext(.currentBalanceDidChanged(newValue))
-            }
-            return Disposables.create()
+        switch action {
+        case .currentBalanceDidChanged(let newValue):
+            return Observable.just(.updateCurrentBalanceValue(newValue))
+        case .historyListDidUpdated(let newHistoryList):
+            print("NEW HISTORY UPDATED")
+            return Observable.just(.updateHistoryList(newHistoryList))
         }
     }
 
     func reduce(state: State, mutation: Mutation) -> State {
         switch mutation {
-        case .currentBalanceDidChanged(let newValue):
+        case .updateCurrentBalanceValue(let newValue):
             self.account.balance = newValue
-            return State(currentBalance: newValue)
+            return State(currentBalance: newValue,
+                         historyList: state.historyList)
+        case .updateHistoryList(let newHistoryList):
+            self.account.history = newHistoryList
+            return state
         }
     }
     
     // MARK: - Methods
     
-    var historyViewModel: BankData {
-        return self
+    var historyViewModel: HistoryViewModel {
+        return HistoryViewModel(data: self)
     }
     
-    var transactionViewModel: BankData {
-        return self
+    var transactionReactor: TransactionReactor {
+        return TransactionReactor(data: self)
     }
 }
 

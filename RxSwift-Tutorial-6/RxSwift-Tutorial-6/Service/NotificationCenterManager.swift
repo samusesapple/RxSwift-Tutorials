@@ -9,17 +9,16 @@ import Foundation
 
 struct NotificationCenterManager {
     
-    static var currentBalanceChangeNotification: Notification.Name {
+    static var currentBalanceChangedNotification: Notification.Name {
         return Notification.Name("valueChanged")
     }
     
     static func postCurrentBalanceChangeNotification(value: Int) {
 
-       let currentBalanceNotification = Notification(name: currentBalanceChangeNotification,
+       let currentBalanceNotification = Notification(name: currentBalanceChangedNotification,
                                             object: [
                                                 "currentBalance" : value
                                             ] as [String : Any])
         NotificationCenter.default.post(currentBalanceNotification)
     }
-
 }

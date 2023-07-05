@@ -47,12 +47,9 @@ final class TransactionViewController: UIViewController, View {
         view.backgroundColor = .white
         
         setAutolayout()
-        
-        bind(reactor: reactor)
     }
         
-    init(data: BankData) {
-        self.reactor = TransactionReactor(data: data)
+    init() {
         self.disposeBag = DisposeBag()
         super.init(nibName: nil, bundle: nil)
     }
