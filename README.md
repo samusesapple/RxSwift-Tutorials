@@ -1,14 +1,14 @@
 # RxSwift-Tutorials
-### 목적
+## 목적
 ---
 RxSwift 기능 학습
 <br>
 <br>
 <br>
 
-### 1. ID & PW 매칭
+## 1. ID & PW 매칭
 ---
-#### * 구현 목표
+### * 구현 목표
 1. idInputField.text : @과.com이 포함 된 경우, 오른쪽의 bullet 색상이 '초록색'으로 바뀐다.
 2. pwInputField.text : 6글자 이상인 경우, 오른쪽의 bullet 색상이 '초록색'으로 바뀐다.
 3. ID와 PW의 bullet이 둘 다 초록색인 경우, LOGIN 버튼이 파란색으로 변하고 활성화 된다.
@@ -16,7 +16,7 @@ RxSwift 기능 학습
 <img width="594" alt="image" src="https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/5522e339-a489-444c-bbc1-984c28d77654">
 <br>
 
-#### * 구현 방법 및 로직
+### * 구현 방법 및 로직
 * 로직
     ```
         private func checkEmailValid(_ email: String) -> Bool {
@@ -117,21 +117,21 @@ RxSwift 기능 학습
 <br>
 <br>
 
-#### * 구현 결과 
+### * 구현 결과 
 ![Simulator Screen Recording - iPhone 14 Pro - 2023-06-18 at 15 47 19](https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/72a14ef6-3f28-47c0-9bc5-7b41d99dfcd4)
 ![Simulator Screen Recording - iPhone 14 Pro - 2023-06-18 at 15 47 49](https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/4e222eb0-d51d-46d7-983b-a55bb7dda8fa)
 <br>
 <br>
 <br>
 
-### 2. 랜덤 고양이 사진 받기
+## 2. 랜덤 고양이 사진 받기
 ---
-#### * 구현 목표
+### * 구현 목표
 * resume 버튼을 누르면 고양이 사진을 받는다. 
 * stop 버튼을 누르면 하얀 화면을 띄운다.
 
-#### * 구현 방법 및 로직
-* 구현 로직
+### * 구현 방법 및 로직
+#### * 구현 로직
   1. resume 버튼을 누르면 https://thecatapi.com/의 API 서버로부터 고양이 사진 URL을 랜덤으로 받는다.
   2. 서버로부터 받은 URL 데이터를 외부 변수에 저장한다.
   3. 외부 변수에 저장된 URL 데이터를 통해 이미지를 다운받는다.
@@ -219,20 +219,20 @@ RxSwift 기능 학습
    ```
    <br>
 
-#### * 구현 결과
+### * 구현 결과
 ![ezgif-4-a830d51106](https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/5a73759e-d38e-4b80-9265-964e96c34c87)
 <br>
 <br>
 <br>
 
-### 3. 멤버 리스트 tableView에 띄우기 (feat. Alamofire)
+## 3. 멤버 리스트 tableView에 띄우기 (feat. Alamofire)
 ---
-#### * 구현 목표
+### * 구현 목표
 * Alamofire + RxSwift를 통한 보다 더 깔끔한 네트워킹 작업 구현
 <br>
 
-#### * 구현 방법 및 로직
-* 로직
+### * 구현 방법 및 로직
+#### * 로직
   1. viewDidLoad() 시점에 서버로부터 멤버 데이터를 배열 형태로 받는다.
   2. 비동기 작업이 완료되면 tableView를 reload 한다.
   3. tableView dataSource cellForRowAt에 indexPath.row를 사용하여 각각의 row에 해당되는 멤버의 데이터를 셀에 전달한다.
@@ -253,7 +253,7 @@ RxSwift 기능 학습
     ```
  <br>
  
-* 네트워킹
+#### * 네트워킹
   * Data Loader (Alamofire)
   ```
      func getMembers() -> Observable<[Member]> {
@@ -276,7 +276,7 @@ RxSwift 기능 학습
   ```
   <br>
   
-  * Image Loader (Alamofire)
+  #### * Image Loader (Alamofire)
   ```
       func loadImage(from url: String) -> Observable<UIImage?> {
         return Observable.create { emitter in
@@ -297,13 +297,13 @@ RxSwift 기능 학습
   ```
 <br>
 
-#### * 구현 결과 
+### * 구현 결과 
 ![Simulator Screen Recording - iPhone 14 Pro - 2023-06-22 at 19 22 59](https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/f4bedcda-deb4-4f06-ab9a-1d5da5b0469b)
 <br>
 <br>
 <br>
 
-### 4. 검색 포털 만들기
+## 4. 검색 포털 만들기
 ---
 #### * 구현 목표
 - RxSwift를 활용한 검색 포털 만들기
@@ -311,8 +311,8 @@ RxSwift 기능 학습
 - Naver 검색 API 활용하기
 <br>
 
-#### * 구현 로직
-* 로직
+### * 구현 로직
+#### * 로직
     1. searchBar의 text를 구독하여 변경되는 값을 외부 변수에 저장
     2. 외부 변수의 값이 변경 될 때마다 네트워킹 요청
     3. 네트워킹을 통해 나온 결과값을 tableView에 display
@@ -320,13 +320,13 @@ RxSwift 기능 학습
     5. detailVC - 전달받은 url을 통해 해당 웹페이시 webview에 띄우기
 <br>
 
-#### * 구현 결과
+### * 구현 결과
 ![Simulator Screen Recording - iPhone 14 - 2023-06-27 at 23 39 25](https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/d2bba83b-246b-40f9-9aa7-114d1ef9c159)
 <br>
 <br>
 <br>
 
-### 5. 더치페이 계산기 
+## 5. 더치페이 계산기 
 ---
 #### * 구현 목표
 - 애플 전화기 theme의 더치페이 계산기 앱 만들기
@@ -335,12 +335,12 @@ RxSwift 기능 학습
 - RxSwift로 진행하는 첫 미니 토이 프로젝트
 <br>
 
-#### * 구조
+### * 구조
 <img width="981" alt="image" src="https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/973318e0-dbbf-4629-b302-4941530d8c96">
 <br>
 
-#### * 문제상황 및 해결과정
-1. UITextField.rx.text는 유저가 직접 키보드로 텍스트필드를 선택해서 입력한 이벤트만 방출한다. 따라서 앱 상의 숫자패드를 입력하여 textField.text를 변경해도 해당 이벤트는 방출되지 않는다. <br>
+### * 문제상황 및 해결과정
+#### 1. UITextField.rx.text는 유저가 직접 키보드로 텍스트필드를 선택해서 입력한 이벤트만 방출한다. 따라서 앱 상의 숫자패드를 입력하여 textField.text를 변경해도 해당 이벤트는 방출되지 않는다. <br>
 
 * 아이디어 로직: <br>
     1. VC : 버튼이 눌리면 외부변수 buttonSubject: PublishSubject<ButtonCommand> 에 어떤 버튼이 눌렸는지를 담는다.
@@ -367,7 +367,7 @@ RxSwift 기능 학습
 <br>
 <br>
 
-#### * Unit Test 과정
+### * Unit Test 과정
     1. SUT(테스트 대상) : CalculatorViewModel
     2. 테스트 시나리오 작성 및 테스트 검증 (GWT 형식) : 'totalAmount: 1000, personCount: 4' 일 경우의 output을 검증하는 test case 작성 및 검증 
 <br>
@@ -375,15 +375,15 @@ RxSwift 기능 학습
 <br>
 <br>
 
-#### * 구현 결과
+### * 구현 결과
 ![Simulator Screen Recording - iPhone 14 Pro - 2023-06-30 at 16 26 34](https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/f6b93620-c10d-4454-9d29-da338c26145a)
 <br>
 <br>
 <br>
 
-### 6. 가상 입출금 앱
+## 6. 가상 입출금 앱
 ---
-#### * 구현 목표
+### * 구현 목표
 - 입금, 출금, 입출금 내역 확인 가능한 Mock 입출금 앱 만들기
 - ReactorKit을 활용한 MVVM 패턴
 - 반응형 데이터 전달 구현
@@ -391,13 +391,13 @@ RxSwift 기능 학습
 - Unit Test
 <br>
 
-#### * 구조
+### * 구조
 <img width="1043" alt="image" src="https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/ee7bd2a8-36e6-45ad-90cd-ff6b09af99a3">
 
 ![image](https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/b9e488e0-2bf5-4faf-b593-3c24fdc24b7a)
 <br>
 
-#### * Unit Test
+### * Unit Test
 * Unit Test 형식:
   
         1. SUT : System Under Text (테스트 대상)
@@ -422,7 +422,7 @@ RxSwift 기능 학습
    <img width="555" alt="image" src="https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/e79adaed-1528-4e7a-b854-84b60eea4517">
 <br>
 
-#### * 데이터 전달 로직
+### * 데이터 전달 로직
 #### 다양한 방법을 활용해보고 싶어 2가지 방식으로 진행 (Notification, Reactive)
 1. currentBalance : NotificationCenter 활용;
    1. TransactionReactor : 입출금 action이 일어날 때마다 valueDidChange에 대해 true 값을 보냄 
@@ -515,9 +515,18 @@ RxSwift 기능 학습
 <br>
 
 
-#### * 구현 결과
+### * 구현 결과
 ![Simulator Screen Recording - iPhone 14 Pro - 2023-07-05 at 17 11 49](https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/10c05f31-860f-465d-ad50-38a16c0bb826) ![Simulator Screen Recording - iPhone 14 Pro - 2023-07-05 at 17 14 15](https://github.com/samusesapple/RxSwift-Tutorials/assets/126672733/b33d3b8b-76e9-4364-ad26-affbb5debfb6)
 <br>
+<br>
+<br>
+
+## 카카오맵 클론 리펙토링
+---
+### * 구현 목표
+기존에 진행한 카카오맵 클론 토이 프로젝트를 RxSwift, RxCocoa, ReactorKit를 활용해 리펙토링하기 <br>
+
+* 기존 카카오맵 클론: https://github.com/samusesapple/KakaoMap_Clone
 <br>
 <br>
 
