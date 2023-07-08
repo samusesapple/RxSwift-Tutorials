@@ -6,12 +6,13 @@
 //
 
 import UIKit
+import SwiftUI
 import Then
 import SnapKit
 import ReactorKit
 import RxCocoa
 
-final class MainViewController: UIViewController, View {
+final class MainViewController: UIViewController {
     
     private var reactor: MainReactor!
     
@@ -137,3 +138,20 @@ final class MainViewController: UIViewController, View {
     }
 }
 
+//SwiftUI를 활용한 미리보기
+struct MainViewController_Previews: PreviewProvider {
+    
+    static var previews: some View {
+        Container().edgesIgnoringSafeArea(.all)
+    }
+    
+    struct Container: UIViewControllerRepresentable {
+        func makeUIViewController(context: Context) -> UIViewController {
+            let layout = UICollectionViewFlowLayout()
+            let mainVC = MainViewController()
+            return UINavigationController(rootViewController: mainVC)
+        }
+        func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {}
+        typealias UIViewControllerType = UIViewController
+    }
+}
