@@ -11,8 +11,6 @@ class FavoriteViewController: UIViewController {
 
     // MARK: - Properties
     
-    var viewModel: FavoriteViewModel!
-    
     private var placeHolder: UILabel = {
         let label = UILabel()
         label.text = "즐겨찾기 한 장소가 없습니다."
@@ -42,10 +40,6 @@ class FavoriteViewController: UIViewController {
         view.backgroundColor = .white
         
         setAutolayout()
-
-        viewModel.needToReloadTableView = { [weak self] in
-            self?.tableView.reloadData()
-        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -73,13 +67,13 @@ class FavoriteViewController: UIViewController {
 
 extension FavoriteViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.placeList.count
+        return 5
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "favoriteCell", for: indexPath) as! FavoriteViewTableViewCell
-        cell.viewModel = self.viewModel
-        cell.configureUIwithData(viewModel.placeList[indexPath.row])
+//        cell.viewModel = self.viewModel
+//        cell.configureUIwithData(viewModel.placeList[indexPath.row])
 
         return cell
     }

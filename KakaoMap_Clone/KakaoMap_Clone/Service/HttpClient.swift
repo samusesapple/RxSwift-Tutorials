@@ -5,8 +5,9 @@
 //  Created by Sam Sung on 2023/05/23.
 //
 
-import Foundation
 import Alamofire
+import Foundation
+import RxSwift
 
 final class HttpClient {
     
@@ -116,22 +117,105 @@ final class HttpClient {
         }
     }
     
-    func getDirection(startPoint: Coordinate, destination: Coordinate, completion: @escaping(DestinationResult) -> Void) {
+    
+    // MARK: - Refactor
+    
+    /// 해당 위치에 대한 데이터 카카오맵 크롤링해서 가져옴 Observable<TargetPlaceDetail>
+    func getDetailDataObservable(placeCode: String) -> Observable<TargetPlaceDetail>  {
+        let url = "https://place.map.kakao.com/main/v/" + placeCode
+        return Observable.create { emitter in
+            let task = AF.request(url,
+                                  method: .get,
+                                  encoding: URLEncoding.default)
+                .responseDecodable(of: TargetPlaceDetail.self) { response in
+                    let result = response.result
+                    switch result {
+                    case .success(let results):
+                        emitter.onNext(results)
+                        return
+                    case .failure(let error):
+                        emitter.onError(error)
+                    }
+                }
+            return Disposables.create {
+                task.cancel()
+            }
+        }
+    }
+    
+    /// 주소로 검색하기 (건물명, 도로명, 지번, 우편번호 및 좌표)
+    func getLocationAddressObservable(coordinate: Coordinate) -> Observable<CurrentAddressResult> {
+        let url = host + "geo/coord2regioncode.json"
+        return Observable.create { [weak self] emitter in
+            let task = AF.request(url,
+                                  method: .get,
+                                  parameters: self?.currentAddressParameters(coordinate: coordinate),
+                                  encoding: URLEncoding.default,
+                                  headers: self?.headers)
+                .validate(statusCode: 200..<300)
+                .responseDecodable(of: CurrentAddressResult.self) { response in
+                    let result = response.result
+                    switch result {
+                    case .success(let result):
+                        emitter.onNext(result)
+                    case .failure(let error):
+                        emitter.onError(error)
+                    }
+                }
+            return Disposables.create {
+                task.cancel()
+            }
+        }
+    }
+    
+    /// 키워드로 검색하기 (상호명 등을 검색)
+    func searchKeywordObservable(with keyword: String, coordinate: Coordinate, page: Int, isAccuracy: Bool = true) -> Observable<KeywordResult> {
+        let url = host + "search/keyword.json"
+        return Observable.create { [weak self] emitter in
+            let task = AF.request(url,
+                                  method: .get,
+                                  parameters: self?.keywordParameters(query: keyword,
+                                                                      coordinate: coordinate,
+                                                                      page: page,
+                                                                      isAccurancy: isAccuracy),
+                                  encoding: URLEncoding.default,
+                                  headers: self?.headers)
+                .validate(statusCode: 200..<600)
+                .responseDecodable(of: KeywordResult.self) { response in
+                    let result = response.result
+                    switch result {
+                    case .success(let searchResult):
+                        emitter.onNext(searchResult)
+                    case .failure(let error):
+                        emitter.onError(error)
+                    }
+                }
+            return Disposables.create {
+                task.cancel()
+            }
+        }
+    }
+    
+    func getDirection(startPoint: Coordinate, destination: Coordinate) -> Observable<DestinationResult> {
         let url = "https://apis-navi.kakaomobility.com/v1/directions"
-        
-        AF.request(url,
-                   method: .get,
-                   parameters: directionParameters(startPoint: startPoint,
-                                                   destination: destination),
-                   encoding: URLEncoding.default,
-                   headers: headers)
-        .validate(statusCode: 200..<600).responseDecodable(of: DestinationResult.self) { response in
-            let result = response.result
-            switch result {
-            case.success(let direction):
-                completion(direction)
-            case .failure(let error):
-                print(error)
+        return Observable.create { [weak self] emitter in
+            let task = AF.request(url,
+                                  method: .get,
+                                  parameters: self?.directionParameters(startPoint: startPoint,
+                                                                        destination: destination),
+                                  encoding: URLEncoding.default,
+                                  headers: self?.headers)
+                .validate(statusCode: 200..<600).responseDecodable(of: DestinationResult.self) { response in
+                    let result = response.result
+                    switch result {
+                    case.success(let direction):
+                        emitter.onNext(direction)
+                    case .failure(let error):
+                        emitter.onError(error)
+                    }
+                }
+            return Disposables.create {
+                task.cancel()
             }
         }
     }

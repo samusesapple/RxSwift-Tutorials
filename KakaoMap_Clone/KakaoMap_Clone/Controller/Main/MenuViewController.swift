@@ -79,13 +79,13 @@ final class MenuViewController: UIViewController {
         menuView.configureUIwithUserData(imageURL: nil, name: nil)
     }
 
-    @objc private func favoritesButtonTapped() {
-        viewModel.getFavoriteViewController { [weak self] favoriteVC in
-            self?.delegate?.needToCloseMenuView()
-            // mainVC에게 favoriteVC 보여주도록 시켜야함
-            self?.delegate?.needToPresent(viewController: favoriteVC)
-        }
-    }
+//    @objc private func favoritesButtonTapped() {
+//        viewModel.getFavoriteViewController { [weak self] favoriteVC in
+//            self?.delegate?.needToCloseMenuView()
+//            // mainVC에게 favoriteVC 보여주도록 시켜야함
+//            self?.delegate?.needToPresent(viewController: favoriteVC)
+//        }
+//    }
     
     @objc private func loginButtonTapped() {
         // 로그아웃 불가능한 경우, 로그인
@@ -147,7 +147,7 @@ final class MenuViewController: UIViewController {
     }
     
     private func setMenuViewButtonActions() {
-        menuView.favoritePlaceButton.addTarget(self, action: #selector(favoritesButtonTapped), for: .touchUpInside)
+//        menuView.favoritePlaceButton.addTarget(self, action: #selector(favoritesButtonTapped), for: .touchUpInside)
         menuView.userLoginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
     }
     

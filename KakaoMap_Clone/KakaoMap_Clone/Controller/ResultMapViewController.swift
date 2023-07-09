@@ -24,9 +24,6 @@ final class ResultMapViewController: UIViewController, CLLocationManagerDelegate
     
     private var polyLine: MTMapPolyline?
     
-    
-    var viewModel: ResultMapViewModel!
-    
     private let progressHud = JGProgressHUD(style: .dark)
     
     weak var delegate: ResultMapViewControllerDelegate?
@@ -167,64 +164,46 @@ final class ResultMapViewController: UIViewController, CLLocationManagerDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
         setAutolayout()
-        setActions()
-        setSearchBarAndAlignmentButtons()
-        
         checkIfTargetPlaceExists()
         
         LocationManager.shared.delegate = self
         
-        footerContainerView.addGestureRecognizer(UITapGestureRecognizer(target: self,
-                                                                        action: #selector(footerViewTapped)))
+//        footerContainerView.addGestureRecognizer(UITapGestureRecognizer(target: self,
+//                                                                        action: #selector(footerViewTapped)))
         
-        viewModel.needToHideHeaderAndFooterView = { [weak self] in
-            DispatchQueue.main.async {
-                UIView.animate(withDuration: 0.3) {
-                    self?.headerContainerView.transform = CGAffineTransform(translationX: 0,
-                                                                            y: -(self?.headerContainerView.bounds.height ?? 0))
-                    self?.footerContainerView.transform = CGAffineTransform(translationX: 0,
-                                                                            y: self?.footerContainerView.bounds.height ?? 0)
-                }
-            }
-        }
+//        viewModel.needToHideHeaderAndFooterView = { [weak self] in
+//            DispatchQueue.main.async {
+//                UIView.animate(withDuration: 0.3) {
+//                    self?.headerContainerView.transform = CGAffineTransform(translationX: 0,
+//                                                                            y: -(self?.headerContainerView.bounds.height ?? 0))
+//                    self?.footerContainerView.transform = CGAffineTransform(translationX: 0,
+//                                                                            y: self?.footerContainerView.bounds.height ?? 0)
+//                }
+//            }
+//        }
         
-        viewModel.needToShowHeaderAndFooterView = { [weak self] in
-            DispatchQueue.main.async {
-                UIView.animate(withDuration: 0.3) {
-                    self?.headerContainerView.transform = CGAffineTransform(translationX: 0,
-                                                                            y: 0)
-                    self?.footerContainerView.transform = CGAffineTransform(translationX: 0,
-                                                                            y: 0)
-                }
-            }
-        }
+//        viewModel.needToShowHeaderAndFooterView = { [weak self] in
+//            DispatchQueue.main.async {
+//                UIView.animate(withDuration: 0.3) {
+//                    self?.headerContainerView.transform = CGAffineTransform(translationX: 0,
+//                                                                            y: 0)
+//                    self?.footerContainerView.transform = CGAffineTransform(translationX: 0,
+//                                                                            y: 0)
+//                }
+//            }
+//        }
         
-        viewModel.needToSetTargetPlaceUI = { [weak self] in
-            self?.configureUIwithDetailedData()
-        }
+//        viewModel.showNoPhoneNumberToast = { [weak self] in
+//            var style = ToastStyle()
+//            style.backgroundColor = .darkGray
+//            style.messageColor = .white
+//
+//            self?.view.makeToast("전화번호가 제공되지 않은 업체입니다.",
+//                                 duration: 1.5,
+//                                 position: .center,
+//                                 style: style)
+//        }
         
-        viewModel.startFetchingData = { [weak progressHud] in
-            progressHud?.show(in: self.view)
-        }
-        
-        viewModel.finishFetchingData = { [weak progressHud] in
-            progressHud?.dismiss()
-        }
-        
-        viewModel.showNoPhoneNumberToast = { [weak self] in
-            var style = ToastStyle()
-            style.backgroundColor = .darkGray
-            style.messageColor = .white
-            
-            self?.view.makeToast("전화번호가 제공되지 않은 업체입니다.",
-                                 duration: 1.5,
-                                 position: .center,
-                                 style: style)
-        }
-        
-        viewModel.configureButtonForFavoritePlace = { [weak self] isFavoritePlace in
-            self?.configureButtonUIforFavoritePlace(isFavoritePlace)
-        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -236,87 +215,11 @@ final class ResultMapViewController: UIViewController, CLLocationManagerDelegate
             mapView.removePolyline(line as? MTMapPolyline)
         }
         // 화면에서 사라지면 mapView의 header와 footer 숨길 수 있는 제스처 없애기
-        mapView.removeGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(mapViewTapped)))
+//        mapView.removeGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(mapViewTapped)))
     }
     
     // MARK: - Actions
-    
-    @objc private func listButtonTapped() {
-        self.navigationController?.popViewController(animated: false)
-    }
-    
-    @objc private func searchBarTapped() {
-        // 선택했던 cell에 해당되는 장소의 정보를 SearchVC에 전달 필요 + SearchResultVC dismiss
-        navigationController?.popViewController(animated: false)
-        delegate?.needToShowSearchVC()
-    }
-    
-    @objc private func cancelButtonTapped() {
-        // 선택했던 cell에 해당되는 장소의 정보를 SearchVC에 전달 필요
-        navigationController?.popViewController(animated: false)
-        delegate?.needToShowMainVC()
-    }
-    
-    @objc private func centerAlignmentButtonTapped() {
-        // 정렬 옵션 선택할 view push 하기  >  정렬 옵션 변경 된 경우 버튼 글자 변경 및 테이블뷰 정렬 변경
-        let firstButtonTapped = centerAlignmentButton.titleLabel?.text != "지도중심 ▾" ? true : false
-        let alertVC = CustomAlignmentAlertViewController(isCenterAlignment: true,
-                                                         firstButtonTapped: firstButtonTapped)
-        //        alertVC.delegate = self
-        alertVC.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext
-        alertVC.modalTransitionStyle = UIModalTransitionStyle.crossDissolve
-        present(alertVC, animated: true)
-        print(#function)
-    }
-    
-    @objc private func accuracyAlignmentButtonTapped() {
-        // 정렬 옵션 선택할 view push 하기  >  정렬 옵션 변경 된 경우 버튼 글자 변경 및 테이블뷰 정렬 변경
-        let firstButtonTapped = accuracyAlignmentButton.titleLabel?.text == "정확도순 ▾" ? true : false
-        let alertVC = CustomAlignmentAlertViewController(isCenterAlignment: false,
-                                                         firstButtonTapped: firstButtonTapped)
-        //        alertVC.delegate = self
-        alertVC.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext
-        alertVC.modalTransitionStyle = UIModalTransitionStyle.crossDissolve
-        present(alertVC, animated: true)
-        print(#function)
-    }
-    
-    @objc private func footerViewTapped() {
-        guard let url = viewModel.targetPlace?.placeURL else { return }
-        let webVC = DetailViewController(url: url)
-        present(webVC, animated: true)
-    }
-    
-    @objc private func navigationButtonTapped() {
-        viewModel.getDirection { [weak self] guides in
-            self?.makePolylines(guide: guides)
-            self?.viewModel.needToHideHeaderAndFooterView()
-            self?.mapView.addGestureRecognizer(UITapGestureRecognizer(target: self,
-                                                                      action: #selector(self?.mapViewTapped)))
-        }
-    }
-    
-    @objc private func mapViewTapped() {
-        viewModel.headerFooterIsHidden.toggle()
-    }
-    
-    @objc private func saveButtonTapped() {
-        guard viewModel.userLoginStatus == true else {
-            view.makeToast(message: "즐겨찾기 기능은 로그인 유저에게만 제공됩니다.")
-            return
-        }
-        print("Firebase에 장소 저장")
-        self.saveButton.setImage(UIImage(named: "save.filled")?
-            .withRenderingMode(.alwaysTemplate)
-            .resizeImage(targetSize: CGSize(width: 25, height: 25)), for: .normal)
-        self.saveButton.tintColor = #colorLiteral(red: 0.9450980392, green: 0.768627451, blue: 0.05882352941, alpha: 1)
-        viewModel.changeFavoritePlaceStatus()
-    }
-    
-    @objc private func phoneCallButtonTapped() {
-        print("해당 장소에 전화하기")
-        viewModel.callToTargetPlace()
-    }
+
     
     // MARK: - Helpers
     
@@ -345,36 +248,6 @@ final class ResultMapViewController: UIViewController, CLLocationManagerDelegate
         buttonStackView.anchor(top: distanceLabel.bottomAnchor, left: footerContainerView.leftAnchor, right: footerContainerView.rightAnchor, paddingTop: 15, paddingLeft: 20, paddingRight: 20)
     }
     
-    private func setActions() {
-        searchBarView.getMenuButton().addTarget(self, action: #selector(listButtonTapped), for: .touchUpInside)
-        searchBarView.getSearchBar().searchTextField.addTarget(self, action: #selector(searchBarTapped), for: .editingDidBegin)
-        searchBarView.getCancelButton().addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
-        
-        centerAlignmentButton.addTarget(self, action: #selector(centerAlignmentButtonTapped), for: .touchUpInside)
-        accuracyAlignmentButton.addTarget(self, action: #selector(accuracyAlignmentButtonTapped), for: .touchUpInside)
-        
-        navigationButton.addTarget(self, action: #selector(navigationButtonTapped), for: .touchUpInside)
-        
-        phoneCallButton.addTarget(self, action: #selector(phoneCallButtonTapped), for: .touchUpInside)
-        saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
-    }
-    
-    private func setSearchBarAndAlignmentButtons() {
-        searchBarView.getSearchBar().showsCancelButton = false
-        searchBarView.getSearchBar().text = viewModel.keyword
-        
-        if viewModel.isMapBasedData {
-            centerAlignmentButton.setTitle("지도중심 ▾", for: .normal)
-        } else {
-            centerAlignmentButton.setTitle("내위치중심 ▾", for: .normal)
-        }
-        
-        if viewModel.isAccuracyAlignment {
-            accuracyAlignmentButton.setTitle("정확도순 ▾", for: .normal)
-        } else {
-            accuracyAlignmentButton.setTitle("거리순 ▾", for: .normal)
-        }
-    }
     
     /// mapView 세팅 - 선택된 장소 유무에 따라 맵뷰의 중심점 세팅하기
     private func setTargetMapView(with place: KeywordDocument?) {
@@ -403,14 +276,14 @@ final class ResultMapViewController: UIViewController, CLLocationManagerDelegate
     
     /// 장소 선택 유무에 따라 다른 UI를 띄우기
     private func checkIfTargetPlaceExists() {
-        guard let targetPlace = viewModel.targetPlace else {
-            viewModel.targetPlace = viewModel.searchResults[0]
-            configureUIwithData(place: viewModel.targetPlace!)
-            setTargetMapView(with: nil)
-            return
-        }
-        configureUIwithData(place: targetPlace)
-        setTargetMapView(with: targetPlace)
+//        guard let targetPlace = viewModel.targetPlace else {
+//            viewModel.targetPlace = viewModel.searchResults[0]
+//            configureUIwithData(place: viewModel.targetPlace!)
+//            setTargetMapView(with: nil)
+//            return
+//        }
+//        configureUIwithData(place: targetPlace)
+//        setTargetMapView(with: targetPlace)
     }
     
     /// FooterView의 UI를 선택된 장소 유무에 따라 다르게 띄우기
@@ -425,34 +298,34 @@ final class ResultMapViewController: UIViewController, CLLocationManagerDelegate
     
     /// 선택된 장소에 대한 크롤링 데이터로 UI 세팅하기
     private func configureUIwithDetailedData() {
-        guard let targetPlace = viewModel.targetPlace,
-              let address = targetPlace.addressName,
-              let data = viewModel.targetPlaceData,
-              let reviewCount = data.comment?.scorecnt,
-              let totalScore = data.comment?.scoresum
-                else {
-            if let reviewStatus = viewModel.targetPlaceData?.comment?.reviewWriteBlocked {
-                if reviewStatus != "NONE" {
-                    print("후기 미제공 업체")
-                    // 상세 주소가 있는 경우 상세주소 세팅
-                    if let detailAddress = viewModel.targetPlaceData?.basicInfo?.address?.addrdetail {
-                        self.addressLabel.text = (viewModel.targetPlace?.addressName!)! + " \(detailAddress)"
-                    }
-                    reviewView.configureBannedReviewUI()
-                }
-            }
-            print("지도뷰 \(viewModel.targetPlace?.id)- 크롤링한 데이터 세팅 실패")
-            return
-        }
+//        guard let targetPlace = viewModel.targetPlace,
+//              let address = targetPlace.addressName,
+//              let data = viewModel.targetPlaceData,
+//              let reviewCount = data.comment?.scorecnt,
+//              let totalScore = data.comment?.scoresum
+//                else {
+//            if let reviewStatus = viewModel.targetPlaceData?.comment?.reviewWriteBlocked {
+//                if reviewStatus != "NONE" {
+//                    print("후기 미제공 업체")
+//                    // 상세 주소가 있는 경우 상세주소 세팅
+//                    if let detailAddress = viewModel.targetPlaceData?.basicInfo?.address?.addrdetail {
+//                        self.addressLabel.text = (viewModel.targetPlace?.addressName!)! + " \(detailAddress)"
+//                    }
+//                    reviewView.configureBannedReviewUI()
+//                }
+//            }
+//            print("지도뷰 \(viewModel.targetPlace?.id)- 크롤링한 데이터 세팅 실패")
+//            return
+//        }
         // 평균 별점
-        let averageReviewPoint = (round((Double(totalScore) / Double(reviewCount)) * 10) / 10)
-        // 상세 주소, 평균 별점, 썸네일 이미지 세팅
-        DispatchQueue.main.async { [weak self] in
-            self?.reviewView.configureUI(averagePoint: averageReviewPoint, reviewCount: reviewCount)
-            if let detailAddress = data.basicInfo?.address?.addrdetail {
-                self?.addressLabel.text = address + " \(detailAddress)"
-            }
-        }
+//        let averageReviewPoint = (round((Double(totalScore) / Double(reviewCount)) * 10) / 10)
+//        // 상세 주소, 평균 별점, 썸네일 이미지 세팅
+//        DispatchQueue.main.async { [weak self] in
+//            self?.reviewView.configureUI(averagePoint: averageReviewPoint, reviewCount: reviewCount)
+//            if let detailAddress = data.basicInfo?.address?.addrdetail {
+//                self?.addressLabel.text = address + " \(detailAddress)"
+//            }
+//        }
     }
     
     private func configureButtonUIforFavoritePlace(_ isFavoritePlace: Bool) {
@@ -476,7 +349,7 @@ final class ResultMapViewController: UIViewController, CLLocationManagerDelegate
 extension ResultMapViewController: MTMapViewDelegate {
     
     func mapView(_ mapView: MTMapView!, selectedPOIItem poiItem: MTMapPOIItem!) -> Bool {
-        let targetPlace = viewModel.filterResults(with: poiItem.tag)
+//        let targetPlace = viewModel.filterResults(with: poiItem.tag)
         print("선택된 위치 장소 코드 : \(poiItem.tag)")
         return false
     }
@@ -489,33 +362,33 @@ extension ResultMapViewController: MTMapViewDelegate {
     /// 검색 결과에 해당되는 장소에 마커 생성
     private func makeMarker() {
         
-        for item in viewModel.searchResults {
-            guard let stringLon = item.x,
-                  let stringLat = item.y,
-                  let lat = Double(stringLat),
-                  let lon = Double(stringLon),
-                  let stringID = item.id,
-                  let placeID = Int(stringID) else {
-                print("마커 좌표값 옵셔널 벗기기 실패")
-                return
-            }
-            self.mapPoint = MTMapPoint(geoCoord: MTMapPointGeo(latitude: lat, longitude: lon))
-            
-            let customPoiImage = UIImage(named: "bluePoint")?.resizeImage(targetSize: CGSize(width: 25, height: 25))
-            let selectedPoiImage = UIImage(named: "selectedBluePoint")?.resizeImage(targetSize: CGSize(width: 35, height: 35))
-            
-            poiItem = MTMapPOIItem()
-            poiItem?.markerType = .customImage
-            poiItem?.customImage = customPoiImage
-            
-            poiItem?.markerSelectedType = .customImage
-            poiItem?.customSelectedImage = selectedPoiImage
-            
-            poiItem?.mapPoint = mapPoint
-            poiItem?.itemName = item.placeName
-            poiItem?.tag = placeID
-            mapView.add(poiItem)
-        }
+//        for item in viewModel.searchResults {
+//            guard let stringLon = item.x,
+//                  let stringLat = item.y,
+//                  let lat = Double(stringLat),
+//                  let lon = Double(stringLon),
+//                  let stringID = item.id,
+//                  let placeID = Int(stringID) else {
+//                print("마커 좌표값 옵셔널 벗기기 실패")
+//                return
+//            }
+//            self.mapPoint = MTMapPoint(geoCoord: MTMapPointGeo(latitude: lat, longitude: lon))
+//
+//            let customPoiImage = UIImage(named: "bluePoint")?.resizeImage(targetSize: CGSize(width: 25, height: 25))
+//            let selectedPoiImage = UIImage(named: "selectedBluePoint")?.resizeImage(targetSize: CGSize(width: 35, height: 35))
+//
+//            poiItem = MTMapPOIItem()
+//            poiItem?.markerType = .customImage
+//            poiItem?.customImage = customPoiImage
+//
+//            poiItem?.markerSelectedType = .customImage
+//            poiItem?.customSelectedImage = selectedPoiImage
+//
+//            poiItem?.mapPoint = mapPoint
+//            poiItem?.itemName = item.placeName
+//            poiItem?.tag = placeID
+//            mapView.add(poiItem)
+//        }
     }
     
     /// 장소 선택 - 네비게이션 버튼 클릭 후 실행됨 : 현재 위치로부터 선택된 장소까지의 경로 poly line 그리기
@@ -523,14 +396,14 @@ extension ResultMapViewController: MTMapViewDelegate {
         // 선택된 장소를 제외한 poiItem 제거
         guard let poiItems = mapView.poiItems else { return }
         
-        for item in poiItems {
-            guard let item = item as? MTMapPOIItem,
-                  let targetId = viewModel.targetPlace?.id else { return }
-            if String(item.tag) != targetId {
-                mapView.remove(item)
-            }
-        }
-        
+//        for item in poiItems {
+//            guard let item = item as? MTMapPOIItem,
+//                  let targetId = viewModel.targetPlace?.id else { return }
+//            if String(item.tag) != targetId {
+//                mapView.remove(item)
+//            }
+//        }
+//
         var mapPoints: [MTMapPoint] = []
         
         polyLine = MTMapPolyline.polyLine()

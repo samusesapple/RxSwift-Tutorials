@@ -16,7 +16,6 @@ protocol SearchResultViewControllerDelegate: AnyObject {
 final class SearchResultViewController: UIViewController {
     // MARK: - Properties
     
-    var viewModel: SearchResultViewModel!
     weak var delegate: SearchResultViewControllerDelegate?
   
     private let activity = UIActivityIndicatorView()
@@ -79,49 +78,9 @@ final class SearchResultViewController: UIViewController {
         setAutolayout()
         setActions()
         setSearchBar()
-
-        viewModel.loadingStarted = { [weak self] in
-            self?.activity.isHidden = false
-            self?.activity.startAnimating()
-        }
-        
-        viewModel.finishLoading = { [weak self] in
-            self?.activity.stopAnimating()
-            self?.tableView.reloadData()
-        }
-        
-        viewModel.showHud = { [weak self] in
-            guard let view = self?.view else { return }
-            self?.progressHud.show(in: view)
-        }
-        
-        viewModel.dismissHud = { [weak self] in
-            self?.progressHud.dismiss()
-            self?.tableView.reloadData()
-        }
     }
     
     // MARK: - Actions
-    
-    @objc private func mapButtonTapped() {
-        // ResultMapView에 정보 전달 및 띄우기
-        let resultMapVC = viewModel.getResultMapVC(targetPlace: nil)
-        resultMapVC.delegate = self
-        navigationController?.pushViewController(resultMapVC, animated: false)
-    }
-    
-    @objc private func searchBarTapped() {
-        // 선택했던 cell에 해당되는 장소의 정보를 SearchVC에 전달 필요
-        delegate?.passTappedHistory(newHistories: viewModel.searchHistories ?? [])
-        navigationController?.popViewController(animated: false)
-    }
-    
-    @objc private func cancelButtonTapped() {
-        // 선택했던 cell에 해당되는 장소의 정보를 SearchVC에 전달 필요
-        delegate?.passTappedHistory(newHistories: viewModel.searchHistories ?? [])
-        navigationController?.popViewController(animated: false)
-        delegate?.needToPresentMainView()
-    }
     
     @objc private func centerAlignmentButtonTapped() {
         // 정렬 옵션 선택할 view push 하기  >  정렬 옵션 변경 된 경우 버튼 글자 변경 및 테이블뷰 정렬 변경
@@ -172,16 +131,12 @@ final class SearchResultViewController: UIViewController {
     }
     
     private func setActions() {
-        searchBarView.getMenuButton().addTarget(self, action: #selector(mapButtonTapped), for: .touchUpInside)
-        searchBarView.getSearchBar().searchTextField.addTarget(self, action: #selector(searchBarTapped), for: .editingDidBegin)
-        searchBarView.getCancelButton().addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
-        
         centerAlignmentButton.addTarget(self, action: #selector(centerAlignmentButtonTapped), for: .touchUpInside)
         accuracyAlignmentButton.addTarget(self, action: #selector(accuracyAlignmentButtonTapped), for: .touchUpInside)
     }
     
     private func setSearchBar() {
-        searchBarView.getSearchBar().searchTextField.text = viewModel.keyword
+//        searchBarView.getSearchBar().searchTextField.text = viewModel.keyword
         searchBarView.getSearchBar().showsCancelButton = false
     }
 }
@@ -192,34 +147,34 @@ final class SearchResultViewController: UIViewController {
 extension SearchResultViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.searchResults.count
+        return 5
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "resultCell", for: indexPath) as! SearchResultTableViewCell
-        cell.configureUIwithData(data: viewModel.searchResults[indexPath.row])
-        
-        HttpClient.shared.getDetailDataForTargetPlace(placeCode: viewModel.searchResults[indexPath.row].id!) { placeData in
-            DispatchQueue.main.async {
-                cell.setPlaceReviewData(data: placeData)
-                print("셀 크롤링한 데이터로 세팅 완료")
-            }
-        }
+//        cell.configureUIwithData(data: viewModel.searchResults[indexPath.row])
+//
+//        HttpClient.shared.getDetailDataForTargetPlace(placeCode: viewModel.searchResults[indexPath.row].id!) { placeData in
+//            DispatchQueue.main.async {
+//                cell.setPlaceReviewData(data: placeData)
+//                print("셀 크롤링한 데이터로 세팅 완료")
+//            }
+//        }
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let targetPlace = viewModel.searchResults[indexPath.row]
-        guard let placeName = targetPlace.placeName else {
-            print("SearchResultVC - placeName error")
-            return
-        }
-        // 검색 기록 추가 + 해당되는 셀의 장소 보여주는 mapResultVC push 하기
-        viewModel.updateNewTappedHistory(location: targetPlace)
-        let resultMapVC = viewModel.getResultMapVC(targetPlace: targetPlace)
-        resultMapVC.delegate = self
-        self.navigationController?.pushViewController(resultMapVC, animated: false)
+//        let targetPlace = viewModel.searchResults[indexPath.row]
+//        guard let placeName = targetPlace.placeName else {
+//            print("SearchResultVC - placeName error")
+//            return
+//        }
+//        // 검색 기록 추가 + 해당되는 셀의 장소 보여주는 mapResultVC push 하기
+//        viewModel.updateNewTappedHistory(location: targetPlace)
+//        let resultMapVC = viewModel.getResultMapVC(targetPlace: targetPlace)
+//        resultMapVC.delegate = self
+//        self.navigationController?.pushViewController(resultMapVC, animated: false)
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -227,20 +182,8 @@ extension SearchResultViewController: UITableViewDelegate, UITableViewDataSource
         let contentHeight = scrollView.contentSize.height
 
         if offsetY > contentHeight - scrollView.frame.height {
-            viewModel.getNextPageResult()
+//            viewModel.getNextPageResult()
         }
-    }
-}
-
-// MARK: - ResultMapViewControllerDelegate
-
-extension SearchResultViewController: ResultMapViewControllerDelegate {
-    func needToShowSearchVC() {
-        searchBarTapped()
-    }
-    
-    func needToShowMainVC() {
-        cancelButtonTapped()
     }
 }
 
@@ -250,28 +193,28 @@ extension SearchResultViewController: CustomAlignmentAlertViewControllerDelegate
     func getCurrentLocationBaseData() {
         print("현재 위치 기준으로 정보 받기")
         centerAlignmentButton.setTitle("내위치중심 ▾", for: .normal)
-        viewModel.isMapBasedData = false
-        viewModel.sortAccuracyAlignment()
+//        viewModel.isMapBasedData = false
+//        viewModel.sortAccuracyAlignment()
     }
     
     func getMapBoundaryBaseData() {
         print("지도상 위치 기준으로 정보 받기")
         centerAlignmentButton.setTitle("지도중심 ▾", for: .normal)
-        viewModel.isMapBasedData = true
-        viewModel.sortAccuracyAlignment()
+//        viewModel.isMapBasedData = true
+//        viewModel.sortAccuracyAlignment()
     }
     
     func correctInfoBaseAlignment() {
         print("정확도 순으로 정렬")
         accuracyAlignmentButton.setTitle("정확도순 ▾", for: .normal)
-        viewModel.isAccuracyAlignment = true
-        viewModel.sortAccuracyAlignment()
+//        viewModel.isAccuracyAlignment = true
+//        viewModel.sortAccuracyAlignment()
     }
     
     func shortDistanceFirstAlignment() {
         print("거리순으로 정렬")
         accuracyAlignmentButton.setTitle("거리순 ▾", for: .normal)
-        viewModel.isAccuracyAlignment = false
-        viewModel.sortAccuracyAlignment()
+//        viewModel.isAccuracyAlignment = false
+//        viewModel.sortAccuracyAlignment()
     }
 }

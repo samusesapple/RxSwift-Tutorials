@@ -5,10 +5,13 @@
 //  Created by Sam Sung on 2023/06/09.
 //
 
-import Foundation
-import KakaoSDKUser
 import FirebaseAuth
+import Foundation
 import GoogleSignIn
+import KakaoSDKUser
+import RxSwift
+import ReactorKit
+
 
 final class AuthViewModel {
     
@@ -97,25 +100,25 @@ final class AuthViewModel {
     }
     
     /// 유저 즐겨찾기 리스트 받기
-    func getFavoriteViewController(completion: @escaping (FavoriteViewController) -> Void) {
-        guard let _ = checkUserLoginStatus() else {
-            print("로그인 필요")
-            showLoginToast()
-            return
-        }
-        self.startFetching()
-
-        FirestoreManager.shared.getFavoritePlaceList { [weak self] places in
-            self?.finishFetching()
-
-            let favoriteViewModel = FavoriteViewModel(placeList: places)
-            let favoriteVC = FavoriteViewController()
-            favoriteVC.viewModel = favoriteViewModel
-            DispatchQueue.main.async {
-                completion(favoriteVC)
-            }
-        }
-    }
+//    func getFavoriteViewController(completion: @escaping (FavoriteViewController) -> Void) {
+//        guard let _ = checkUserLoginStatus() else {
+//            print("로그인 필요")
+//            showLoginToast()
+//            return
+//        }
+//        self.startFetching()
+//
+//        FirestoreManager.shared.getFavoritePlaceList { [weak self] places in
+//            self?.finishFetching()
+//
+//            let favoriteViewModel = FavoriteViewModel(placeList: places)
+//            let favoriteVC = FavoriteViewController()
+//            favoriteVC.viewModel = favoriteViewModel
+//            DispatchQueue.main.async {
+//                completion(favoriteVC)
+//            }
+//        }
+//    }
 
 // MARK: - Helpers
     /// 카카오톡 로그인 된 유저 정보를 Firebase에 저장 / Firebase 앱 로그인 실행, NotificationCenter에 카카오톡 로그인 알리기
@@ -209,7 +212,7 @@ final class AuthViewModel {
                                                uid: uid,
                                                isKakaoLogin: isKakaoLogin,
                                                imageURL: "\(profileImageURL)")
-        // 노티피케이션 센터에 로그인 됨 알리기
+        // 유저 로그인 됨 알리기
         NotificationManager.postloginNotification(name: name,
                                                   userEmail: email,
                                                   profileImageURL: profileImageURL,

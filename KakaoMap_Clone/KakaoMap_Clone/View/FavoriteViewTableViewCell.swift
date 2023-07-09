@@ -11,8 +11,6 @@ class FavoriteViewTableViewCell: UITableViewCell {
 
     // MARK: - Properties
     
-    var viewModel: FavoriteViewModel!
-    
     var id: String?
     
     let starButton: UIButton = {
@@ -64,7 +62,6 @@ class FavoriteViewTableViewCell: UITableViewCell {
                                             height: 30)),
                         for: .normal)
         starButton.tintColor = .gray
-        viewModel.removeFavorite(id: id)
     }
     
     // MARK: - Helpers
@@ -93,7 +90,6 @@ class FavoriteViewTableViewCell: UITableViewCell {
     func configureUIwithData(_ data: FavoritePlace) {
         placeNameLabel.text = data.placeName
         distanceAddressStackView.addressLabel.text = data.address
-//        distanceAddressStackView.distanceLabel.text = MeasureFormatter.measureDistance(distance: distance)
         self.id = data.placeID
     }
 }

@@ -13,8 +13,6 @@ final class SearchViewController: UIViewController {
     
     // MARK: - Properties
     
-    var viewModel: SearchViewModel!
-    
     private let progressHud = JGProgressHUD(style: .dark)
     
     private let searchBarView = CustomSearchBarView(placeholder: "장소 및 주소 검색", needBorderLine: true)
@@ -74,42 +72,6 @@ final class SearchViewController: UIViewController {
         
         searchBarView.getSearchBar().searchTextField.becomeFirstResponder()
         searchBarView.getSearchBar().delegate = self
-        
-        viewModel.showProgressHUD = { [weak self] in
-            self?.progressHud.show(in: (self?.view)!, animated: true)
-        }
-        
-        viewModel.dismissProgressHUD = { [weak self] in
-            self?.progressHud.dismiss()
-        }
-        
-        viewModel.presentResultVC = { [weak self] in
-            guard let resultVC = self?.viewModel.getSearchResultVC() else { return }
-            resultVC.delegate = self
-            self?.navigationController?.pushViewController(resultVC, animated: false)
-        }
-        
-        viewModel.presentResultMapVC = { [weak self] targetPlace in
-            guard let mapVC = self?.viewModel.getResultMapVC(targetPlace: targetPlace) else { return }
-            mapVC.delegate = self
-            self?.navigationController?.pushViewController(mapVC, animated: false)
-        }
-        
-        viewModel.setSearchBar = { [weak self] keyword in
-            self?.searchBarView.getSearchBar().text = keyword
-        }
-        
-        viewModel.showNoResultToast = { [weak self] in
-            var style = ToastStyle()
-            style.backgroundColor = .gray
-            style.messageColor = .white
-            style.messageAlignment = .center
-            
-            self?.view.makeToast("검색 결과가 존재하지 않습니다. 맞춤법을 확인해주세요.",
-                                 duration: 1.5,
-                                 position: .center,
-                                 style: style)
-        }
     }
     
     // MARK: - Actions
@@ -149,25 +111,23 @@ final class SearchViewController: UIViewController {
 extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.getSearchOptions.count
+        return 5
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "menuCell", for: indexPath) as! MenuCollectionViewCell
         cell.contentView.backgroundColor = .clear
-        cell.configureUI(with: viewModel.getSearchOptions[indexPath.row])
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         // 지도 위치 근처에 있는 선택된 카테고리의 장소 보여줘야함
-        print(viewModel.getSearchOptions[indexPath.row].title)
-        viewModel.getKeywordSearchResult(with: viewModel.getSearchOptions[indexPath.row].title)
+//        viewModel.getKeywordSearchResult(with: viewModel.getSearchOptions[indexPath.row].title)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let cellWidth = viewModel.getCellWidth(with: viewModel.getSearchOptions[indexPath.row])
-        return CGSize(width: cellWidth, height: 45)
+//        let cellWidth = viewModel.getCellWidth(with: viewModel.getSearchOptions[indexPath.row])
+        return CGSize(width: 100, height: 45)
     }
     
 }
@@ -177,15 +137,16 @@ extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSo
 extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.searchHistories?.count ?? 0
+//        return viewModel.searchHistories?.count ?? 0
+        return 5
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         cell.backgroundColor = .clear
-        guard let searchHistory = viewModel.searchHistories else { return cell }
-        cell.textLabel?.text = searchHistory[indexPath.row].searchText
-        cell.imageView?.image = searchHistory[indexPath.row].type
+//        guard let searchHistory = viewModel.searchHistories else { return cell }
+//        cell.textLabel?.text = searchHistory[indexPath.row].searchText
+//        cell.imageView?.image = searchHistory[indexPath.row].type
         
         let backgroundColorView = UIView()
         backgroundColorView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.5)
@@ -200,13 +161,13 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         let keyword = cell.textLabel?.text,
         let image = cell.imageView?.image else { return }
         // 1. 장소 정보 없는 검색의 경우 - 현재 위치 기준으로 해당 키워드로 검색 -> SearchResultVC에 결과 띄우기
-        if image == UIImage(systemName: "magnifyingglass") {
-            viewModel.getKeywordSearchResult(with: keyword)
-        }
-        // 2. 장소 정보 있는 경우 - 장소의 상세 페이지 보여주기
-        if image == UIImage(systemName: "building.2") {
-            viewModel.getTargetPlace(with: keyword)
-        }
+//        if image == UIImage(systemName: "magnifyingglass") {
+//            viewModel.getKeywordSearchResult(with: keyword)
+//        }
+//        // 2. 장소 정보 있는 경우 - 장소의 상세 페이지 보여주기
+//        if image == UIImage(systemName: "building.2") {
+//            viewModel.getTargetPlace(with: keyword)
+//        }
     }
     
 }
@@ -222,7 +183,7 @@ extension SearchViewController: UISearchBarDelegate, UISearchResultsUpdating {
         guard let text = searchBar.text else { return }
         searchBar.resignFirstResponder()
         if text != " " {
-            viewModel.getKeywordSearchResult(with: text)
+//            viewModel.getKeywordSearchResult(with: text)
         }
     }
 }
@@ -236,7 +197,7 @@ extension SearchViewController: SearchResultViewControllerDelegate {
     }
     
     func passTappedHistory(newHistories: [SearchHistory]) {
-        viewModel.updateNewSearchHistory(newHistories)
+//        viewModel.updateNewSearchHistory(newHistories)
         searchBarView.getSearchBar().searchTextField.becomeFirstResponder()
         tableView.reloadData()
     }
