@@ -17,9 +17,6 @@ final class MainViewController: UIViewController, View {
     
     var disposeBag: DisposeBag
     
-    private var userLocationRelay: PublishRelay<Coordinate> = PublishRelay()
-    private var mapCenterRelay: PublishRelay<Coordinate> = PublishRelay()
-    
     // MARK: - Components
     
     private let menuVC = MenuViewController()
@@ -43,8 +40,8 @@ final class MainViewController: UIViewController, View {
     // MARK: - Lifecycle
     
     init() {
-        self.reactor = MainViewReactor(location: Coordinate(longtitude: 37.123,
-                                                            latitude: 36.123))
+        self.reactor = MainViewReactor(location: Coordinate(longtitude: 37.5760222,
+                                                            latitude: 126.9769000))
         self.disposeBag = DisposeBag()
         super.init(nibName: nil, bundle: nil)
     }
@@ -82,8 +79,11 @@ final class MainViewController: UIViewController, View {
     
     private func bindActions(_ reactor: MainViewReactor) {
         // searchBar tapped
-        searchBarView.getSearchBar().searchTextField.rx.controlEvent([.touchUpInside])
-            .map({ MainViewReactor.Action.searchBarDidTapped })
+        searchBarView.getSearchBar().searchTextField.rx.controlEvent([.editingDidBegin])
+            .map({ [weak self] _ in
+                self?.searchBarView.getSearchBar().searchTextField.resignFirstResponder()
+                return MainViewReactor.Action.searchBarDidTapped
+            })
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
@@ -97,78 +97,49 @@ final class MainViewController: UIViewController, View {
     }
     
     private func bindStates(_ reactor: MainViewReactor) {
-        // user current location
+        // set map center address
         reactor.state
-            .map({ $0.userLocationCoordinate })
-            .bind(to: userLocationRelay)
-            .disposed(by: disposeBag)
-        
-        // map center coordinate
-        reactor.state
-            .map({ $0.mapCenterCoordinate })
-            .bind(to: mapCenterRelay)
+            .map({ $0.mapAddress })
+            .subscribe(on: MainScheduler.asyncInstance)
+            .bind(to: self.searchBarView.getSearchBar().rx.placeholder)
             .disposed(by: disposeBag)
         
         // present searchVC
         reactor.state
             .map({ $0.shouldStartSearching })
-            .filter({ $0 == true })
-            .bind { _ in
+            .filter({ $0 != false })
+            .subscribe(on: MainScheduler.asyncInstance)
+            .bind { [weak self] _ in
                 let searchVC = SearchViewController()
-                self.navigationController?.pushViewController(searchVC, animated: true)
+                self?.searchBarView.getSearchBar().resignFirstResponder()
+                self?.navigationController?.pushViewController(searchVC, animated: false)
             }
             .disposed(by: disposeBag)
         
+        // handle menu view
         reactor.state
             .map({ $0.menuIsOpend })
             .bind(onNext: { [weak self] opened in
-                self?.bindMenuStatus(open: opened)
+                self?.changeMenuStatus(open: opened)
             })
             .disposed(by: disposeBag)
     }
     
-    private func bindMenuStatus(open: Bool) {
-        let translationX = open ? 0 : menuVC.view.frame.width
-        let backgroundcolor = open ? UIColor.clear : UIColor(red: 33/255,
-                                                               green: 33/255,
-                                                               blue: 33/255,
-                                                               alpha: 0.8)
-        UIView.animate(withDuration: 0.5,
-                       delay: 0,
-                       usingSpringWithDamping: 0.8,
-                       initialSpringVelocity: 0,
-                       options: .curveEaseInOut) { [weak self] in
-            self?.menuVC.view.transform = CGAffineTransform(translationX: translationX, y: 0)
-        } completion: { [weak self] done in
-            if done {
-                self?.menuVC.view.backgroundColor = backgroundcolor
-                if open {
-                    self?.menuVC.menuContainer.transform = CGAffineTransform(translationX: translationX, y: 0)
-                }
-            }
-            return
-        }
-    }
-    
     @objc private func showCurrentLocation() {
-        print("현재 위치로 이동")
-        DispatchQueue.global(qos: .userInteractive).async { [weak self] in
-            if LocationManager.shared.authorizationStatus == .authorizedAlways || LocationManager.shared.authorizationStatus == .authorizedWhenInUse {
-                guard let currentCoordinate = LocationManager.shared.location?.coordinate else { return }
-                let currentLongtitude = currentCoordinate.longitude
-                let currentLatitude = currentCoordinate.latitude
-                DispatchQueue.main.async {
-                    self?.mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude: currentLatitude,
-                                                                                  longitude: currentLongtitude)), animated: true)
-                }
-            }
+        guard LocationManager.shared.authorizationStatus == .authorizedAlways || LocationManager.shared.authorizationStatus == .authorizedWhenInUse,
+              let currentCoordinate = LocationManager.shared.location?.coordinate else { return }
+        
+        print("현재 위치로 이동 : \(currentCoordinate)")
+//        let currentLongtitude = currentCoordinate.longitude
+//        let currentLatitude = currentCoordinate.latitude
+        DispatchQueue.main.async { [weak self] in
+            self?.mapView.setMapCenter(MTMapPoint(
+                geoCoord: MTMapPointGeo(latitude: (self?.reactor.userCoordinate.latitude)!,
+                                        longitude: (self?.reactor.userCoordinate.longtitude)!)),
+                                      animated: true)
         }
     }
     
-    @objc private func swipedToOpenMenu() {
-        print("SWIPE")
-        
-    }
     
     // MARK: - Helpers
     
@@ -192,8 +163,6 @@ final class MainViewController: UIViewController, View {
     
     private func setActions() {
         currentLocationButton.addTarget(self, action: #selector(showCurrentLocation), for: .touchUpInside)
-        //        searchBarView.getMenuButton().addTarget(self, action: #selector(menuButtonTapped), for: .touchUpInside)
-        //        searchBarView.getSearchBar().searchTextField.addTarget(self, action: #selector(searchBarTapped), for: .editingDidBegin)
         hideKeyboardWhenTappedAround()
     }
     
@@ -212,6 +181,7 @@ final class MainViewController: UIViewController, View {
                 print("location update 아직 안된 상태")
                 return
             }
+            print("유저 현재 위치 세팅하기")
             self?.reactor = MainViewReactor(location: Coordinate(longtitude: location.longitude,
                                                                  latitude: location.latitude))
         }
@@ -239,6 +209,29 @@ final class MainViewController: UIViewController, View {
         requestLocationServiceAlert.addAction(presentSettings)
         
         present(requestLocationServiceAlert, animated: true)
+    }
+    
+    private func changeMenuStatus(open: Bool) {
+        let translationX = open ? 0 : menuVC.view.frame.width
+        let backgroundcolor = open ? UIColor.clear : UIColor(red: 33/255,
+                                                             green: 33/255,
+                                                             blue: 33/255,
+                                                             alpha: 0.8)
+        UIView.animate(withDuration: 0.5,
+                       delay: 0,
+                       usingSpringWithDamping: 0.8,
+                       initialSpringVelocity: 0,
+                       options: .curveEaseInOut) { [weak self] in
+            self?.menuVC.view.transform = CGAffineTransform(translationX: translationX, y: 0)
+        } completion: { [weak self] done in
+            if done {
+                self?.menuVC.view.backgroundColor = backgroundcolor
+                if open {
+                    self?.menuVC.menuContainer.transform = CGAffineTransform(translationX: translationX, y: 0)
+                }
+            }
+            return
+        }
     }
 }
 
@@ -271,8 +264,14 @@ extension MainViewController: CLLocationManagerDelegate {
 extension MainViewController: MTMapViewDelegate {
     func mapView(_ mapView: MTMapView!, finishedMapMoveAnimation mapCenterPoint: MTMapPoint!) {
         // 맵 이동되면 이동된 위치 세팅 필요
-        //        viewModel.getAddressDetailResult(lon: mapCenterPoint.mapPointGeo().longitude,
-        //                                         lat: mapCenterPoint.mapPointGeo().latitude)
+        let mapCoordinate = Coordinate(longtitude: mapCenterPoint.mapPointGeo().longitude,
+                                       latitude: mapCenterPoint.mapPointGeo().latitude)
+        Observable.just(mapCoordinate)
+            .map({ print("지도 움직임"); return Reactor.Action.mapDidMoved($0) })
+            .bind(to: reactor.action )
+            .disposed(by: disposeBag)
+        //                viewModel.getAddressDetailResult(lon: mapCenterPoint.mapPointGeo().longitude,
+        //                                                 lat: mapCenterPoint.mapPointGeo().latitude)
     }
     // 메모리 차지가 많을 경우, 캐시 정리
     override func didReceiveMemoryWarning() {
