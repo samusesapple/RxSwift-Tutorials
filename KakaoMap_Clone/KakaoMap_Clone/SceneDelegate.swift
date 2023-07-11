@@ -18,7 +18,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         let window = UIWindow(windowScene: windowScene)
+        
+        let mockData = MockLocationData(coordinate: Coordinate(longtitude: 35.7922,
+                                                               latitude: -129.2156))
         let mainVC = MainViewController()
+        let mainReactor = MainViewReactor(data: mockData)
+        mainVC.bind(reactor: mainReactor)
         
         window.rootViewController = UINavigationController(rootViewController: mainVC)
         window.makeKeyAndVisible()

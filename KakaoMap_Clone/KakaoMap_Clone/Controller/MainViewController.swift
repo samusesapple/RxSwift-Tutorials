@@ -40,8 +40,6 @@ final class MainViewController: UIViewController, View {
     // MARK: - Lifecycle
     
     init() {
-        self.reactor = MainViewReactor(location: Coordinate(longtitude: 37.5760222,
-                                                            latitude: 126.9769000))
         self.disposeBag = DisposeBag()
         super.init(nibName: nil, bundle: nil)
     }
@@ -62,7 +60,7 @@ final class MainViewController: UIViewController, View {
         setActions()
         setMapView()
         
-        bind(reactor: reactor)
+//        bind(reactor: reactor)
     }
     
     
@@ -73,6 +71,7 @@ final class MainViewController: UIViewController, View {
     // MARK: - Actions
     
     func bind(reactor: MainViewReactor) {
+        self.reactor = reactor
         bindActions(reactor)
         bindStates(reactor)
     }
@@ -94,6 +93,7 @@ final class MainViewController: UIViewController, View {
             .disposed(by: disposeBag)
         
         // mapView did moved
+        
     }
     
     private func bindStates(_ reactor: MainViewReactor) {
@@ -111,6 +111,9 @@ final class MainViewController: UIViewController, View {
             .subscribe(on: MainScheduler.asyncInstance)
             .bind { [weak self] _ in
                 let searchVC = SearchViewController()
+                let searchReactor = SearchViewReactor(reactor)
+                searchVC.bind(reactor: searchReactor)
+                
                 self?.searchBarView.getSearchBar().resignFirstResponder()
                 self?.navigationController?.pushViewController(searchVC, animated: false)
             }
@@ -130,8 +133,6 @@ final class MainViewController: UIViewController, View {
               let currentCoordinate = LocationManager.shared.location?.coordinate else { return }
         
         print("현재 위치로 이동 : \(currentCoordinate)")
-//        let currentLongtitude = currentCoordinate.longitude
-//        let currentLatitude = currentCoordinate.latitude
         DispatchQueue.main.async { [weak self] in
             self?.mapView.setMapCenter(MTMapPoint(
                 geoCoord: MTMapPointGeo(latitude: (self?.reactor.userCoordinate.latitude)!,
@@ -182,8 +183,8 @@ final class MainViewController: UIViewController, View {
                 return
             }
             print("유저 현재 위치 세팅하기")
-            self?.reactor = MainViewReactor(location: Coordinate(longtitude: location.longitude,
-                                                                 latitude: location.latitude))
+            self?.reactor.userCoordinate = Coordinate(longtitude: location.longitude,
+                                                      latitude: location.latitude)
         }
     }
     
@@ -226,9 +227,9 @@ final class MainViewController: UIViewController, View {
         } completion: { [weak self] done in
             if done {
                 self?.menuVC.view.backgroundColor = backgroundcolor
-                if open {
-                    self?.menuVC.menuContainer.transform = CGAffineTransform(translationX: translationX, y: 0)
-                }
+//                if open {
+//                    self?.menuVC.menuContainer.transform = CGAffineTransform(translationX: translationX, y: 0)
+//                }
             }
             return
         }
@@ -263,15 +264,13 @@ extension MainViewController: CLLocationManagerDelegate {
 
 extension MainViewController: MTMapViewDelegate {
     func mapView(_ mapView: MTMapView!, finishedMapMoveAnimation mapCenterPoint: MTMapPoint!) {
-        // 맵 이동되면 이동된 위치 세팅 필요
+        // 맵 이동에 대한 Action 및 지도 중심 좌표 전달
         let mapCoordinate = Coordinate(longtitude: mapCenterPoint.mapPointGeo().longitude,
                                        latitude: mapCenterPoint.mapPointGeo().latitude)
         Observable.just(mapCoordinate)
             .map({ print("지도 움직임"); return Reactor.Action.mapDidMoved($0) })
             .bind(to: reactor.action )
             .disposed(by: disposeBag)
-        //                viewModel.getAddressDetailResult(lon: mapCenterPoint.mapPointGeo().longitude,
-        //                                                 lat: mapCenterPoint.mapPointGeo().latitude)
     }
     // 메모리 차지가 많을 경우, 캐시 정리
     override func didReceiveMemoryWarning() {
@@ -287,6 +286,9 @@ extension MainViewController: MenuViewControllerDelegate {
     }
     
     func needToCloseMenuView() {
-        //        viewModel.needToOpenMenu = false
+        print("close menu")
+        Observable.just(Reactor.Action.menuButtonDidTapped)
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
 }

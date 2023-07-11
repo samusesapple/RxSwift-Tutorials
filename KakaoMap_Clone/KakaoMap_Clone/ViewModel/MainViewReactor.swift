@@ -28,7 +28,8 @@ class MainViewReactor: UserLocation, Reactor {
     enum Mutation {
         case getCurrentLocationCoordinate(Coordinate)
         case getMapCenterAddress(String)
-        case toggleMenuStatus(Bool)
+        case openMenuView
+        case closeMenuView
         case willStartSearching(Bool)
     }
     
@@ -40,8 +41,8 @@ class MainViewReactor: UserLocation, Reactor {
     
     // MARK: - Initializer
     
-    init(location: Coordinate) {
-        self.userCoordinate = location
+    init(data: UserLocation) {
+        self.userCoordinate = data.userCoordinate
         self.initialState = State(mapAddress: "",
                                   menuIsOpend: false,
                                   shouldStartSearching: false)
@@ -61,7 +62,8 @@ class MainViewReactor: UserLocation, Reactor {
                 .map({ Mutation.getMapCenterAddress($0!) })
             
         case .menuButtonDidTapped:
-            return Observable.just(.toggleMenuStatus(!initialState.menuIsOpend))
+            return Observable
+                .just(!initialState.menuIsOpend ? Mutation.openMenuView : Mutation.closeMenuView)
             
         case .searchBarDidTapped:
             return Observable.concat([
@@ -80,10 +82,14 @@ class MainViewReactor: UserLocation, Reactor {
         case .getMapCenterAddress(let address):
             print("MAP ADDRESS")
             newState.mapAddress = address
-        case .toggleMenuStatus(let status):
-            newState.menuIsOpend = status
         case .willStartSearching(let status):
             newState.shouldStartSearching = status
+        case .openMenuView:
+            print("메뉴 열기 ㅇㅋ")
+            newState.menuIsOpend = true
+        case .closeMenuView:
+            print("메뉴 닫기 ㅇㅋ")
+            newState.menuIsOpend = false
         }
         return newState
     }

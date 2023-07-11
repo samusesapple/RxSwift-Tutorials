@@ -5,17 +5,24 @@
 //  Created by Sam Sung on 2023/05/23.
 //
 
-import UIKit
 import JGProgressHUD
+import ReactorKit
+import RxCocoa
 import Toast_Swift
+import UIKit
 
-final class SearchViewController: UIViewController {
+final class SearchViewController: UIViewController, View {
+
+    var reactor: SearchViewReactor!
     
-    // MARK: - Properties
+    var disposeBag = DisposeBag()
+    
+    // MARK: - Components
     
     private let progressHud = JGProgressHUD(style: .dark)
     
-    private let searchBarView = CustomSearchBarView(placeholder: "장소 및 주소 검색", needBorderLine: true)
+    private let searchBarView = CustomSearchBarView(placeholder: "장소 및 주소 검색",
+                                                    needBorderLine: true)
     
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -72,6 +79,31 @@ final class SearchViewController: UIViewController {
         
         searchBarView.getSearchBar().searchTextField.becomeFirstResponder()
         searchBarView.getSearchBar().delegate = self
+
+    }
+    
+    // MARK: - Bind
+    
+    func bind(reactor: SearchViewReactor) {
+        self.reactor = reactor
+        bindAction(reactor)
+        bindState(reactor)
+    }
+    
+    func bindAction(_ reactor: SearchViewReactor) {
+        searchBarView.getSearchBar().searchTextField.rx.controlEvent(.editingDidEndOnExit)
+            .map({ print("검색 시작"); return SearchViewReactor.Action.didTappedSearchButton })
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+    }
+    
+    func bindState(_ reactor: SearchViewReactor) {
+        reactor.state
+            .map({ $0.showSearchResult })
+            .bind { [weak self] userCoordinate in
+                self?.navigationController?.pushViewController(SearchViewController(),
+                                                               animated: true)
+            }
     }
     
     // MARK: - Actions
@@ -111,23 +143,24 @@ final class SearchViewController: UIViewController {
 extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        return reactor.searchOptions.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "menuCell", for: indexPath) as! MenuCollectionViewCell
+        cell.configureUI(with: reactor.searchOptions[indexPath.row])
         cell.contentView.backgroundColor = .clear
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         // 지도 위치 근처에 있는 선택된 카테고리의 장소 보여줘야함
-//        viewModel.getKeywordSearchResult(with: viewModel.getSearchOptions[indexPath.row].title)
+//        viewModel.getKeywordSearchResult(with: reactor.searchOptions[indexPath.row].title)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-//        let cellWidth = viewModel.getCellWidth(with: viewModel.getSearchOptions[indexPath.row])
-        return CGSize(width: 100, height: 45)
+        let cellWidth = reactor.getCellWidth(with: reactor.searchOptions[indexPath.row])
+        return CGSize(width: cellWidth, height: 45)
     }
     
 }

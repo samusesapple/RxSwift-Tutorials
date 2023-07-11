@@ -19,6 +19,7 @@
 		F15A4F832A31BA8900793806 /* LoginAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F15A4F822A31BA8900793806 /* LoginAlertViewController.swift */; };
 		F161EF182A25CC8500ED9709 /* SearchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F161EF172A25CC8500ED9709 /* SearchModel.swift */; };
 		F1698F742A5D3ADB00532682 /* SearchViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1698F732A5D3ADB00532682 /* SearchViewReactor.swift */; };
+		F19123D92A5D543300549FB0 /* MockLocationData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F19123D82A5D543200549FB0 /* MockLocationData.swift */; };
 		F1954A7E2A2B168D00E9D0C7 /* Coordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1954A7D2A2B168D00E9D0C7 /* Coordinate.swift */; };
 		F1954A812A2B192100E9D0C7 /* MapDataType.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1954A802A2B192100E9D0C7 /* MapDataType.swift */; };
 		F1954A832A2C644200E9D0C7 /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1954A822A2C644200E9D0C7 /* MenuView.swift */; };
@@ -108,6 +109,7 @@
 		F15A4F822A31BA8900793806 /* LoginAlertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginAlertViewController.swift; sourceTree = "<group>"; };
 		F161EF172A25CC8500ED9709 /* SearchModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchModel.swift; sourceTree = "<group>"; };
 		F1698F732A5D3ADB00532682 /* SearchViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewReactor.swift; sourceTree = "<group>"; };
+		F19123D82A5D543200549FB0 /* MockLocationData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLocationData.swift; sourceTree = "<group>"; };
 		F1954A7D2A2B168D00E9D0C7 /* Coordinate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinate.swift; sourceTree = "<group>"; };
 		F1954A802A2B192100E9D0C7 /* MapDataType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapDataType.swift; sourceTree = "<group>"; };
 		F1954A822A2C644200E9D0C7 /* MenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
@@ -251,15 +253,14 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
-		F1EBC3252A2587AF0043CC46 /* Main */ = {
+		F1EBC3252A2587AF0043CC46 /* Menu */ = {
 			isa = PBXGroup;
 			children = (
-				F1F211312A19CC76000443AB /* MainViewController.swift */,
 				F1EBC3232A2587AA0043CC46 /* MenuViewController.swift */,
 				F15A4F822A31BA8900793806 /* LoginAlertViewController.swift */,
 				F13C69EA2A39C6E80015CFE8 /* FavoriteViewController.swift */,
 			);
-			path = Main;
+			path = Menu;
 			sourceTree = "<group>";
 		};
 		F1F211212A19CC76000443AB = {
@@ -286,6 +287,7 @@
 				F1F2129F2A19D9E1000443AB /* DaumMap.embeddedframework */,
 				F1F2112D2A19CC76000443AB /* AppDelegate.swift */,
 				F1F2112F2A19CC76000443AB /* SceneDelegate.swift */,
+				F19123D82A5D543200549FB0 /* MockLocationData.swift */,
 				F1F212EB2A19F78F000443AB /* Service */,
 				F1F212E92A19F76F000443AB /* Model */,
 				F1F212E82A19F75E000443AB /* View */,
@@ -391,7 +393,8 @@
 		F1F212E72A19F74C000443AB /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				F1EBC3252A2587AF0043CC46 /* Main */,
+				F1F211312A19CC76000443AB /* MainViewController.swift */,
+				F1EBC3252A2587AF0043CC46 /* Menu */,
 				F10BA3492A1C762A00CCBE9D /* SearchViewController.swift */,
 				F1B8F75B2A1D9F0000D3B45E /* SearchResultViewController.swift */,
 				F1A92BA72A1F1CD800A3AA8F /* ResultMapViewController.swift */,
@@ -617,6 +620,7 @@
 				F13C69E72A39BE3A0015CFE8 /* DistanceAddressView.swift in Sources */,
 				F1954A862A2C66C500E9D0C7 /* MenuOptionsButton.swift in Sources */,
 				F13C69EB2A39C6E80015CFE8 /* FavoriteViewController.swift in Sources */,
+				F19123D92A5D543300549FB0 /* MockLocationData.swift in Sources */,
 				F1A92BA82A1F1CD800A3AA8F /* ResultMapViewController.swift in Sources */,
 				F1698F742A5D3ADB00532682 /* SearchViewReactor.swift in Sources */,
 				F1B8F7572A1CE5E900D3B45E /* KeywordResult.swift in Sources */,
