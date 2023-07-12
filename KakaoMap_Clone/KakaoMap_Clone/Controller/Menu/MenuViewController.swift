@@ -38,7 +38,7 @@ final class MenuViewController: UIViewController {
         
         view.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(menuViewStartedSwiping)))
         
-        checkUserLoginStatusAndConfigureUI()
+//        checkUserLoginStatusAndConfigureUI()
         
         viewModel.showLoginToast = { [weak self] in
             self?.view.makeToast(message: "로그인이 필요합니다.")
@@ -139,12 +139,12 @@ final class MenuViewController: UIViewController {
     }
     
     /// 유저 로그인 여부 확인 후, 로그인 상태인 경우 UI 세팅
-    private func checkUserLoginStatusAndConfigureUI() {
-        guard let userData = viewModel.checkUserLoginStatus() else { return }
-        
-        print("유저 로그인 된 상태")
-        configureMenuUIwithKakaoLoginStatus(name: userData.name, imageURL: userData.imageURL)
-    }
+//    private func checkUserLoginStatusAndConfigureUI() {
+//        guard let userData = viewModel.checkUserLoginStatus() else { return }
+//
+//        print("유저 로그인 된 상태")
+//        configureMenuUIwithKakaoLoginStatus(name: userData.name, imageURL: userData.imageURL)
+//    }
     
     private func setMenuViewButtonActions() {
 //        menuView.favoritePlaceButton.addTarget(self, action: #selector(favoritesButtonTapped), for: .touchUpInside)

@@ -10,9 +10,6 @@ import ReactorKit
 import RxSwift
 
 class SearchViewReactor: UserLocation, Reactor {
-    var initialState: State
-    
-    var userCoordinate: Coordinate
     
     let searchOptions: [SearchOption] = {[
         SearchOption(icon: UIImage(systemName: "fork.knife")!, title: "맛집"),
@@ -23,26 +20,31 @@ class SearchViewReactor: UserLocation, Reactor {
         SearchOption(icon: UIImage(systemName: "train.side.rear.car")!, title: "지하철")
     ]}()
     
+    var initialState: State
+    
+    var userCoordinate: Coordinate
+    var searchHistories: [SearchHistory] = []
+
     enum Action {
-        case viewDidLoad
-        case didTappedSearchButton
+        case didTappedSearchButton(String)
     }
     
     enum Mutation {
-        case shouldUpdateSearchHistory(Bool)
-        case presentSearchResultView(Coordinate)
+        case reloadData(Bool)
+        case shouldUpdateSearchHistory(SearchHistory)
+        case getSearchResult([KeywordDocument])
     }
     
     struct State {
         var updateSearchHistory: Bool
-        var showSearchResult: Coordinate
+        var showSearchResult: [KeywordDocument]
     }
     
     // MARK: - Initializer
     
     init(_ data: UserLocation) {
         self.initialState = State(updateSearchHistory: false,
-                                  showSearchResult: data.userCoordinate)
+                                  showSearchResult: [])
         self.userCoordinate = data.userCoordinate
     }
     
@@ -50,26 +52,31 @@ class SearchViewReactor: UserLocation, Reactor {
     
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
-        case .viewDidLoad:
-            return Observable.concat([
-                Observable.just(.shouldUpdateSearchHistory(true)),
-                Observable.just(.shouldUpdateSearchHistory(false))
-            ])
-        case .didTappedSearchButton:
-            return Observable.just(.presentSearchResultView(userCoordinate))
+        case .didTappedSearchButton(let keyword):
+            print("didTappedSearchButton")
+            return HttpClient.shared.searchKeywordObservable(with: keyword,
+                                                             coordinate: userCoordinate,
+                                                             page: 1)
+            .map({ $0.documents })
+            .filter({ $0 != nil })
+            .map({ Mutation.getSearchResult($0!) })
         }
     }
-    
+
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         switch mutation {
-        case .shouldUpdateSearchHistory(let update):
-            newState.updateSearchHistory = update
+        case .reloadData(_):
+            newState.updateSearchHistory = true
+        case .shouldUpdateSearchHistory(let newHistory):
+            searchHistories.append(newHistory)
             
-        case .presentSearchResultView(let userCoord):
-            newState.showSearchResult = userCoord
+        case .getSearchResult(let searchResults):
+            print("getSearchResult")
+            newState.showSearchResult = searchResults
         }
         return newState
+            
     }
     
     // MARK: - Helpers

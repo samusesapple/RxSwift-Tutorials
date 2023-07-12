@@ -46,20 +46,20 @@ struct UserDefaultsManager {
         UserDefaults.standard.removeObject(forKey: "isKakaoLogin")
     }
     
-    func getUserInfo() -> UserDefaultsModel {
-        let name = UserDefaults.standard.object(forKey: "name") as! String
-        let email = UserDefaults.standard.object(forKey: "email") as! String
-        let uid = UserDefaults.standard.object(forKey: "uid") as! String
-        let isKakaoLogin = UserDefaults.standard.object(forKey: "isKakaoLogin") as! Bool
-        let imageURL = UserDefaults.standard.object(forKey: "imageURL") as! String
-        
-        return UserDefaultsModel(name: name,
-                                 email: email,
-                                 uid: uid,
-                                 isKakaoLogin: isKakaoLogin,
-                                 imageURL: URL(string: imageURL)!)
-    }
-    
+//    func getUserInfo() -> UserDefaultsModel {
+//        let name = UserDefaults.standard.object(forKey: "name") as! String
+//        let email = UserDefaults.standard.object(forKey: "email") as! String
+//        let uid = UserDefaults.standard.object(forKey: "uid") as! String
+//        let isKakaoLogin = UserDefaults.standard.object(forKey: "isKakaoLogin") as! Bool
+//        let imageURL = UserDefaults.standard.object(forKey: "imageURL") as! String
+//        
+//        return UserDefaultsModel(name: name,
+//                                 email: email,
+//                                 uid: uid,
+//                                 isKakaoLogin: isKakaoLogin,
+//                                 imageURL: URL(string: imageURL)!)
+//    }
+//    
     // MARK: - Coordinate
     
     var currentCoordinate: Coordinate {

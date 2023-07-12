@@ -60,6 +60,7 @@ final class MainViewController: UIViewController, View {
         setActions()
         setMapView()
         
+        
 //        bind(reactor: reactor)
     }
     
@@ -113,7 +114,7 @@ final class MainViewController: UIViewController, View {
                 let searchVC = SearchViewController()
                 let searchReactor = SearchViewReactor(reactor)
                 searchVC.bind(reactor: searchReactor)
-                
+                print(searchReactor.userCoordinate)
                 self?.searchBarView.getSearchBar().resignFirstResponder()
                 self?.navigationController?.pushViewController(searchVC, animated: false)
             }
@@ -131,6 +132,8 @@ final class MainViewController: UIViewController, View {
     @objc private func showCurrentLocation() {
         guard LocationManager.shared.authorizationStatus == .authorizedAlways || LocationManager.shared.authorizationStatus == .authorizedWhenInUse,
               let currentCoordinate = LocationManager.shared.location?.coordinate else { return }
+        reactor.userCoordinate = Coordinate(longtitude: currentCoordinate.longitude,
+                                            latitude: currentCoordinate.latitude)
         
         print("현재 위치로 이동 : \(currentCoordinate)")
         DispatchQueue.main.async { [weak self] in

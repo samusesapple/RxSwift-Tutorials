@@ -91,8 +91,11 @@ final class SearchViewController: UIViewController, View {
     }
     
     func bindAction(_ reactor: SearchViewReactor) {
-        searchBarView.getSearchBar().searchTextField.rx.controlEvent(.editingDidEndOnExit)
-            .map({ print("검색 시작"); return SearchViewReactor.Action.didTappedSearchButton })
+        
+        searchBarView.getSearchBar().searchTextField.rx.controlEvent(.editingDidEnd)
+            .map({
+                return SearchViewReactor.Action.didTappedSearchButton("키워드")
+            })
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }
@@ -100,10 +103,13 @@ final class SearchViewController: UIViewController, View {
     func bindState(_ reactor: SearchViewReactor) {
         reactor.state
             .map({ $0.showSearchResult })
-            .bind { [weak self] userCoordinate in
-                self?.navigationController?.pushViewController(SearchViewController(),
+            .filter({ !$0.isEmpty })
+            .bind { [weak self] searchResults in
+                print("검색 결과 갯수 : \(searchResults.count)")
+                self?.navigationController?.pushViewController(SearchResultViewController(),
                                                                animated: true)
             }
+            .disposed(by: disposeBag)
     }
     
     // MARK: - Actions
@@ -171,15 +177,14 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 //        return viewModel.searchHistories?.count ?? 0
-        return 5
+        return reactor.searchHistories.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         cell.backgroundColor = .clear
-//        guard let searchHistory = viewModel.searchHistories else { return cell }
-//        cell.textLabel?.text = searchHistory[indexPath.row].searchText
-//        cell.imageView?.image = searchHistory[indexPath.row].type
+        cell.textLabel?.text = reactor.searchHistories[indexPath.row].searchText
+        cell.imageView?.image = reactor.searchHistories[indexPath.row].type
         
         let backgroundColorView = UIView()
         backgroundColorView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.5)
@@ -223,19 +228,19 @@ extension SearchViewController: UISearchBarDelegate, UISearchResultsUpdating {
 
 // MARK: - SearchResultViewControllerDelegate
 
-extension SearchViewController: SearchResultViewControllerDelegate {
-    
-    func needToPresentMainView() {
-        self.navigationController?.popViewController(animated: false)
-    }
-    
-    func passTappedHistory(newHistories: [SearchHistory]) {
-//        viewModel.updateNewSearchHistory(newHistories)
-        searchBarView.getSearchBar().searchTextField.becomeFirstResponder()
-        tableView.reloadData()
-    }
-    
-}
+//extension SearchViewController: SearchResultViewControllerDelegate {
+//    
+//    func needToPresentMainView() {
+//        self.navigationController?.popViewController(animated: false)
+//    }
+//    
+//    func passTappedHistory(newHistories: [SearchHistory]) {
+////        viewModel.updateNewSearchHistory(newHistories)
+//        searchBarView.getSearchBar().searchTextField.becomeFirstResponder()
+//        tableView.reloadData()
+//    }
+//    
+//}
 
 // MARK: - ResultMapViewControllerDelegate
 

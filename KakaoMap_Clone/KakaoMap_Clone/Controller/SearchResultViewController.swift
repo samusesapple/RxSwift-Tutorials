@@ -7,17 +7,15 @@
 
 import Foundation
 import JGProgressHUD
+import ReactorKit
 
-protocol SearchResultViewControllerDelegate: AnyObject {
-    func needToPresentMainView()
-    func passTappedHistory(newHistories: [SearchHistory])
-}
-
-final class SearchResultViewController: UIViewController {
+final class SearchResultViewController: UIViewController, View {
+    
+    var reactor: SearchResultViewReactor!
+    var disposeBag = DisposeBag()
+    
     // MARK: - Properties
     
-    weak var delegate: SearchResultViewControllerDelegate?
-  
     private let activity = UIActivityIndicatorView()
 
     private let progressHud = JGProgressHUD(style: .dark)
@@ -70,7 +68,7 @@ final class SearchResultViewController: UIViewController {
     }()
     
     // MARK: - Lifecycle
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -78,6 +76,16 @@ final class SearchResultViewController: UIViewController {
         setAutolayout()
         setActions()
         setSearchBar()
+    }
+    
+    // MARK: - Bind
+    
+    func bind(reactor: SearchResultViewReactor) {
+        
+    }
+    
+    func bindActions(_ reactor: SearchResultViewReactor) {
+        
     }
     
     // MARK: - Actions
