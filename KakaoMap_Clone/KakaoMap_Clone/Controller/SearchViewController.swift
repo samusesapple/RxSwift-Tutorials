@@ -91,10 +91,10 @@ final class SearchViewController: UIViewController, View {
     }
     
     func bindAction(_ reactor: SearchViewReactor) {
-        
         searchBarView.getSearchBar().searchTextField.rx.controlEvent(.editingDidEnd)
-            .map({
-                return SearchViewReactor.Action.didTappedSearchButton("키워드")
+            .map({ [weak self] in
+                let keyword = self?.searchBarView.getSearchBar().searchTextField.text
+                return SearchViewReactor.Action.didTappedSearchButton(keyword ?? "")
             })
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
