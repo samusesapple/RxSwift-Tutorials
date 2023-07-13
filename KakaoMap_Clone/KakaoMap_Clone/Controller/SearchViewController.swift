@@ -6,14 +6,14 @@
 //
 
 import JGProgressHUD
-import ReactorKit
 import RxCocoa
+import RxSwift
 import Toast_Swift
 import UIKit
 
-final class SearchViewController: UIViewController, View {
+final class SearchViewController: UIViewController {
 
-    var reactor: SearchViewReactor!
+    var reactor: SearchViewModel!
     
     var disposeBag = DisposeBag()
     
@@ -79,36 +79,25 @@ final class SearchViewController: UIViewController, View {
         
         searchBarView.getSearchBar().searchTextField.becomeFirstResponder()
         searchBarView.getSearchBar().delegate = self
-
+        
+        bindAction(reactor)
     }
     
     // MARK: - Bind
-    
-    func bind(reactor: SearchViewReactor) {
-        self.reactor = reactor
-        bindAction(reactor)
-        bindState(reactor)
-    }
-    
-    func bindAction(_ reactor: SearchViewReactor) {
+
+    private func bindAction(_ reactor: SearchViewModel, keyword: String? = nil) {
         searchBarView.getSearchBar().searchTextField.rx.controlEvent(.editingDidEnd)
-            .map({ [weak self] in
-                let keyword = self?.searchBarView.getSearchBar().searchTextField.text
-                return SearchViewReactor.Action.didTappedSearchButton(keyword ?? "")
+            .flatMap({ [weak self] in
+                let searchKeyword = keyword ?? self?.searchBarView.getSearchBar().searchTextField.text
+                return reactor.getSearchResultViewModel(keyword: searchKeyword!)
             })
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-    }
-    
-    func bindState(_ reactor: SearchViewReactor) {
-        reactor.state
-            .map({ $0.showSearchResult })
-            .filter({ !$0.isEmpty })
-            .bind { [weak self] searchResults in
-                print("검색 결과 갯수 : \(searchResults.count)")
-                self?.navigationController?.pushViewController(SearchResultViewController(),
-                                                               animated: true)
-            }
+            .subscribe(on: MainScheduler.asyncInstance)
+            .bind(onNext: { [weak self] reactor in
+                let resultVC = SearchResultViewController()
+                resultVC.reactor = reactor
+                self?.navigationController?.pushViewController(resultVC,
+                                                              animated: false)
+            })
             .disposed(by: disposeBag)
     }
     
@@ -161,7 +150,7 @@ extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSo
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         // 지도 위치 근처에 있는 선택된 카테고리의 장소 보여줘야함
-//        viewModel.getKeywordSearchResult(with: reactor.searchOptions[indexPath.row].title)
+        bindAction(reactor, keyword: reactor.searchOptions[indexPath.row].title)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -176,7 +165,6 @@ extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSo
 extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return viewModel.searchHistories?.count ?? 0
         return reactor.searchHistories.count
     }
     
@@ -223,34 +211,5 @@ extension SearchViewController: UISearchBarDelegate, UISearchResultsUpdating {
         if text != " " {
 //            viewModel.getKeywordSearchResult(with: text)
         }
-    }
-}
-
-// MARK: - SearchResultViewControllerDelegate
-
-//extension SearchViewController: SearchResultViewControllerDelegate {
-//    
-//    func needToPresentMainView() {
-//        self.navigationController?.popViewController(animated: false)
-//    }
-//    
-//    func passTappedHistory(newHistories: [SearchHistory]) {
-////        viewModel.updateNewSearchHistory(newHistories)
-//        searchBarView.getSearchBar().searchTextField.becomeFirstResponder()
-//        tableView.reloadData()
-//    }
-//    
-//}
-
-// MARK: - ResultMapViewControllerDelegate
-
-extension SearchViewController: ResultMapViewControllerDelegate {
-    
-    func needToShowSearchVC() {
-        print("ReusltMapVC Delegate - SearchVC - 띄우기")
-    }
-    
-    func needToShowMainVC() {
-        navigationController?.popViewController(animated: false)
     }
 }

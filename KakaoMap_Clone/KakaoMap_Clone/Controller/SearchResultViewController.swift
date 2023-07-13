@@ -14,7 +14,7 @@ final class SearchResultViewController: UIViewController, View {
     var reactor: SearchResultViewReactor!
     var disposeBag = DisposeBag()
     
-    // MARK: - Properties
+    // MARK: - Components
     
     private let activity = UIActivityIndicatorView()
 
@@ -62,8 +62,6 @@ final class SearchResultViewController: UIViewController, View {
         tv.backgroundColor = .white 
         tv.rowHeight = view.frame.height / 7
         tv.register(SearchResultTableViewCell.self, forCellReuseIdentifier: "resultCell")
-        tv.dataSource = self
-        tv.delegate = self
         return tv
     }()
     
@@ -75,17 +73,44 @@ final class SearchResultViewController: UIViewController, View {
         
         setAutolayout()
         setActions()
-        setSearchBar()
+        searchBarView.getSearchBar().showsCancelButton = false
+        
+        bind(reactor: reactor)
     }
     
     // MARK: - Bind
     
     func bind(reactor: SearchResultViewReactor) {
-        
+        bindActions(reactor)
+        bindStates(reactor)
     }
     
-    func bindActions(_ reactor: SearchResultViewReactor) {
+    private func bindActions(_ reactor: SearchResultViewReactor) {
+        searchBarView.getSearchBar().searchTextField.rx.controlEvent(.allEditingEvents)
+            .bind(onNext: { [weak self] _ in
+                print("dismiss")
+                self?.navigationController?.popViewController(animated: false)
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func bindStates(_ reactor: SearchResultViewReactor) {
+        // 키워드 세팅
+        reactor.state
+            .map({ $0.searchKeyword })
+            .bind(to: searchBarView.getSearchBar().rx.text)
+            .disposed(by: disposeBag)
         
+        // 장소 검색 결과 데이터 셀에 뿌리기
+        reactor.state
+            .filter({ !$0.searchResults.isEmpty })
+            .map({ $0.searchResults })
+            .bind(to: tableView.rx.items(cellIdentifier: "resultCell",
+                                         cellType: SearchResultTableViewCell.self)) { index, data, cell in
+                cell.configureUIwithData(data: data)
+                print("cell 세팅 ㅇㅋ - \(data.placeName)")
+            }
+            .disposed(by: disposeBag)
     }
     
     // MARK: - Actions
@@ -141,57 +166,6 @@ final class SearchResultViewController: UIViewController, View {
     private func setActions() {
         centerAlignmentButton.addTarget(self, action: #selector(centerAlignmentButtonTapped), for: .touchUpInside)
         accuracyAlignmentButton.addTarget(self, action: #selector(accuracyAlignmentButtonTapped), for: .touchUpInside)
-    }
-    
-    private func setSearchBar() {
-//        searchBarView.getSearchBar().searchTextField.text = viewModel.keyword
-        searchBarView.getSearchBar().showsCancelButton = false
-    }
-}
-
-
-// MARK: - UITableViewDelegate & UITableViewDataSource
-
-extension SearchResultViewController: UITableViewDelegate, UITableViewDataSource {
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "resultCell", for: indexPath) as! SearchResultTableViewCell
-//        cell.configureUIwithData(data: viewModel.searchResults[indexPath.row])
-//
-//        HttpClient.shared.getDetailDataForTargetPlace(placeCode: viewModel.searchResults[indexPath.row].id!) { placeData in
-//            DispatchQueue.main.async {
-//                cell.setPlaceReviewData(data: placeData)
-//                print("셀 크롤링한 데이터로 세팅 완료")
-//            }
-//        }
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-//        let targetPlace = viewModel.searchResults[indexPath.row]
-//        guard let placeName = targetPlace.placeName else {
-//            print("SearchResultVC - placeName error")
-//            return
-//        }
-//        // 검색 기록 추가 + 해당되는 셀의 장소 보여주는 mapResultVC push 하기
-//        viewModel.updateNewTappedHistory(location: targetPlace)
-//        let resultMapVC = viewModel.getResultMapVC(targetPlace: targetPlace)
-//        resultMapVC.delegate = self
-//        self.navigationController?.pushViewController(resultMapVC, animated: false)
-    }
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let offsetY = scrollView.contentOffset.y
-        let contentHeight = scrollView.contentSize.height
-
-        if offsetY > contentHeight - scrollView.frame.height {
-//            viewModel.getNextPageResult()
-        }
     }
 }
 

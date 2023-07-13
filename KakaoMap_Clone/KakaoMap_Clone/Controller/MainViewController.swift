@@ -112,9 +112,9 @@ final class MainViewController: UIViewController, View {
             .subscribe(on: MainScheduler.asyncInstance)
             .bind { [weak self] _ in
                 let searchVC = SearchViewController()
-                let searchReactor = SearchViewReactor(reactor)
-                searchVC.bind(reactor: searchReactor)
-                print(searchReactor.userCoordinate)
+                let searchReactor = SearchViewModel(reactor)
+                searchVC.reactor = searchReactor
+                
                 self?.searchBarView.getSearchBar().resignFirstResponder()
                 self?.navigationController?.pushViewController(searchVC, animated: false)
             }

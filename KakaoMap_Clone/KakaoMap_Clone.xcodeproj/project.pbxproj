@@ -13,13 +13,13 @@
 		F10BA34C2A1C829500CCBE9D /* MenuCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10BA34B2A1C829500CCBE9D /* MenuCollectionViewCell.swift */; };
 		F10BA3502A1CBAA500CCBE9D /* HttpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10BA34F2A1CBAA500CCBE9D /* HttpClient.swift */; };
 		F11F06452A5E6BC700DE0977 /* SearchResultViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11F06442A5E6BC700DE0977 /* SearchResultViewReactor.swift */; };
+		F11F06472A5FAB3500DE0977 /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11F06462A5FAB3500DE0977 /* SearchViewModel.swift */; };
 		F121ADA62A5A703A008590EF /* MainViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F121ADA52A5A703A008590EF /* MainViewReactor.swift */; };
 		F13C69E72A39BE3A0015CFE8 /* DistanceAddressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F13C69E62A39BE3A0015CFE8 /* DistanceAddressView.swift */; };
 		F13C69E92A39C4600015CFE8 /* FavoriteViewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F13C69E82A39C4600015CFE8 /* FavoriteViewTableViewCell.swift */; };
 		F13C69EB2A39C6E80015CFE8 /* FavoriteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F13C69EA2A39C6E80015CFE8 /* FavoriteViewController.swift */; };
 		F15A4F832A31BA8900793806 /* LoginAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F15A4F822A31BA8900793806 /* LoginAlertViewController.swift */; };
 		F161EF182A25CC8500ED9709 /* SearchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F161EF172A25CC8500ED9709 /* SearchModel.swift */; };
-		F1698F742A5D3ADB00532682 /* SearchViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1698F732A5D3ADB00532682 /* SearchViewReactor.swift */; };
 		F19123D92A5D543300549FB0 /* MockLocationData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F19123D82A5D543200549FB0 /* MockLocationData.swift */; };
 		F1954A7E2A2B168D00E9D0C7 /* Coordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1954A7D2A2B168D00E9D0C7 /* Coordinate.swift */; };
 		F1954A812A2B192100E9D0C7 /* MapDataType.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1954A802A2B192100E9D0C7 /* MapDataType.swift */; };
@@ -103,13 +103,13 @@
 		F10BA34B2A1C829500CCBE9D /* MenuCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuCollectionViewCell.swift; sourceTree = "<group>"; };
 		F10BA34F2A1CBAA500CCBE9D /* HttpClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpClient.swift; sourceTree = "<group>"; };
 		F11F06442A5E6BC700DE0977 /* SearchResultViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultViewReactor.swift; sourceTree = "<group>"; };
+		F11F06462A5FAB3500DE0977 /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
 		F121ADA52A5A703A008590EF /* MainViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewReactor.swift; sourceTree = "<group>"; };
 		F13C69E62A39BE3A0015CFE8 /* DistanceAddressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceAddressView.swift; sourceTree = "<group>"; };
 		F13C69E82A39C4600015CFE8 /* FavoriteViewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteViewTableViewCell.swift; sourceTree = "<group>"; };
 		F13C69EA2A39C6E80015CFE8 /* FavoriteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteViewController.swift; sourceTree = "<group>"; };
 		F15A4F822A31BA8900793806 /* LoginAlertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginAlertViewController.swift; sourceTree = "<group>"; };
 		F161EF172A25CC8500ED9709 /* SearchModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchModel.swift; sourceTree = "<group>"; };
-		F1698F732A5D3ADB00532682 /* SearchViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewReactor.swift; sourceTree = "<group>"; };
 		F19123D82A5D543200549FB0 /* MockLocationData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLocationData.swift; sourceTree = "<group>"; };
 		F1954A7D2A2B168D00E9D0C7 /* Coordinate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinate.swift; sourceTree = "<group>"; };
 		F1954A802A2B192100E9D0C7 /* MapDataType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapDataType.swift; sourceTree = "<group>"; };
@@ -436,7 +436,7 @@
 			children = (
 				F1DB31412A33208600B6D513 /* AuthViewModel.swift */,
 				F121ADA52A5A703A008590EF /* MainViewReactor.swift */,
-				F1698F732A5D3ADB00532682 /* SearchViewReactor.swift */,
+				F11F06462A5FAB3500DE0977 /* SearchViewModel.swift */,
 				F11F06442A5E6BC700DE0977 /* SearchResultViewReactor.swift */,
 			);
 			path = ViewModel;
@@ -620,8 +620,8 @@
 				F1954A862A2C66C500E9D0C7 /* MenuOptionsButton.swift in Sources */,
 				F13C69EB2A39C6E80015CFE8 /* FavoriteViewController.swift in Sources */,
 				F19123D92A5D543300549FB0 /* MockLocationData.swift in Sources */,
+				F11F06472A5FAB3500DE0977 /* SearchViewModel.swift in Sources */,
 				F1A92BA82A1F1CD800A3AA8F /* ResultMapViewController.swift in Sources */,
-				F1698F742A5D3ADB00532682 /* SearchViewReactor.swift in Sources */,
 				F1B8F7572A1CE5E900D3B45E /* PlaceData.swift in Sources */,
 				F1A7C09D2A31D49400F96041 /* NotificationManager.swift in Sources */,
 				F1B8F75C2A1D9F0000D3B45E /* SearchResultViewController.swift in Sources */,

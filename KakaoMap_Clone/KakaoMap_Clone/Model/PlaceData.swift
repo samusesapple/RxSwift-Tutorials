@@ -8,8 +8,9 @@
 import Foundation
 
 struct PlaceData {
-    let data: KeywordDocument
-    let detailData: TargetPlaceDetail
+    var keyword: String
+    var data: [KeywordDocument]
+//    let detailData: TargetPlaceDetail
 }
 
 // 카카오맵 기본 API로부터 받은 데이터 파싱할 모델
