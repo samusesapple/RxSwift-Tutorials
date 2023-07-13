@@ -77,19 +77,22 @@ final class SearchViewController: UIViewController {
         setAutolayout()
         setActions()
         
-        searchBarView.getSearchBar().searchTextField.becomeFirstResponder()
         searchBarView.getSearchBar().delegate = self
         
         bindAction(reactor)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        searchBarView.getSearchBar().searchTextField.becomeFirstResponder()
+    }
+    
     // MARK: - Bind
 
-    private func bindAction(_ reactor: SearchViewModel, keyword: String? = nil) {
+    private func bindAction(_ reactor: SearchViewModel) {
         searchBarView.getSearchBar().searchTextField.rx.controlEvent(.editingDidEnd)
             .flatMap({ [weak self] in
-                let searchKeyword = keyword ?? self?.searchBarView.getSearchBar().searchTextField.text
-                return reactor.getSearchResultViewModel(keyword: searchKeyword!)
+                let keyword = self?.searchBarView.getSearchBar().searchTextField.text
+                return reactor.getSearchResultViewModel(keyword: keyword!)
             })
             .subscribe(on: MainScheduler.asyncInstance)
             .bind(onNext: { [weak self] reactor in
@@ -150,7 +153,9 @@ extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSo
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         // 지도 위치 근처에 있는 선택된 카테고리의 장소 보여줘야함
-        bindAction(reactor, keyword: reactor.searchOptions[indexPath.row].title)
+        searchBarView.getSearchBar().searchTextField.text = reactor.searchOptions[indexPath.row].title
+        searchBarView.getSearchBar().resignFirstResponder()
+
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
