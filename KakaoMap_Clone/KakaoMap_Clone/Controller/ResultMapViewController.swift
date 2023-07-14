@@ -5,11 +5,14 @@
 //  Created by Sam Sung on 2023/05/25.
 //
 
-import UIKit
 import CoreLocation
-import JGProgressHUD
-import Toast_Swift
 import FirebaseAuth
+import JGProgressHUD
+import RxSwift
+import RxCocoa
+import Toast_Swift
+import UIKit
+
 
 protocol ResultMapViewControllerDelegate: AnyObject {
     func needToShowSearchVC()
@@ -17,7 +20,10 @@ protocol ResultMapViewControllerDelegate: AnyObject {
 }
 
 final class ResultMapViewController: UIViewController, CLLocationManagerDelegate {
-    // MARK: - Properties
+    
+    var viewModel: ResultMapViewModel!
+    
+    // MARK: - Components
     
     private var mapPoint: MTMapPoint?
     private var poiItem: MTMapPOIItem?
@@ -218,8 +224,20 @@ final class ResultMapViewController: UIViewController, CLLocationManagerDelegate
 //        mapView.removeGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(mapViewTapped)))
     }
     
+    // MARK: - Bind
+    
+    /* action - 1. 다른 장소 선택한 경우
+                2. 길 안내 버튼 눌림 (하단바)
+                3. 전화 버튼 눌림 (하단바)
+                4. 즐겨찾기 버튼 눌림 (하단바)
+                5. x 버튼 눌러서 메인으로 이동
+                6. 목록 버튼 눌러서 searchResultVC로 이동 (self.pop)
+                7. 화면 탭 해서 상단,하단바 보이기/숨기기
+     */
+    
+    
     // MARK: - Actions
-
+    
     
     // MARK: - Helpers
     

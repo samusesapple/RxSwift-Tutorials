@@ -92,6 +92,11 @@ final class SearchResultViewController: UIViewController, View {
                 self?.navigationController?.popViewController(animated: false)
             })
             .disposed(by: disposeBag)
+        
+        tableView.rx.itemSelected
+            .map({ SearchResultViewReactor.Action.didTappedCell($0.row) })
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
     
     private func bindStates(_ reactor: SearchResultViewReactor) {
@@ -108,9 +113,24 @@ final class SearchResultViewController: UIViewController, View {
             .bind(to: tableView.rx.items(cellIdentifier: "resultCell",
                                          cellType: SearchResultTableViewCell.self)) { index, data, cell in
                 cell.configureUIwithData(data: data)
-                print("cell 세팅 ㅇㅋ - \(data.placeName)")
             }
             .disposed(by: disposeBag)
+        
+        // 셀 선택되면 선택된 셀에 대한 resultMapView 띄우기
+        reactor.state
+            .filter({ $0.selectedPlace != nil })
+            .map({ ResultMapViewModel(userData: reactor,
+                                      selected: $0.selectedPlace!) })
+            .map({ vm in
+                let resultVC = ResultMapViewController()
+                resultVC.viewModel = vm
+                return resultVC
+            })
+            .bind(onNext: { self.navigationController?.pushViewController($0,
+                                                                          animated: true)} )
+            .disposed(by: disposeBag)
+        
+            
     }
     
     // MARK: - Actions
@@ -136,7 +156,6 @@ final class SearchResultViewController: UIViewController, View {
         alertVC.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext
         alertVC.modalTransitionStyle = UIModalTransitionStyle.crossDissolve
         present(alertVC, animated: true)
-        print(#function)
     }
     
     // MARK: - Helpers
