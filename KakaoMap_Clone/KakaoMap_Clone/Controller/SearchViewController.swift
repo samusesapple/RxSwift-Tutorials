@@ -6,12 +6,11 @@
 //
 
 import JGProgressHUD
-import RxCocoa
-import RxSwift
+import ReactorKit
 import Toast_Swift
 import UIKit
 
-final class SearchViewController: UIViewController {
+final class SearchViewController: UIViewController, View {
 
     var reactor: SearchViewModel!
     
@@ -78,8 +77,7 @@ final class SearchViewController: UIViewController {
         setActions()
         
         searchBarView.getSearchBar().delegate = self
-        
-        bindAction(reactor)
+        bind(reactor: reactor)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -88,20 +86,51 @@ final class SearchViewController: UIViewController {
     
     // MARK: - Bind
 
+    func bind(reactor: SearchViewModel) {
+        bindAction(reactor)
+        bindState(reactor)
+    }
+    
     private func bindAction(_ reactor: SearchViewModel) {
         searchBarView.getSearchBar().searchTextField.rx.controlEvent(.editingDidEnd)
-            .flatMap({ [weak self] in
+            .map({ [weak self] in
                 let keyword = self?.searchBarView.getSearchBar().searchTextField.text
-                return reactor.getSearchResultViewModel(keyword: keyword!)
+                return SearchViewModel.Action.startedSearching(keyword!)
             })
-            .subscribe(on: MainScheduler.asyncInstance)
-            .bind(onNext: { [weak self] reactor in
-                let resultVC = SearchResultViewController()
-                resultVC.reactor = reactor
-                self?.navigationController?.pushViewController(resultVC,
-                                                              animated: false)
-            })
+            .bind(to: reactor.action)
             .disposed(by: disposeBag)
+//            .subscribe(on: MainScheduler.asyncInstance)
+//            .bind(onNext: { [weak self] reactor in
+//                let resultVC = SearchResultViewController()
+//                resultVC.reactor = reactor
+//                self?.navigationController?.pushViewController(resultVC,
+//                                                              animated: false)
+//            })
+//            .disposed(by: disposeBag)
+    }
+    
+    private func bindState(_ reactor: SearchViewModel) {
+        reactor.resultDataPublisher
+            .filter({ !$0.isEmpty })
+            .map { datas in
+                let reactor = SearchResultViewReactor(reactor,
+                                                      search: <#T##PlaceDataType#>)
+                let resultVC = SearchResultViewController()
+                
+            }
+//        reactor.state
+//            .filter({ print("시작"); return !$0.searchResults.isEmpty })
+//            .map({ print("dd"); return SearchResultViewReactor(reactor,
+//                                           search: $0) })
+//            .subscribe(on: MainScheduler.asyncInstance)
+//            .bind { [weak self] reactor in
+//                print("검색 ㅇㅋ")
+//                let resultVC = SearchResultViewController()
+//                resultVC.reactor = reactor
+//                self?.navigationController?.pushViewController(resultVC,
+//                                                               animated: false)
+//            }
+//            .disposed(by: disposeBag)
     }
     
     // MARK: - Actions

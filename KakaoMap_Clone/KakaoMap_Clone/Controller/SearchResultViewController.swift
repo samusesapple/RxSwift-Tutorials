@@ -112,7 +112,8 @@ final class SearchResultViewController: UIViewController, View {
             .map({ $0.searchResults })
             .bind(to: tableView.rx.items(cellIdentifier: "resultCell",
                                          cellType: SearchResultTableViewCell.self)) { index, data, cell in
-                cell.configureUIwithData(data: data)
+                cell.configureUIwithData(data: data.placeInfo)
+                cell.setPlaceReviewData(data: data.placeDetail)
             }
             .disposed(by: disposeBag)
         

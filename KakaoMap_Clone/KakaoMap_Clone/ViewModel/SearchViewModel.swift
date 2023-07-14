@@ -12,17 +12,28 @@ class SearchViewModel: UserLocation, Reactor {
     
     var initialState: State
     
-    enum Action {}
+    enum Action {
+        case startedSearching(String)
+    }
+    
+    enum Mutation {
+        case getSearchResultDatas([KeywordDocument])
+    }
+    
+    struct State: PlaceDataType {
+        var searchKeyword: String
+        var searchResults: [ResultData]
+        var selectedPlace: ResultData?
+    }
     
     var userCoordinate: Coordinate
     
     var searchHistories: [SearchHistory] = []
+    var disposeBag = DisposeBag()
     
-    struct State: PlaceData {
-        var searchKeyword: String
-        var searchResults: [KeywordDocument]
-        var selectedPlace: KeywordDocument?
-    }
+    var resultDataPublisher = PublishSubject<[ResultData]>()
+    
+
     
     let searchOptions: [SearchOption] = {[
         SearchOption(icon: UIImage(systemName: "fork.knife")!, title: "맛집"),
@@ -42,23 +53,55 @@ class SearchViewModel: UserLocation, Reactor {
     }
     
     // MARK: - Transform
+ 
+    func mutate(action: Action) -> Observable<Mutation> {
+        switch action {
+        case .startedSearching(let keyword):
+            let documents = HttpClient.shared.searchKeywordObservable(with: keyword,
+                                                             coordinate: userCoordinate,
+                                                             page: 1)
+            .filter({ $0.documents != nil })
+            .map({ Mutation.getSearchResultDatas($0.documents!) })
+            
+            return documents
+        }
+    }
     
-    func getSearchResultViewModel(keyword: String) -> Observable<SearchResultViewReactor> {
-        return HttpClient.shared.searchKeywordObservable(with: keyword,
+    func reduce(state: State, mutation: Mutation) -> State {
+        var newState = state
+        switch mutation {
+        case .getSearchResultDatas(let documents):
+            let dataObservable = documents.compactMap(getSearchResultDetail)
+            let final = Observable.combineLatest(dataObservable)
+            
+            final.bind(to: resultDataPublisher)
+                .disposed(by: disposeBag)
+//            final.bind { datas in
+//                newState.searchResults = datas
+//                print(newState.searchResults.count)
+//            }
+//            .disposed(by: disposeBag)
+            return newState
+
+        }
+    }
+    
+    func getSearchResultData(keyword: String) {
+        HttpClient.shared.searchKeywordObservable(with: keyword,
                                                   coordinate: userCoordinate,
                                                   page: 1)
         .filter({ $0.documents != nil })
-        .map({ [weak self] data in
-            self?.initialState.searchKeyword = keyword
-            self?.initialState.searchResults = data.documents!
-            self?.initialState.selectedPlace = nil
-            return self!.initialState
-        })
-        .map({
-            SearchResultViewReactor(self,
-                                    search: $0)
-        })
-        
+        .map { $0.documents! }
+        .bind(to: keywordDocuments)
+        .disposed(by: DisposeBag())
+    }
+    
+    func getSearchResultDetail(searchResult: KeywordDocument) -> Observable<ResultData> {
+        return HttpClient.shared.getDetailDataObservable(placeCode: searchResult.id!)
+            .map({
+                ResultData(placeInfo: searchResult,
+                           placeDetail: $0)
+            })
     }
     
     // MARK: - Helpers

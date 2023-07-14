@@ -12,14 +12,14 @@ class ResultMapViewModel: UserLocation {
     var userCoordinate: Coordinate
     
     let searchKeyword: String
-    let placeDatas: [KeywordDocument]
-    var targetPlace: KeywordDocument?
+    let placeDatas: [ResultData]
+    var targetPlace: ResultData?
     
-    init(userData: UserLocation, search: PlaceData) {
+    init(userData: UserLocation, search: PlaceDataType) {
         self.userCoordinate = userData.userCoordinate
         self.searchKeyword = search.searchKeyword
         self.placeDatas = search.searchResults
         self.targetPlace = search.selectedPlace
-        print(targetPlace?.placeName)
+//        print(targetPlace?.placeName)
     }
 }

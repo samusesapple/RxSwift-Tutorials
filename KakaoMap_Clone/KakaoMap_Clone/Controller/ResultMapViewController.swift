@@ -176,6 +176,7 @@ final class ResultMapViewController: UIViewController, CLLocationManagerDelegate
         
         LocationManager.shared.delegate = self
         
+        bindAction()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -192,15 +193,19 @@ final class ResultMapViewController: UIViewController, CLLocationManagerDelegate
     
     // MARK: - Bind
     
-    /* action - 1. 다른 장소 선택한 경우
-                2. 길 안내 버튼 눌림 (하단바)
-                3. 전화 버튼 눌림 (하단바)
-                4. 즐겨찾기 버튼 눌림 (하단바)
-                5. x 버튼 눌러서 메인으로 이동
-                6. 목록 버튼 눌러서 searchResultVC로 이동 (self.pop)
-                7. 화면 탭 해서 상단,하단바 보이기/숨기기
+    /* action - 1. 길 안내 버튼 눌림 (하단바) - 길안내 표시
+                2. 전화 버튼 눌림 (하단바) - 매장에 전화
+                3. 즐겨찾기 버튼 탭 (하단바) - 즐겨찾기 추가
+                4. x 버튼 - 메인으로 이동
+                5. 화면 탭 - 상단,하단바 보이기/숨기기
+                6. 검색 시작 - 검색 화면으로 이동
      */
     
+    private func bindAction() {
+        searchBarView.getMenuButton().addTarget(self,
+                                                action: #selector(listButtonTapped),
+                                                for: .touchUpInside)
+    }
     
     // MARK: - Actions
     
@@ -265,12 +270,12 @@ final class ResultMapViewController: UIViewController, CLLocationManagerDelegate
     private func checkIfTargetPlaceExists() {
         guard let targetPlace = viewModel.targetPlace else {
             viewModel.targetPlace = viewModel.placeDatas[0]
-            configureUIwithData(place: viewModel.targetPlace!)
+            configureUIwithData(place: viewModel.targetPlace?.placeInfo)
             setTargetMapView(with: nil)
             return
         }
-        configureUIwithData(place: targetPlace)
-        setTargetMapView(with: targetPlace)
+        configureUIwithData(place: targetPlace.placeInfo)
+        setTargetMapView(with: targetPlace.placeInfo)
     }
     
     /// FooterView의 UI를 선택된 장소 유무에 따라 다르게 띄우기
@@ -285,34 +290,34 @@ final class ResultMapViewController: UIViewController, CLLocationManagerDelegate
     
     /// 선택된 장소에 대한 크롤링 데이터로 UI 세팅하기
     private func configureUIwithDetailedData() {
-//        guard let targetPlace = viewModel.targetPlace,
-//              let address = targetPlace.addressName,
-//              let data = viewModel.targetPlaceData,
-//              let reviewCount = data.comment?.scorecnt,
-//              let totalScore = data.comment?.scoresum
-//                else {
-//            if let reviewStatus = viewModel.targetPlaceData?.comment?.reviewWriteBlocked {
-//                if reviewStatus != "NONE" {
-//                    print("후기 미제공 업체")
-//                    // 상세 주소가 있는 경우 상세주소 세팅
-//                    if let detailAddress = viewModel.targetPlaceData?.basicInfo?.address?.addrdetail {
-//                        self.addressLabel.text = (viewModel.targetPlace?.addressName!)! + " \(detailAddress)"
-//                    }
-//                    reviewView.configureBannedReviewUI()
-//                }
-//            }
-//            print("지도뷰 \(viewModel.targetPlace?.id)- 크롤링한 데이터 세팅 실패")
-//            return
-//        }
-        // 평균 별점
-//        let averageReviewPoint = (round((Double(totalScore) / Double(reviewCount)) * 10) / 10)
-//        // 상세 주소, 평균 별점, 썸네일 이미지 세팅
-//        DispatchQueue.main.async { [weak self] in
-//            self?.reviewView.configureUI(averagePoint: averageReviewPoint, reviewCount: reviewCount)
-//            if let detailAddress = data.basicInfo?.address?.addrdetail {
-//                self?.addressLabel.text = address + " \(detailAddress)"
-//            }
-//        }
+        guard let targetPlace = viewModel.targetPlace,
+              let address = targetPlace.placeInfo.addressName,
+              let data = viewModel.targetPlace?.placeDetail,
+              let reviewCount = data.comment?.scorecnt,
+              let totalScore = data.comment?.scoresum
+                else {
+            if let reviewStatus = viewModel.targetPlace?.placeDetail.comment?.reviewWriteBlocked {
+                if reviewStatus != "NONE" {
+                    print("후기 미제공 업체")
+                    // 상세 주소가 있는 경우 상세주소 세팅
+                    if let detailAddress = viewModel.targetPlace?.placeDetail.basicInfo?.address?.addrdetail {
+                        self.addressLabel.text = (viewModel.targetPlace?.placeInfo.addressName!)! + " \(detailAddress)"
+                    }
+                    reviewView.configureBannedReviewUI()
+                }
+            }
+            print("지도뷰 \(viewModel.targetPlace?.placeInfo.id)- 크롤링한 데이터 세팅 실패")
+            return
+        }
+//         평균 별점
+        let averageReviewPoint = (round((Double(totalScore) / Double(reviewCount)) * 10) / 10)
+        // 상세 주소, 평균 별점, 썸네일 이미지 세팅
+        DispatchQueue.main.async { [weak self] in
+            self?.reviewView.configureUI(averagePoint: averageReviewPoint, reviewCount: reviewCount)
+            if let detailAddress = data.basicInfo?.address?.addrdetail {
+                self?.addressLabel.text = address + " \(detailAddress)"
+            }
+        }
     }
     
     private func configureButtonUIforFavoritePlace(_ isFavoritePlace: Bool) {
@@ -350,11 +355,11 @@ extension ResultMapViewController: MTMapViewDelegate {
     private func makeMarker() {
         
         for item in viewModel.placeDatas {
-            guard let stringLon = item.x,
-                  let stringLat = item.y,
+            guard let stringLon = item.placeInfo.x,
+                  let stringLat = item.placeInfo.y,
                   let lat = Double(stringLat),
                   let lon = Double(stringLon),
-                  let stringID = item.id,
+                  let stringID = item.placeInfo.id,
                   let placeID = Int(stringID) else {
                 print("마커 좌표값 옵셔널 벗기기 실패")
                 return
@@ -372,7 +377,7 @@ extension ResultMapViewController: MTMapViewDelegate {
             poiItem?.customSelectedImage = selectedPoiImage
 
             poiItem?.mapPoint = mapPoint
-            poiItem?.itemName = item.placeName
+            poiItem?.itemName = item.placeInfo.placeName
             poiItem?.tag = placeID
             mapView.add(poiItem)
         }
@@ -385,7 +390,7 @@ extension ResultMapViewController: MTMapViewDelegate {
         
         for item in poiItems {
             guard let item = item as? MTMapPOIItem,
-                  let targetId = viewModel.targetPlace?.id else { return }
+                  let targetId = viewModel.targetPlace?.placeInfo.id else { return }
             if String(item.tag) != targetId {
                 mapView.remove(item)
             }

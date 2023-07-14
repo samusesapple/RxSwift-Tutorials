@@ -25,13 +25,13 @@ class SearchResultViewReactor: UserLocation, Reactor {
         case getMorePlaceData
     }
     
-    struct State: PlaceData {
+    struct State: PlaceDataType {
         var searchKeyword: String
-        var searchResults: [KeywordDocument]
-        var selectedPlace: KeywordDocument?
+        var searchResults: [ResultData]
+        var selectedPlace: ResultData?
     }
     
-    init(_ userData: UserLocation, search: PlaceData) {
+    init(_ userData: UserLocation, search: PlaceDataType) {
         self.userCoordinate = userData.userCoordinate
         self.initialState = State(searchKeyword: search.searchKeyword,
                                   searchResults: search.searchResults,

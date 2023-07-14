@@ -7,11 +7,20 @@
 
 import Foundation
 
-protocol PlaceData {
+protocol PlaceDataType {
     var searchKeyword: String { get set }
-    var searchResults: [KeywordDocument] { get set }
-    var selectedPlace: KeywordDocument? { get set }
-//    let detailData: TargetPlaceDetail
+    var searchResults: [ResultData] { get set }
+    var selectedPlace: ResultData? { get set }
+}
+
+struct ResultData {
+    let placeInfo: KeywordDocument
+    let placeDetail: TargetPlaceDetail
+    
+//    init(placeInfo: KeywordDocument) {
+//        self.placeInfo = placeInfo
+//        self.placeDetail = HttpClient.shared.getDetailDataObservable(placeCode: placeInfo.id!)
+//    }
 }
 
 // 카카오맵 기본 API로부터 받은 데이터 파싱할 모델
