@@ -6,13 +6,23 @@
 //
 
 import Foundation
-import RxCocoa
-import RxSwift
+import ReactorKit
 
-class SearchViewModel: UserLocation {
+class SearchViewModel: UserLocation, Reactor {
+    
+    var initialState: State
+    
+    enum Action {}
+    
     var userCoordinate: Coordinate
     
     var searchHistories: [SearchHistory] = []
+    
+    struct State: PlaceData {
+        var searchKeyword: String
+        var searchResults: [KeywordDocument]
+        var selectedPlace: KeywordDocument?
+    }
     
     let searchOptions: [SearchOption] = {[
         SearchOption(icon: UIImage(systemName: "fork.knife")!, title: "맛집"),
@@ -27,6 +37,8 @@ class SearchViewModel: UserLocation {
     
     init(_ userData: UserLocation) {
         self.userCoordinate = userData.userCoordinate
+        self.initialState = State(searchKeyword: "",
+                                  searchResults: [])
     }
     
     // MARK: - Transform
@@ -36,8 +48,12 @@ class SearchViewModel: UserLocation {
                                                   coordinate: userCoordinate,
                                                   page: 1)
         .filter({ $0.documents != nil })
-        .map({ PlaceData(keyword: keyword,
-                         data: $0.documents!) })
+        .map({ [weak self] data in
+            self?.initialState.searchKeyword = keyword
+            self?.initialState.searchResults = data.documents!
+            self?.initialState.selectedPlace = nil
+            return self!.initialState
+        })
         .map({
             SearchResultViewReactor(self,
                                     search: $0)

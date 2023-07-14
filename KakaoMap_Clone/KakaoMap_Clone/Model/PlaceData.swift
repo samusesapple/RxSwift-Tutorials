@@ -7,9 +7,10 @@
 
 import Foundation
 
-struct PlaceData {
-    var keyword: String
-    var data: [KeywordDocument]
+protocol PlaceData {
+    var searchKeyword: String { get set }
+    var searchResults: [KeywordDocument] { get set }
+    var selectedPlace: KeywordDocument? { get set }
 //    let detailData: TargetPlaceDetail
 }
 

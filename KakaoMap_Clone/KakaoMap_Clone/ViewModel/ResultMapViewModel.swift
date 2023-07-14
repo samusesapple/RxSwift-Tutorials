@@ -10,10 +10,16 @@ import RxSwift
 
 class ResultMapViewModel: UserLocation {
     var userCoordinate: Coordinate
+    
+    let searchKeyword: String
+    let placeDatas: [KeywordDocument]
     var targetPlace: KeywordDocument?
     
-    init(userData: UserLocation, selected: KeywordDocument) {
+    init(userData: UserLocation, search: PlaceData) {
         self.userCoordinate = userData.userCoordinate
-        self.targetPlace = selected
+        self.searchKeyword = search.searchKeyword
+        self.placeDatas = search.searchResults
+        self.targetPlace = search.selectedPlace
+        print(targetPlace?.placeName)
     }
 }

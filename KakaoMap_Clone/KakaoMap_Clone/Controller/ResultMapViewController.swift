@@ -169,46 +169,12 @@ final class ResultMapViewController: UIViewController, CLLocationManagerDelegate
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        searchBarView.getSearchBar().text = viewModel.searchKeyword
+        
         setAutolayout()
         checkIfTargetPlaceExists()
         
         LocationManager.shared.delegate = self
-        
-//        footerContainerView.addGestureRecognizer(UITapGestureRecognizer(target: self,
-//                                                                        action: #selector(footerViewTapped)))
-        
-//        viewModel.needToHideHeaderAndFooterView = { [weak self] in
-//            DispatchQueue.main.async {
-//                UIView.animate(withDuration: 0.3) {
-//                    self?.headerContainerView.transform = CGAffineTransform(translationX: 0,
-//                                                                            y: -(self?.headerContainerView.bounds.height ?? 0))
-//                    self?.footerContainerView.transform = CGAffineTransform(translationX: 0,
-//                                                                            y: self?.footerContainerView.bounds.height ?? 0)
-//                }
-//            }
-//        }
-        
-//        viewModel.needToShowHeaderAndFooterView = { [weak self] in
-//            DispatchQueue.main.async {
-//                UIView.animate(withDuration: 0.3) {
-//                    self?.headerContainerView.transform = CGAffineTransform(translationX: 0,
-//                                                                            y: 0)
-//                    self?.footerContainerView.transform = CGAffineTransform(translationX: 0,
-//                                                                            y: 0)
-//                }
-//            }
-//        }
-        
-//        viewModel.showNoPhoneNumberToast = { [weak self] in
-//            var style = ToastStyle()
-//            style.backgroundColor = .darkGray
-//            style.messageColor = .white
-//
-//            self?.view.makeToast("전화번호가 제공되지 않은 업체입니다.",
-//                                 duration: 1.5,
-//                                 position: .center,
-//                                 style: style)
-//        }
         
     }
     
@@ -238,6 +204,9 @@ final class ResultMapViewController: UIViewController, CLLocationManagerDelegate
     
     // MARK: - Actions
     
+    @objc private func listButtonTapped() {
+        self.navigationController?.popViewController(animated: false)
+    }
     
     // MARK: - Helpers
     
@@ -294,14 +263,14 @@ final class ResultMapViewController: UIViewController, CLLocationManagerDelegate
     
     /// 장소 선택 유무에 따라 다른 UI를 띄우기
     private func checkIfTargetPlaceExists() {
-//        guard let targetPlace = viewModel.targetPlace else {
-//            viewModel.targetPlace = viewModel.searchResults[0]
-//            configureUIwithData(place: viewModel.targetPlace!)
-//            setTargetMapView(with: nil)
-//            return
-//        }
-//        configureUIwithData(place: targetPlace)
-//        setTargetMapView(with: targetPlace)
+        guard let targetPlace = viewModel.targetPlace else {
+            viewModel.targetPlace = viewModel.placeDatas[0]
+            configureUIwithData(place: viewModel.targetPlace!)
+            setTargetMapView(with: nil)
+            return
+        }
+        configureUIwithData(place: targetPlace)
+        setTargetMapView(with: targetPlace)
     }
     
     /// FooterView의 UI를 선택된 장소 유무에 따라 다르게 띄우기
@@ -380,33 +349,33 @@ extension ResultMapViewController: MTMapViewDelegate {
     /// 검색 결과에 해당되는 장소에 마커 생성
     private func makeMarker() {
         
-//        for item in viewModel.searchResults {
-//            guard let stringLon = item.x,
-//                  let stringLat = item.y,
-//                  let lat = Double(stringLat),
-//                  let lon = Double(stringLon),
-//                  let stringID = item.id,
-//                  let placeID = Int(stringID) else {
-//                print("마커 좌표값 옵셔널 벗기기 실패")
-//                return
-//            }
-//            self.mapPoint = MTMapPoint(geoCoord: MTMapPointGeo(latitude: lat, longitude: lon))
-//
-//            let customPoiImage = UIImage(named: "bluePoint")?.resizeImage(targetSize: CGSize(width: 25, height: 25))
-//            let selectedPoiImage = UIImage(named: "selectedBluePoint")?.resizeImage(targetSize: CGSize(width: 35, height: 35))
-//
-//            poiItem = MTMapPOIItem()
-//            poiItem?.markerType = .customImage
-//            poiItem?.customImage = customPoiImage
-//
-//            poiItem?.markerSelectedType = .customImage
-//            poiItem?.customSelectedImage = selectedPoiImage
-//
-//            poiItem?.mapPoint = mapPoint
-//            poiItem?.itemName = item.placeName
-//            poiItem?.tag = placeID
-//            mapView.add(poiItem)
-//        }
+        for item in viewModel.placeDatas {
+            guard let stringLon = item.x,
+                  let stringLat = item.y,
+                  let lat = Double(stringLat),
+                  let lon = Double(stringLon),
+                  let stringID = item.id,
+                  let placeID = Int(stringID) else {
+                print("마커 좌표값 옵셔널 벗기기 실패")
+                return
+            }
+            self.mapPoint = MTMapPoint(geoCoord: MTMapPointGeo(latitude: lat, longitude: lon))
+
+            let customPoiImage = UIImage(named: "bluePoint")?.resizeImage(targetSize: CGSize(width: 25, height: 25))
+            let selectedPoiImage = UIImage(named: "selectedBluePoint")?.resizeImage(targetSize: CGSize(width: 35, height: 35))
+
+            poiItem = MTMapPOIItem()
+            poiItem?.markerType = .customImage
+            poiItem?.customImage = customPoiImage
+
+            poiItem?.markerSelectedType = .customImage
+            poiItem?.customSelectedImage = selectedPoiImage
+
+            poiItem?.mapPoint = mapPoint
+            poiItem?.itemName = item.placeName
+            poiItem?.tag = placeID
+            mapView.add(poiItem)
+        }
     }
     
     /// 장소 선택 - 네비게이션 버튼 클릭 후 실행됨 : 현재 위치로부터 선택된 장소까지의 경로 poly line 그리기
@@ -414,14 +383,14 @@ extension ResultMapViewController: MTMapViewDelegate {
         // 선택된 장소를 제외한 poiItem 제거
         guard let poiItems = mapView.poiItems else { return }
         
-//        for item in poiItems {
-//            guard let item = item as? MTMapPOIItem,
-//                  let targetId = viewModel.targetPlace?.id else { return }
-//            if String(item.tag) != targetId {
-//                mapView.remove(item)
-//            }
-//        }
-//
+        for item in poiItems {
+            guard let item = item as? MTMapPOIItem,
+                  let targetId = viewModel.targetPlace?.id else { return }
+            if String(item.tag) != targetId {
+                mapView.remove(item)
+            }
+        }
+
         var mapPoints: [MTMapPoint] = []
         
         polyLine = MTMapPolyline.polyLine()

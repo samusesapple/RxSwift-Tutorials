@@ -120,7 +120,7 @@ final class SearchResultViewController: UIViewController, View {
         reactor.state
             .filter({ $0.selectedPlace != nil })
             .map({ ResultMapViewModel(userData: reactor,
-                                      selected: $0.selectedPlace!) })
+                                      search: $0) })
             .map({ vm in
                 let resultVC = ResultMapViewController()
                 resultVC.viewModel = vm
