@@ -99,38 +99,27 @@ final class SearchViewController: UIViewController, View {
             })
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-//            .subscribe(on: MainScheduler.asyncInstance)
-//            .bind(onNext: { [weak self] reactor in
-//                let resultVC = SearchResultViewController()
-//                resultVC.reactor = reactor
-//                self?.navigationController?.pushViewController(resultVC,
-//                                                              animated: false)
-//            })
-//            .disposed(by: disposeBag)
     }
     
     private func bindState(_ reactor: SearchViewModel) {
-        reactor.resultDataPublisher
-            .filter({ !$0.isEmpty })
-            .map { datas in
-                let reactor = SearchResultViewReactor(reactor,
-                                                      search: <#T##PlaceDataType#>)
+        
+        let finalObservable = Observable.combineLatest(reactor.state,
+                                 reactor.resultDataPublisher) { state, results in
+            return SearchViewModel.State(searchKeyword: state.searchKeyword,
+                                  searchResults: results)
+        }
+            
+        finalObservable
+            .filter({ !$0.searchResults.isEmpty })
+            .map({ SearchResultViewReactor(reactor, search: $0) })
+            .bind(onNext: { reactor in
                 let resultVC = SearchResultViewController()
-                
-            }
-//        reactor.state
-//            .filter({ print("시작"); return !$0.searchResults.isEmpty })
-//            .map({ print("dd"); return SearchResultViewReactor(reactor,
-//                                           search: $0) })
-//            .subscribe(on: MainScheduler.asyncInstance)
-//            .bind { [weak self] reactor in
-//                print("검색 ㅇㅋ")
-//                let resultVC = SearchResultViewController()
-//                resultVC.reactor = reactor
-//                self?.navigationController?.pushViewController(resultVC,
-//                                                               animated: false)
-//            }
-//            .disposed(by: disposeBag)
+                resultVC.reactor = reactor
+                print(reactor.state)
+                self.navigationController?.pushViewController(resultVC,
+                                                              animated: false)
+            })
+            .disposed(by: disposeBag)
     }
     
     // MARK: - Actions

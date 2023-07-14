@@ -17,6 +17,7 @@ class SearchViewModel: UserLocation, Reactor {
     }
     
     enum Mutation {
+        case setKeyword(String)
         case getSearchResultDatas([KeywordDocument])
     }
     
@@ -57,18 +58,21 @@ class SearchViewModel: UserLocation, Reactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .startedSearching(let keyword):
-            let documents = HttpClient.shared.searchKeywordObservable(with: keyword,
+            let documentsObservable = HttpClient.shared.searchKeywordObservable(with: keyword,
                                                              coordinate: userCoordinate,
                                                              page: 1)
             .filter({ $0.documents != nil })
             .map({ Mutation.getSearchResultDatas($0.documents!) })
-            
-            return documents
+            return Observable.merge([
+                documentsObservable,
+                Observable.just(.setKeyword(keyword))
+            ])
         }
     }
     
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
+        
         switch mutation {
         case .getSearchResultDatas(let documents):
             let dataObservable = documents.compactMap(getSearchResultDetail)
@@ -76,24 +80,11 @@ class SearchViewModel: UserLocation, Reactor {
             
             final.bind(to: resultDataPublisher)
                 .disposed(by: disposeBag)
-//            final.bind { datas in
-//                newState.searchResults = datas
-//                print(newState.searchResults.count)
-//            }
-//            .disposed(by: disposeBag)
-            return newState
-
+            
+        case .setKeyword(let keyword):
+            newState.searchKeyword = keyword
         }
-    }
-    
-    func getSearchResultData(keyword: String) {
-        HttpClient.shared.searchKeywordObservable(with: keyword,
-                                                  coordinate: userCoordinate,
-                                                  page: 1)
-        .filter({ $0.documents != nil })
-        .map { $0.documents! }
-        .bind(to: keywordDocuments)
-        .disposed(by: DisposeBag())
+        return newState
     }
     
     func getSearchResultDetail(searchResult: KeywordDocument) -> Observable<ResultData> {

@@ -268,6 +268,7 @@ final class ResultMapViewController: UIViewController, CLLocationManagerDelegate
     
     /// 장소 선택 유무에 따라 다른 UI를 띄우기
     private func checkIfTargetPlaceExists() {
+        configureUIwithDetailedData()
         guard let targetPlace = viewModel.targetPlace else {
             viewModel.targetPlace = viewModel.placeDatas[0]
             configureUIwithData(place: viewModel.targetPlace?.placeInfo)
@@ -316,6 +317,8 @@ final class ResultMapViewController: UIViewController, CLLocationManagerDelegate
             self?.reviewView.configureUI(averagePoint: averageReviewPoint, reviewCount: reviewCount)
             if let detailAddress = data.basicInfo?.address?.addrdetail {
                 self?.addressLabel.text = address + " \(detailAddress)"
+            } else {
+                print("상세 정보 세팅 x")
             }
         }
     }
