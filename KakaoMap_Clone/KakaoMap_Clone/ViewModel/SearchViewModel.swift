@@ -54,7 +54,7 @@ class SearchViewModel: UserLocation, Reactor {
     }
     
     // MARK: - Transform
- 
+
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .startedSearching(let keyword):
